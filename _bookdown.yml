@@ -1,0 +1,10 @@
+book_filename: "CHAPTER 9 - EXAMPLES IN R"
+delete_merged_file: true
+output_dir: "docs"
+new_session: yes
+
+rmd_files: [
+  "index.rmd", 
+   "03DescriptiveParameters.Rmd"
+ 
+]

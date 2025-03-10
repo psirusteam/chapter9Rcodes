@@ -1,6 +1,6 @@
 ---
-title: "CHAPTER 9: ANALYSIS OF HOUSEHOLD SURVEY DATA"
-author: "Andrés Gutiérrez^[Comisión Económica para América Latina y el Caribe (CEPAL) -  andres.gutierrez@cepal.org], Pedro Luis do Nascimento Silva^[SCIENCE, pedronsilva@gmail.com]"
+title: "CHAPTER 9 - EXAMPLES IN R"
+author: "Andrés Gutiérrez^[Comisión Económica para América Latina y el Caribe (CEPAL) -  andres.gutierrez@cepal.org], Stalyn Guerrero Gómez^[guerrerostalyn@gmail.com]"
 date: "`r Sys.Date()`"
 documentclass: book
 bibliography: chapterbib.bib
@@ -11,8 +11,8 @@ lot: yes
 lof: yes
 fontsize: 12pt
 geometry: margin=3cm
-github-repo: psirusteam/Chapter9HHS
-description: "Chapter 9 of UN Household Survey Handbook"
+github-repo: psirusteam/chapter9Rcodes
+description: "CHAPTER 9 - EXAMPLES IN R"
 knit: "bookdown::render_book"
 linkcolor: blue
 output: 

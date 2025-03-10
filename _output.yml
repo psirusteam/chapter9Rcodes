@@ -8,11 +8,11 @@ bookdown::gitbook:
     toc:
       collapse: section
       before: |
-        <li><a href="./">Chapter 9 of UN Household Survey Handbook.</a></li>
+        <li><a href="./">CHAPTER 9 - EXAMPLES IN R.</a></li>
       after: |
-        <li><a Chapter 9 of UN Household Survey Handbook. </a></li>
+        <li><a CHAPTER 9 - EXAMPLES IN R. </a></li>
     download: [pdf, epub, mobi]
-    edit: https://github.com/psirusteam/Chapter9HHS/%s
+    edit: https://github.com/psirusteam/chapter9Rcodes/%s
     sharing:
       github: yes
       facebook: no
