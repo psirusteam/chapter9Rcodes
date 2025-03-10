@@ -1,0 +1,9 @@
+descriptive-parameters
+ethiopia-socioeconomic-survey-ess4-sampling-design-and-data-source
+data-source
+sampling-design
+sampling-frame
+definición-del-diseño-muestral-en-r
+frequencies-and-proportions
+demographic-characteristics
+totals-means-and-ratios
