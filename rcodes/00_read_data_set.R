@@ -107,7 +107,7 @@ read_sav("data/bases/sect13_hh_w4_v2.sav") %>%
   saveRDS("data/data_ESS4/sect13_hh_w4_v2.rds")
 
 ################################################################################
-
+options(survey.lonely.psu = "adjust") # Tiene error cuando uso adjust
 data_sec <- read_sav("data/bases/sect7b_hh_w4_v2.sav")
 
 data_sec %>% group_by(item_cd_12months,s7q03 ) %>% 

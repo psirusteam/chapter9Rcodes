@@ -1,6 +1,6 @@
 ---
 title: "CHAPTER 9 - EXAMPLES IN R"
-author: "Andrés Gutiérrez^[Comisión Económica para América Latina y el Caribe (CEPAL) -  andres.gutierrez@cepal.org], Stalyn Guerrero Gómez^[guerrerostalyn@gmail.com]"
+author: ""
 date: "2025-03-10"
 documentclass: book
 bibliography: chapterbib.bib

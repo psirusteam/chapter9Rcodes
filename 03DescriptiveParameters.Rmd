@@ -140,14 +140,13 @@ The process starts by converting the `Region` variable into a factor using `as_f
 
 
 ```{r, eval=FALSE}
-options(survey.lonely.psu = "fail") # Tiene error cuando uso adjust
+options(survey.lonely.psu = "adjust") # Tiene error cuando uso adjust
 design_sampleing <-
   design_sampleing  %>%    mutate(Region  = as_factor(saq01))
 
 tab_01 <- design_sampleing %>% group_by(Region) %>%
-  survey_tally(vartype = c("cv", "se", "ci"),
-               proportion = TRUE, 
-               prop_method = "logit" name = "hat_N")
+  summarise(N_hat = survey_total(vartype = c("cv", "se", "ci")))
+            
 ```
 
 After calculating these values, transformations are applied to improve their presentation:  

@@ -20,7 +20,7 @@
   <meta name="twitter:description" content="1.3 Frequencies and proportions | CHAPTER 9 - EXAMPLES IN R" />
   
 
-<meta name="author" content="Andrés Gutiérrez, Stalyn Guerrero Gómez" />
+<meta name="author" content="" />
 
 
 <meta name="date" content="2025-03-10" />
@@ -137,7 +137,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">CHAPTER 9 - EXAMPLES IN R.</a></li>
+<li><a href="./">CHAPTER 9 - EXAMPLES IN R</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Abstract</a></li>
@@ -156,7 +156,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="divider"></li>
-<li><a CHAPTER 9 - EXAMPLES IN R. </a></li>
+<li><a CHAPTER 9 - EXAMPLES IN R </a></li>
 
 </ul>
 
@@ -182,14 +182,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <code>options(survey.lonely.psu = "adjust")</code><br />
 This adjustment ensures that the variance is computed for strata with a single cluster rather than discarding them, leading to more robust variance estimation.</p>
 <p>The process starts by converting the <code>Region</code> variable into a factor using <code>as_factor(saq01)</code>, ensuring it is treated as a categorical variable. Next, the data is grouped by <code>Region</code> using <code>group_by(Region)</code>. Within each group, the hat_N estimate of the variable of interest is calculated using the <code>survey_hat_N()</code> function. This function provides estimates of the population hat_N along with key precision metrics, including the coefficient of variation (<code>cv</code>), standard error (<code>se</code>), and confidence intervals (<code>ci</code>).</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="frequencies-and-proportions.html#cb4-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">survey.lonely.psu =</span> <span class="st">&quot;fail&quot;</span>) <span class="co"># Tiene error cuando uso adjust</span></span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="frequencies-and-proportions.html#cb4-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">survey.lonely.psu =</span> <span class="st">&quot;adjust&quot;</span>) <span class="co"># Tiene error cuando uso adjust</span></span>
 <span id="cb4-2"><a href="frequencies-and-proportions.html#cb4-2" tabindex="-1"></a>design_sampleing <span class="ot">&lt;-</span></span>
 <span id="cb4-3"><a href="frequencies-and-proportions.html#cb4-3" tabindex="-1"></a>  design_sampleing  <span class="sc">%&gt;%</span>    <span class="fu">mutate</span>(<span class="at">Region  =</span> <span class="fu">as_factor</span>(saq01))</span>
 <span id="cb4-4"><a href="frequencies-and-proportions.html#cb4-4" tabindex="-1"></a></span>
 <span id="cb4-5"><a href="frequencies-and-proportions.html#cb4-5" tabindex="-1"></a>tab_01 <span class="ot">&lt;-</span> design_sampleing <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Region) <span class="sc">%&gt;%</span></span>
-<span id="cb4-6"><a href="frequencies-and-proportions.html#cb4-6" tabindex="-1"></a>  <span class="fu">survey_tally</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;cv&quot;</span>, <span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>),</span>
-<span id="cb4-7"><a href="frequencies-and-proportions.html#cb4-7" tabindex="-1"></a>               <span class="at">proportion =</span> <span class="cn">TRUE</span>, </span>
-<span id="cb4-8"><a href="frequencies-and-proportions.html#cb4-8" tabindex="-1"></a>               <span class="at">prop_method =</span> <span class="st">&quot;logit&quot;</span> <span class="at">name =</span> <span class="st">&quot;hat_N&quot;</span>)</span></code></pre></div>
+<span id="cb4-6"><a href="frequencies-and-proportions.html#cb4-6" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">N_hat =</span> <span class="fu">survey_total</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;cv&quot;</span>, <span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>)))</span></code></pre></div>
 <p>After calculating these values, transformations are applied to improve their presentation:</p>
 <ul>
 <li><p><code>hat_N</code> is rounded to the nearest integer.</p></li>
@@ -641,13 +639,6 @@ This adjustment ensures that the variance is computed for strata with a single c
 </div>
 </div>
 <!-- </div> -->
-
-
-
-
-
-
-
             </section>
 
           </div>
