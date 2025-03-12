@@ -131,13 +131,18 @@ data_sec_regression <- data_sec_regression %>%
 ###############################################################################
 # Pfeffermann
 ###############################################################################
-
 modwk <-
   lm(pw_w4 ~  saq14 * religion + saq14 + sexo + age_group    ,
      data = data_sec_regression)
 
 wkpred <- predict(modwk)
+
 summary(wkpred)
+summary(data_sec_regression$pw_w4)
+
+sum(wkpred)
+sum(data_sec_regression$pw_w4)
+
 data_sec_regression %<>% mutate(pw_qw = pw_w4 / wkpred)
 
 
@@ -153,7 +158,7 @@ boxplot(data_sec_regression$pw_w4)
 boxplot(data_sec_regression$pw_qw)
 
 ###############################################################################
-
+options(survey.lonely.psu = "fail") # Tiene error cuando uso adjust
 # Linear models
 
 design_sampleing <- data_sec_regression %>%
@@ -167,7 +172,7 @@ design_sampleing <- data_sec_regression %>%
     # Peso final ajustado
     nest = TRUE
   ) %>% 
-  mutate(log_expenditure = log(percapita_expenditure + 2) )
+  mutate(log_expenditure = log(percapita_expenditure + 70) )
 
 fit_svy <-
   svyglm(log_expenditure  ~ -1 + saq14 * religion + saq14 + sexo + age_group,
@@ -212,90 +217,163 @@ design_sampleing$variables %<>% mutate(stdresids = stdresids)
 
 qqnorm(stdresids)
 qqline(stdresids, col = 2)
+
+library(ggplot2)
+
+ggplot(data = data.frame(stdresids), aes(x = stdresids)) +
+  geom_histogram(
+    aes(y = ..density..),
+    bins = 30,
+    fill = "#CCE5FF",
+    color = "black"
+  ) +  # Histograma con densidad
+  stat_function(
+    fun = dnorm,
+    args = list(mean = 0, sd = 1),
+    color = "black",
+    size = 1
+  ) + 
+  labs(title = "Standardized Residuals",
+       x = "",
+       y = "") +  # Agrega etiqueta en el eje Y para densidad
+  theme_minimal(base_size = 20) +
+  theme(plot.title = element_text(hjust = 0.5))  # Centra el título
+
+
 ggplot(data = data.frame(stdresids), aes(sample = stdresids)) +
   stat_qq() +
   stat_qq_line(color = "red") +  # Reference line in red
   labs(title = "Q-Q Plot of Standardized Residuals",
        x = "Theoretical Quantiles",
        y = "Sample Quantiles") +
-  theme_minimal() +
+  theme_minimal(base_size = 20) +
   theme(plot.title = element_text(hjust = 0.5))  # Centers the title
 
 ########################################
 # Influential Observations
 ########################################
 
-## Distancia de Cook
+## Cook's Distance
 
 d_cook = data.frame(cook = svyCooksD(fit_svy),
                     id = 1:length(svyCooksD(fit_svy)))
 
+d_cook %<>%
+  mutate(Criterion = ifelse(cook > 3, "Yes", "No"))  # Renamed "Criterio" to "Criterion"
+
 ggplot(d_cook, aes(y = cook, x = id)) +
-  geom_point() +
-  theme_minimal(20)
+  geom_point(aes(col = Criterion)) +
+  geom_hline(aes(yintercept = 3),
+             color = "black",
+             linetype = "dashed") +  # Horizontal line at 3
+  scale_color_manual(values = c("Yes" = "red", "No" = "black")) +
+  scale_y_continuous(breaks = c(0, 3, 6, 9, 12, 15)) +  # Ensure 3 appears on the axis
+  theme_minimal(base_size = 20)+ 
+  theme(plot.title = element_text(hjust = 0.5)) +  # Centers the title
+  labs(title = "Cook's Distance")
 
-# Calcular DFBETAS
 
+# Calculate DFBETAS
 d_dfbetas <- svydfbetas(fit_svy)$Dfbetas %>%
   t() %>%
-  as.data.frame()
+  as.data.frame() 
 
-# Renombrar columnas de Beta
-colnames(d_dfbetas) <- paste0("Beta_", seq_len(ncol(d_dfbetas)) - 1)
+# Rename Beta columns with LaTeX subscripts
+colnames(d_dfbetas)[1:(ncol(d_dfbetas))] <-
+  paste0("beta[", seq_len(ncol(d_dfbetas))-1, "]") 
 
-# Agregar ID y reorganizar en formato largo
-d_dfbetas <- d_dfbetas %>%
+# Reshape to long format
+d_dfbetas_long <- d_dfbetas %>%
   mutate(id = row_number()) %>%
-  pivot_longer(cols = starts_with("Beta_"), names_to = "Variable", values_to = "value")
+  pivot_longer(cols = -id,
+               names_to = "Variable",
+               values_to = "value")  # Keep `id` intact
 
-# Obtener umbral de influencia
+# Get influence threshold
 cutoff <- svydfbetas(fit_svy)$cutoff
 
-# Agregar criterio de influencia
-d_dfbetas <- d_dfbetas %>%
-  mutate(Criterio = ifelse(abs(value) > cutoff, "Si", "No"))
+# Add influence criterion
+d_dfbetas_long <- d_dfbetas_long %>%
+  mutate(Criterion = ifelse(abs(value) > cutoff, "Yes", "No"))
 
-# Seleccionar las 10 observaciones más influyentes
-tex_label <- d_dfbetas %>%
-  filter(Criterio == "Si") %>%
-  arrange(desc(abs(value))) 
- 
+# Ensure `id` is numeric
+d_dfbetas_long$id <- as.numeric(d_dfbetas_long$id)
 
-# Mostrar las 10 observaciones más influyentes
-tex_label %>%  slice_head(n = 20) %>%  kable(digits = 4)
+# Plot with β and subscripts in LaTeX format
+ggplot(d_dfbetas_long %>% sample_n(min(20000, nrow(d_dfbetas_long))), aes(y = abs(value), x = id)) +
+  geom_point(aes(color = Criterion)) +
+  geom_hline(aes(yintercept = cutoff), linetype = "dashed") +
+  facet_wrap(. ~ Variable, nrow = 4, labeller = label_parsed,
+             scales = "free_y") +  # Ensure LaTeX formatting
+  scale_color_manual(values = c("Yes" = "red", "No" = "black")) +
+  labs(title = "DFBETAS Analysis",
+       x = "Observation ID",
+       y = expression(abs(beta))) +
+  theme_minimal(base_size = 20) +
+  theme(plot.title = element_text(hjust = 0.5))  # Centers the title
 
-ggplot(d_dfbetas %>% sample_n(10000), aes(y = abs(value), x = id)) +
-  geom_point(aes(col = Criterio)) +
-  geom_hline(aes(yintercept = cutoff)) +
-  facet_wrap(. ~ Variable , nrow = 4) +
-  scale_color_manual(values = c("Si" = "red", "No" = "black")) +
-  theme_minimal(20)
+## DFFITS Analysis
 
 
-## df fits
-
+# Create DFFITS dataframe
 d_dffits <- data.frame(dffits = svydffits(fit_svy)$Dffits,
                        id = 1:length(svydffits(fit_svy)$Dffits))
 
+# Get cutoff threshold for influence
 cutoff <- svydffits(fit_svy)$cutoff
 
-d_dffits %<>% mutate(C_cutoff = ifelse(abs(dffits) > cutoff, "Si", "No"))
+# Add influence criterion
+d_dffits <- d_dffits %>%
+  mutate(Criterion = ifelse(abs(dffits) > cutoff, "Yes", "No"))  # Translated "Si" to "Yes" and "No" remains the same
+
+# Plot DFFITS with cutoff threshold
 ggplot(d_dffits, aes(y = abs(dffits), x = id)) +
-  geom_point(aes(col = C_cutoff)) +
-  geom_hline(yintercept = cutoff) +
-  scale_color_manual(values = c("Si" = "red", "No" = "black")) +
-  theme_minimal(20)
+  geom_point(aes(color = Criterion)) +
+  geom_hline(yintercept = cutoff,
+             linetype = "dashed",
+             color = "black") +  # Dashed horizontal line
+  scale_color_manual(values = c("Yes" = "red", "No" = "black")) +
+  labs(
+    title = "DFFITS Influence Analysis",
+    x = "Observation ID",
+    y = expression(abs(DFFITS))
+  ) +
+  theme_minimal(base_size = 20) +
+  theme(plot.title = element_text(hjust = 0.5))  # Centers the title
 
 ########################################
 #  Inference on Model Parameters
 ########################################
-
 library(jtools)
 survey:::confint.svyglm(fit_svy) %>% kable(digits = 2)
 
 plot_coefs(fit_svy,
            scale = TRUE,
            plot.distributions = TRUE)
-summ(fit_svy, digits = 2,pvals = TRUE)
+summ(fit_svy, digits = 2, pvals = TRUE)
 
+library(broom)
 
+# Extract coefficients and confidence intervals
+coef_df <- tidy(fit_svy, conf.int = TRUE)
+
+ggplot(coef_df, aes(x = reorder(term, estimate), y = estimate)) +
+  geom_point(size = 3, color = "blue") +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high),
+                width = 0.2,
+                color = "black") +
+  geom_hline(yintercept = 0,
+             linetype = "dashed",
+             color = "red") +
+  labs(
+    title = "Survey Model Coefficients",
+    subtitle = "Point estimates with 95% confidence intervals",
+    x = "Coefficients",
+    y = "Estimate"
+  ) +
+  theme_minimal(base_size = 16) +
+  theme(
+    plot.title = element_text(hjust = 0.5),      # Center title
+    plot.subtitle = element_text(hjust = 0.5)   # Center subtitle
+  ) +
+  coord_flip()  # Flip for better readability
