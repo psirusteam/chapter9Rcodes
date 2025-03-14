@@ -1,79 +1,82 @@
-#########################################################
-# Lectura y preparación de las bases de datos          
-# Autor: Andrés Gutiérrez             
-#########################################################
+################################################################################
+# 5.3 Linear Models
+################################################################################
+# Author: Andrés Gutiérrez, Stalyn Guerrero
+# 
+# Description:
+# This script loads and prepares household survey data, including expenditure
+# calculations, demographic characteristics, and survey weighting adjustments,
+# followed by the estimation of linear models.
+# 
+# Data Source:
+# https:/microdata.worldbank.org/index.php/catalog/3823/data-dictionary
+# Version:  1
+# Date    :  13-03-2025
+################################################################################
 
-### Limpieza del entorno ###
+#------------------------------------------------------------------------------#
+#                           Cleaning R Environment                             #
+#------------------------------------------------------------------------------#
+
 rm(list = ls())
 gc()
 
-#################
-### Librerías ###
-#################
+#------------------------------------------------------------------------------#
+#                                Libraries                                     #
+#------------------------------------------------------------------------------#
+
 library(dplyr)
 library(survey)
 library(srvyr)
-library(sae)
-library(lme4)
 library(data.table)
 library(magrittr)
-library(fastDummies)
 library(haven)
 library(stringr)
 library(tidyr)
 library(knitr)
 library(kableExtra)
-library(broom)
-library(modelsummary)
-library(gtsummary)
 library(ggplot2)
 
-
-# Asegurar el uso correcto de la función select de dplyr
+# Ensure the correct use of dplyr's select function
 select <- dplyr::select
 
-###############################
-### Carga de bases de datos ###
-###############################
+#------------------------------------------------------------------------------#
+#                           Loading Datasets                                   #
+#------------------------------------------------------------------------------#
 
-## Gasto per cápita
-data_expenditure <- read_sav("data/bases/sect7b_hh_w4_v2.sav") %>%
+## Household expenditure data
+data_expenditure <- read_sav("data/data_ESS4/sect7b_hh_w4_v2.sav") %>%
   mutate(expenditure = ifelse(s7q03 == 2, 0, s7q04)) %>%
   group_by(household_id) %>%
   summarise(total_expenditure = sum(expenditure, na.rm = TRUE))
 
-## Información general del hogar
-data_sec <- read_sav("data/bases/sect1_hh_w4.sav")
+## General household information
+data_sec <- read_sav("data/data_ESS4/sect1_hh_w4.sav")
 
-## Resumen de variables clave
-cat("Dimensiones de data_sec:", dim(data_sec), "\n")
+#------------------------------------------------------------------------------#
+#                     Processing Demographic Information                        #
+#------------------------------------------------------------------------------#
 
-# Cálculo de poblaciones según edad
-cat("Población de 18 años o más:", sum(data_sec$s1q03a >= 18), "\n")
-cat("Suma total de pesos muestrales:", sum(data_sec$pw_w4), "\n")
-cat("Peso muestral para mayores de 18 años:", sum(data_sec$pw_w4[data_sec$s1q03a >= 18]), "\n")
-cat("Peso muestral para menores de 18 años:", sum(data_sec$pw_w4[data_sec$s1q03a < 18]), "\n")
-
-## Creación de variable de grupo etario y otras características demográficas
+## Age grouping and demographic characteristics
 data_sec_age <- data_sec %>% 
   transmute(
     household_id,
     individual_id,
-    ea_id,  # Identificador de unidades primarias de muestreo (EA)
+    ea_id,  # Primary sampling unit identifier (EA)
     pw_w4,
-    saq01, # Región
-    saq14, # Área
-    strata = paste0(saq01, "_", saq14), # Estratificación región-zona
-    s1q03a, # Edad en años
+    saq01, # Region
+    Zone = as_factor(saq14), # Urban/Rural classification
+    strata = paste0(saq01, "_", saq14), # Stratification region-zone
+    s1q03a, # Age in years
     age_group = case_when(
       s1q03a < 18 ~ NA_character_,
       s1q03a < 31 ~ "18-30",
       s1q03a < 46 ~ "31-45", 
       s1q03a < 66 ~ "46-65", 
-      TRUE ~ "66 o más"
+      TRUE ~ "66 or more"
     ),
-    sexo = as_factor(s1q02),
-    religion = as_factor(s1q08) %>% 
+    Sexo = as_factor(s1q02),
+    Religion = as_factor(s1q08) %>% 
       recode(
         "6. PEGAN" = "OTHER", 
         "5. TRADITIONAL" = "OTHER",
@@ -83,112 +86,72 @@ data_sec_age <- data_sec %>%
       replace_na("OTHER")
   )
 
-## Estado civil
-data_sec4 <- read_dta("data/bases/sect1_hh_w4.dta")
+#------------------------------------------------------------------------------#
+#                      Processing Marital Status                               #
+#------------------------------------------------------------------------------#
 
-data_sec4_MARRIED <- data_sec4 %>% 
+data_sec1 <- read_sav("data/data_ESS4/sect1_hh_w4.sav")
+
+data_sec1_MARRIED <- data_sec1 %>% 
   transmute(
     household_id,
     individual_id,
-    s1q09 = as.character(as_factor(s1q09)) %>% replace_na("not answered")
+    s1q09 = as.character(as_factor(s1q09)) %>% 
+      replace_na("not answered")
   )
 
-## Cobertura del hogar
-data_sec3 <- read_sav("data/bases/sect_cover_hh_w4.sav") %>%
+#------------------------------------------------------------------------------#
+#                     Household Expenditure Per Capita                         #
+#------------------------------------------------------------------------------#
+
+data_sec2 <- read_sav("data/data_ESS4/sect_cover_hh_w4.sav") %>%
   inner_join(data_expenditure, by = "household_id")
 
-data_sec_expenditure <- data_sec3 %>% 
+data_sec_expenditure <- data_sec2 %>% 
   transmute(
     household_id,
     percapita_expenditure = total_expenditure / saq09
   )
 
-###########################################
-### Unión de bases para regresión final ###
-###########################################
+#------------------------------------------------------------------------------#
+#                 Merging Datasets for Regression Analysis                     #
+#------------------------------------------------------------------------------#
 
 data_sec_regression <- data_sec_age %>%
-  inner_join(data_sec4_MARRIED,
-             by = c("household_id", "individual_id")) %>%
+  inner_join(data_sec1_MARRIED, by = c("household_id", "individual_id")) %>%
   inner_join(data_sec_expenditure, by = "household_id") %>%
   filter(s1q03a >= 18)
 
-cat("Suma total de pesos muestrales en data_sec_regression:", 
-    sum(data_sec_regression$pw_w4), "\n")
+# Saving processed dataset
+saveRDS(data_sec_regression, "data/data_ESS4/data_sec_regression.rds")
 
-## Tablas de frecuencias para variables categóricas
-data_sec_regression %>% 
-  mutate(across(c(saq01, saq14), as_factor)) %>% 
-  select(where(is.factor), where(is.character),
-         -household_id, -individual_id, -ea_id) %>% 
-  purrr::map(~table(.x, useNA = "always"))
+#------------------------------------------------------------------------------#
+#                          Defining Survey Design                              #
+#------------------------------------------------------------------------------#
 
-## Conversión a data.table
-data_sec_regression <- data_sec_regression %>% 
-  mutate(across(c(saq01, saq14), as_factor)) %>% 
-  data.table()
+options(survey.lonely.psu = "fail") # Adjust to handle singleton PSUs
 
-###############################################################################
-# Pfeffermann
-###############################################################################
-modwk <-
-  lm(pw_w4 ~  saq14 * religion + saq14 + sexo + age_group    ,
-     data = data_sec_regression)
-
-wkpred <- predict(modwk)
-
-summary(wkpred)
-summary(data_sec_regression$pw_w4)
-
-sum(wkpred)
-sum(data_sec_regression$pw_w4)
-
-data_sec_regression %<>% mutate(pw_qw = pw_w4 / wkpred)
-
-
-summary(data_sec_regression$pw_qw)
-
-plot(data_sec_regression$pw_w4, data_sec_regression$pw_qw)
-
-par(mfrow=c(2, 2))
-
-hist(data_sec_regression$pw_w4)
-hist(data_sec_regression$pw_qw)
-boxplot(data_sec_regression$pw_w4)
-boxplot(data_sec_regression$pw_qw)
-
-###############################################################################
-options(survey.lonely.psu = "fail") # Tiene error cuando uso adjust
-# Linear models
-
-design_sampleing <- data_sec_regression %>%
-   filter(percapita_expenditure > 0)   %>% 
-   as_survey_design(
-    ids = ea_id,
-    # Identificador de las unidades primarias de muestreo (EA)
-    strata =  strata,
-    # Estratificación por región (saq01) y zona urbana/rural (saq14)
-    weights = pw_qw,
-    # Peso final ajustado
+design_sampling <- data_sec_regression %>%
+  filter(percapita_expenditure > 0) %>% 
+  as_survey_design(
+    ids = ea_id,  # Primary sampling unit identifier (EA)
+    strata = strata, # Stratification by region (saq01) and urban/rural zone (Zone)
+    weights = pw_w4,  # Final adjusted weight
     nest = TRUE
   ) %>% 
-  mutate(log_expenditure = log(percapita_expenditure + 70) )
+  mutate(log_expenditure = log(percapita_expenditure + 70))
 
-fit_svy <-
-  svyglm(log_expenditure  ~ -1 + saq14 * religion + saq14 + sexo + age_group,
-         design = design_sampleing)
+#------------------------------------------------------------------------------#
+#                         Estimating Linear Models                             #
+#------------------------------------------------------------------------------#
 
+# Survey-weighted linear model for log expenditure
+fit_svy <- svyglm(log_expenditure  ~ -1 + Zone * Religion + Zone + Sexo + age_group,
+                  design = design_sampling)
 
-summary(fit_svy)
-tidy(fit_svy) %>% kable(digits = 2)
+# Display model coefficients
+fit_svy %>% coef()
 
-# modelsummary(
-#  list(svyglm =  fit_svy),
-#   fmt = 1,
-#   estimate  = "{estimate} [{conf.low}, {conf.high}]",
-#   statistic = "p.value",
-#   coef_omit = "Intercept",
-#   output = "markdown")
 
 #############################
 # Coefficient of determination pendiente. 
@@ -207,6 +170,7 @@ wSSE <- s1$dispersion
 
 R2 = 1 - wSSE / wSST
 R2
+
 
 ########################################
 ## 5.5.2 Standardized Residuals
@@ -344,18 +308,11 @@ ggplot(d_dffits, aes(y = abs(dffits), x = id)) +
 ########################################
 #  Inference on Model Parameters
 ########################################
-library(jtools)
-survey:::confint.svyglm(fit_svy) %>% kable(digits = 2)
-
-plot_coefs(fit_svy,
-           scale = TRUE,
-           plot.distributions = TRUE)
-summ(fit_svy, digits = 2, pvals = TRUE)
-
 library(broom)
 
 # Extract coefficients and confidence intervals
 coef_df <- tidy(fit_svy, conf.int = TRUE)
+coef_df %>% kable(digits = 2)
 
 ggplot(coef_df, aes(x = reorder(term, estimate), y = estimate)) +
   geom_point(size = 3, color = "blue") +
