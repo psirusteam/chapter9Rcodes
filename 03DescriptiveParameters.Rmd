@@ -12,29 +12,6 @@ deal with the suppression of estimates that do not reach expected quality.
 
 ## Ethiopia Socioeconomic Survey (ESS4): Sampling Design and Data Source
 
-The Ethiopia Socioeconomic Survey (ESS4) is part of the Living Standards Measurement Study (LSMS), an initiative by the World Bank in collaboration with the Central Statistical Agency of Ethiopia (CSA). Its objective is to provide high-quality data for the analysis of poverty, food security, agricultural development, and other key socioeconomic aspects.
-
-The ESS4 is part of a series of longitudinal surveys initiated in 2011 under the name Ethiopia Rural Socioeconomic Survey (ERSS). In its first two rounds, the survey only covered rural areas and small towns, but starting from the second wave (ESS2, 2013/2014), the coverage was expanded to all urban areas, ensuring nationally representative estimates. The ESS1, ESS2, and ESS3 waves constitute Panel I, while ESS4 initiates a new panel, serving as the baseline for future surveys.
-
-The survey provides information on household structure, employment, income, consumption, education, health, access to infrastructure, and characteristics of the agricultural sector. One of its key features is the combination of household survey data with administrative records and remote sensing technologies, such as satellite imagery, to improve the accuracy of economic and social indicator estimates.
-
-### Data Source
-
-The ESS4 was implemented by the CSA of Ethiopia, in collaboration with the World Bank and other international organizations. Data collection was conducted through direct interviews with selected households, using electronic devices through Computer-Assisted Personal Interviewing (CAPI). The database includes detailed information on:
-
--   Household structure and sociodemographic characteristics (age, gender, education, health).
-
--   Living conditions and economic well-being (income, consumption, access to services).
-
--   Housing characteristics (construction materials, access to drinking water, sanitation, and electricity).
-
--   Food security and agricultural production (crops, livestock, access to markets).
-
--   Access to financing and land tenure.
-
--   Mobility and migration (internal displacement and job seeking).
-
-The ESS4 not only allows for the generation of descriptive statistics on the Ethiopian population but also facilitates longitudinal studies to assess changes in living conditions over time.
 
 ### Sampling Design
 

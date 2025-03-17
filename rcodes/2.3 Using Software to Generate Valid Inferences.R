@@ -1,7 +1,7 @@
 ################################################################################
 # 2.3 Using Software to Generate Valid Inferences
 ################################################################################
-# Author: Andrés Gutiérrez, Stalyn Guerrero
+# Authors: Andrés Gutiérrez & Stalyn Guerrero
 # 
 # Data Source:
 # https://microdata.worldbank.org/index.php/catalog/3823/data-dictionary 
@@ -45,39 +45,38 @@ memory.limit(250000000)
 #------------------------------------------------------------------------------#
 
 # Household identification; location; household size and field staff identification 
-dat_Hogar <- read_sav("data/data_ESS4/sect_cover_hh_w4.sav") %>% 
+HH_data <- read_sav("data/data_ESS4/sect_cover_hh_w4.sav") %>% 
   select(
     household_id, # Unique Household Identifier 
     ea_id,        # Unique Enumeration Area Identifier
-    saq14,        # Rural/Urban
-    saq02,        # saq02 Code
-    saq01,        # saq01 Code 
-    pw_w4         # Final adjusted wave 4 weight
+    saq14,        # Area = Rural/Urban
+    saq02,        # Zone Code
+    saq01,        # Region Code 
+    pw_w4         # Final adjusted sampling weight
   )
 
 
 #------------------------------------------------------------------------------#
-# TABLE 1.1A
-# ESS4 Sampled EAs and Households by Region and by Urban and Rural  
 # Ethiopia Socioeconomic Survey (ESS) 2018/19
-# SURVEY REPORT
+# ESS4 Sampled EAs and Households by Region and by Urban and Rural  
+# SURVEY REPORT - TABLE 1.1A
 # Central Statistics Agency of Ethiopia | World Bank
 #------------------------------------------------------------------------------#
 
 # Count of Enumeration Areas (EA) by saq01 and saq14 categories
 
-total_ea_id <- dat_Hogar %>% 
+ea_counts_by_region <- HH_data %>% 
   distinct(ea_id, saq14, saq01) %>% 
   mutate(saq14 = as_factor(saq14), saq01 = as_factor(saq01)) %>% 
   group_by(saq01, saq14) %>% 
   tally() %>% 
   pivot_wider(names_from = saq14, values_from = n, values_fill = list(n = 0)) %>% 
-  mutate(TOTAL_ea_id = RURAL + URBAN) %>% 
+  mutate(ea_counts_by_region = RURAL + URBAN) %>% 
   rename_with(~ paste0(., "_ea_id"), c("RURAL", "URBAN"))
 
-# Count of Households (HH) by saq01 and saq14 categories
+# Count of Households (HH) by region and area (urban/rural) categories
 
-total_viv <- dat_Hogar %>% 
+hh_counts_by_region <- HH_data %>% 
   distinct(household_id, saq01, saq14) %>% 
   mutate(saq14 = as_factor(saq14), saq01 = as_factor(saq01)) %>% 
   group_by(saq01, saq14) %>% 
@@ -87,13 +86,13 @@ total_viv <- dat_Hogar %>%
   rename_with(~ paste0(., "_HH"), c("RURAL", "URBAN"))
 
 # Merging both datasets on saq01
-temp <- inner_join(total_viv, total_ea_id)
+temp <- inner_join(hh_counts_by_region, ea_counts_by_region)
 
-# Summarizing the results including an additional row for "Etiopia"
-final_result <- bind_rows(
+# Summarizing the results including an additional row for "ETHIOPIA"
+survey_counts <- bind_rows(
   temp,
   temp %>% data.frame() %>% summarise_if(is.numeric, sum) %>%
-    mutate(saq01 = "Etiopia")
+    mutate(saq01 = "ETHIOPIA")
 ) %>% 
   select(
     Region = saq01, 
@@ -102,17 +101,17 @@ final_result <- bind_rows(
     URBAN_HH, 
     URBAN_AE = URBAN_ea_id,
     TOTAL_HH,
-    TOTAL_AE = TOTAL_ea_id
+    TOTAL_AE = ea_counts_by_region
   ) %>% 
   data.frame()
 
 # Display final result
-data.frame(final_result)
+data.frame(survey_counts)
 #------------------------------------------------------------------------------#
-# Defining survey design
+# Defining the survey design
 #------------------------------------------------------------------------------#
 
-design_sampling <- data_sec %>% 
+ESS4_design <- HH_data %>% 
   mutate(strata = paste0(saq01, "_", saq14)) %>% 
   as_survey_design(
     ids = ea_id,  # Primary sampling unit identifier (EA)
@@ -121,4 +120,4 @@ design_sampling <- data_sec %>%
     nest = TRUE
   )
 
-summary(design_sampling)
+summary(ESS4_design)

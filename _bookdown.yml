@@ -5,6 +5,7 @@ new_session: yes
 
 rmd_files: [
   "index.rmd", 
+  "2.3_Using_Software_to_Generate_Valid_Inferences.rmd",
    "03DescriptiveParameters.Rmd"
  
 ]

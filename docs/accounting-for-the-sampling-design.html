@@ -4,20 +4,20 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>2.2 Definición del diseño muestral en R | CHAPTER 9 - EXAMPLES IN R</title>
-  <meta name="description" content="2.2 Definición del diseño muestral en R | CHAPTER 9 - EXAMPLES IN R" />
+  <title>1 Accounting for the Sampling Design | CHAPTER 9 - EXAMPLES IN R</title>
+  <meta name="description" content="1 Accounting for the Sampling Design | CHAPTER 9 - EXAMPLES IN R" />
   <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="2.2 Definición del diseño muestral en R | CHAPTER 9 - EXAMPLES IN R" />
+  <meta property="og:title" content="1 Accounting for the Sampling Design | CHAPTER 9 - EXAMPLES IN R" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:description" content="2.2 Definición del diseño muestral en R | CHAPTER 9 - EXAMPLES IN R" />
+  <meta property="og:description" content="1 Accounting for the Sampling Design | CHAPTER 9 - EXAMPLES IN R" />
   <meta name="github-repo" content="psirusteam/chapter9Rcodes" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="2.2 Definición del diseño muestral en R | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="twitter:title" content="1 Accounting for the Sampling Design | CHAPTER 9 - EXAMPLES IN R" />
   
-  <meta name="twitter:description" content="2.2 Definición del diseño muestral en R | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="twitter:description" content="1 Accounting for the Sampling Design | CHAPTER 9 - EXAMPLES IN R" />
   
 
 <meta name="author" content="" />
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="ethiopia-socioeconomic-survey-ess4-sampling-design-and-data-source.html"/>
-<link rel="next" href="frequencies-and-proportions.html"/>
+<link rel="prev" href="index.html"/>
+<link rel="next" href="data-source.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -184,34 +184,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="definición-del-diseño-muestral-en-r" class="section level2 hasAnchor" number="2.2">
-<h2><span class="header-section-number">2.2</span> Definición del diseño muestral en R<a href="definición-del-diseño-muestral-en-r.html#definición-del-diseño-muestral-en-r" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>First, the necessary libraries are loaded: <strong><code>haven</code></strong> to read data files in <code>.sav</code> format (SPSS), <strong><code>dplyr</code></strong> for data manipulation, <strong><code>survey</code></strong> for the analysis of complex surveys, and <strong><code>srvyr</code></strong>, which is an extension of <code>survey</code> with a syntax similar to <code>dplyr</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="definición-del-diseño-muestral-en-r.html#cb9-1" tabindex="-1"></a><span class="fu">library</span>(haven)       <span class="co"># Para leer archivos .sav</span></span>
-<span id="cb9-2"><a href="definición-del-diseño-muestral-en-r.html#cb9-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)       <span class="co"># Para manipulación de datos</span></span>
-<span id="cb9-3"><a href="definición-del-diseño-muestral-en-r.html#cb9-3" tabindex="-1"></a><span class="fu">library</span>(survey)      <span class="co"># Para análisis de encuestas complejas</span></span>
-<span id="cb9-4"><a href="definición-del-diseño-muestral-en-r.html#cb9-4" tabindex="-1"></a><span class="fu">library</span>(srvyr)</span>
-<span id="cb9-5"><a href="definición-del-diseño-muestral-en-r.html#cb9-5" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span></code></pre></div>
-<p>Next, the data is loaded from an <code>.rds</code> file using the <strong><code>readRDS</code></strong> function. The data is stored in the object <strong><code>dat_Hogar</code></strong>. Then, the relevant columns for the analysis are selected using the <strong><code>transmute</code></strong> function. These columns include: <strong><code>household_id</code></strong> (unique household identifier), <strong><code>ea_id</code></strong> (unique identifier for the enumeration area, representing the primary sampling units), <strong><code>saq14</code></strong> (variable indicating whether the household is rural (1) or urban (2)), <strong><code>saq02</code></strong> (region or district code), <strong><code>saq01</code></strong> (region code), and <strong><code>pw_w4</code></strong> (final adjusted weight for the fourth wave of the survey, necessary for weighted analysis).</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="definición-del-diseño-muestral-en-r.html#cb10-1" tabindex="-1"></a>dat_Hogar <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/data_ESS4/sect1_hh_w4.rds&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-2"><a href="definición-del-diseño-muestral-en-r.html#cb10-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strata =</span> <span class="fu">paste0</span>(saq01, <span class="st">&quot;_&quot;</span>, saq14) )</span></code></pre></div>
-<p>Finally, the complex survey design is defined using the <strong><code>as_survey_design</code></strong> function from the <code>srvyr</code> package. This design considers: <strong><code>ids = ~ ea_id</code></strong> to specify the primary sampling units (enumeration areas), <strong><code>strata = ~ saq01 + saq14</code></strong> to define stratification by region and urban/rural area, <strong><code>weights = ~ pw_w4</code></strong> to assign sampling weights, and <strong><code>nest = TRUE</code></strong> to indicate that the cluster identifiers are nested within the strata. This survey design is essential for performing statistical analyses that take into account the complex structure of the survey, such as estimating means, hat_Ns, or regressions.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="definición-del-diseño-muestral-en-r.html#cb11-1" tabindex="-1"></a><span class="co"># Definir el diseño muestral</span></span>
-<span id="cb11-2"><a href="definición-del-diseño-muestral-en-r.html#cb11-2" tabindex="-1"></a>design_sampleing <span class="ot">&lt;-</span> dat_Hogar <span class="sc">%&gt;%</span> <span class="co"># Base de datos</span></span>
-<span id="cb11-3"><a href="definición-del-diseño-muestral-en-r.html#cb11-3" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(</span>
-<span id="cb11-4"><a href="definición-del-diseño-muestral-en-r.html#cb11-4" tabindex="-1"></a>    <span class="at">ids =</span> ea_id,  <span class="co"># Identificador de las unidades primarias de muestreo (EA)</span></span>
-<span id="cb11-5"><a href="definición-del-diseño-muestral-en-r.html#cb11-5" tabindex="-1"></a>    <span class="at">strata =</span>  strata, <span class="co"># Estratificación por región (saq01) y zona urbana/rural (saq14)</span></span>
-<span id="cb11-6"><a href="definición-del-diseño-muestral-en-r.html#cb11-6" tabindex="-1"></a>    <span class="at">weights =</span> pw_w4,    <span class="co"># Peso final ajustado</span></span>
-<span id="cb11-7"><a href="definición-del-diseño-muestral-en-r.html#cb11-7" tabindex="-1"></a>    <span class="at">nest =</span> <span class="cn">TRUE</span></span>
-<span id="cb11-8"><a href="definición-del-diseño-muestral-en-r.html#cb11-8" tabindex="-1"></a>  )</span></code></pre></div>
+<div id="accounting-for-the-sampling-design" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">1</span> Accounting for the Sampling Design<a href="accounting-for-the-sampling-design.html#accounting-for-the-sampling-design" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>The Ethiopia Socioeconomic Survey (ESS4) is part of the Living Standards Measurement Study (LSMS), an initiative by the World Bank in collaboration with the Central Statistical Agency of Ethiopia (CSA). Its objective is to provide high-quality data for the analysis of poverty, food security, agricultural development, and other key socioeconomic aspects.</p>
+<p>The ESS4 is part of a series of longitudinal surveys initiated in 2011 under the name Ethiopia Rural Socioeconomic Survey (ERSS). In its first two rounds, the survey only covered rural areas and small towns, but starting from the second wave (ESS2, 2013/2014), the coverage was expanded to all urban areas, ensuring nationally representative estimates. The ESS1, ESS2, and ESS3 waves constitute Panel I, while ESS4 initiates a new panel, serving as the baseline for future surveys.</p>
+<p>The survey provides information on household structure, employment, income, consumption, education, health, access to infrastructure, and characteristics of the agricultural sector. One of its key features is the combination of household survey data with administrative records and remote sensing technologies, such as satellite imagery, to improve the accuracy of economic and social indicator estimates.</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="ethiopia-socioeconomic-survey-ess4-sampling-design-and-data-source.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="frequencies-and-proportions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="data-source.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -242,7 +227,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/psirusteam/chapter9Rcodes/03DescriptiveParameters.Rmd",
+"link": "https://github.com/psirusteam/chapter9Rcodes/2.3_Using_Software_to_Generate_Valid_Inferences.rmd",
 "text": "Edit"
 },
 "history": {
