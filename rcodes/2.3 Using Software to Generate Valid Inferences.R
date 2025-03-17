@@ -120,4 +120,6 @@ ESS4_design <- HH_data %>%
     nest = TRUE
   )
 
+# Makes it an error to have a stratum with a single, non-certainty PSU
+options(survey.lonely.psu = "fail") 
 summary(ESS4_design)
