@@ -1,7 +1,7 @@
 ################################################################################
 # 3.2 Totals, means and ratios
 ################################################################################
-# Author: Andrés Gutiérrez & Stalyn Guerrero
+# Authors: Andrés Gutiérrez & Stalyn Guerrero
 # Economic Comission for Latin America and the Caribbean 
 # Statistics Division
 #

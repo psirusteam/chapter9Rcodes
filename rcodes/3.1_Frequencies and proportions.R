@@ -1,7 +1,7 @@
 ################################################################################
 # 3.1 Frequencies and Proportions
 ################################################################################
-# Author: Andrés Gutiérrez & Stalyn Guerrero
+# Authors: Andrés Gutiérrez & Stalyn Guerrero
 # Economic Comission for Latin America and the Caribbean 
 # Statistics Division
 #

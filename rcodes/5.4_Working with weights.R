@@ -1,7 +1,9 @@
 ################################################################################
 # 5.4 Working with Weights
 ################################################################################
-# Author: Andrés Gutiérrez
+# Authors: Andrés Gutiérrez & Stalyn Guerrero
+# Economic Comission for Latin America and the Caribbean
+# Statistics Division
 #
 # Description:
 # This script processes and calibrates survey weights using different methods,
