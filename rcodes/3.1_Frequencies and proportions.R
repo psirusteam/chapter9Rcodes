@@ -2,6 +2,8 @@
 # 3.1 Frequencies and Proportions
 ################################################################################
 # Author: Andrés Gutiérrez & Stalyn Guerrero
+# Economic Comission for Latin America and the Caribbean 
+# Statistics Division
 #
 # Data Source:
 # https://microdata.worldbank.org/index.php/catalog/3823/data-dictionary

@@ -1,7 +1,9 @@
 ################################################################################
 # 2.3 Using Software to Generate Valid Inferences
 ################################################################################
-# Authors: Andrés Gutiérrez & Stalyn Guerrero
+# Author: Andrés Gutiérrez & Stalyn Guerrero
+# Economic Comission for Latin America and the Caribbean 
+# Statistics Division
 #
 # Data Source:
 # https://microdata.worldbank.org/index.php/catalog/3823/data-dictionary

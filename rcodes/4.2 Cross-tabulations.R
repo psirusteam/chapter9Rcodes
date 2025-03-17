@@ -1,8 +1,10 @@
 ################################################################################
 # 4.2 Cross-tabulations
 ################################################################################
-# Author: Andrés Gutiérrez, Stalyn Guerrero
-# 
+# Author: Andrés Gutiérrez & Stalyn Guerrero
+# Economic Comission for Latin America and the Caribbean 
+# Statistics Division
+#
 # Data Source:
 # https://microdata.worldbank.org/index.php/catalog/3823/data-dictionary 
 # Version:  1
@@ -46,31 +48,37 @@ memory.limit(250000000)
 #------------------------------------------------------------------------------#
 
 options(survey.lonely.psu = "fail") 
-data_sec <- read_sav("data/data_ESS4/sect1_hh_w4.sav")
+HH_data <- read_sav("data/data_ESS4/sect1_hh_w4.sav")
 
 #------------------------------------------------------------------------------#
 #                         Defining Survey Design                              #
 #------------------------------------------------------------------------------#
 
-design_sampling <- data_sec %>%
+ESS4_design <- HH_data %>%
   mutate(strata = paste0(saq01, "_", saq14)) %>%
   as_survey_design(
-    ids = ea_id, # Primary sampling unit identifier (EA)
-    strata = strata, # Stratification by region (saq01) and urban/rural zone (saq14)
-    weights = pw_w4,  # Final adjusted weight
+    ids = ea_id,
+    # Primary sampling unit identifier (EA)
+    strata = strata,
+    # Stratification by region (saq01) and urban/rural zone (saq14)
+    weights = pw_w4,
+    # Final adjusted weight
     nest = TRUE
   )
+
+options(survey.lonely.psu = "fail")
+summary(ESS4_design)
 
 #------------------------------------------------------------------------------#
 #                   Processing Variables for Analysis                         #
 #------------------------------------------------------------------------------#
 
-design_sampling <- design_sampling %>%
+ESS4_design <- ESS4_design %>%
   mutate(
     sexo = as_factor(s1q02),
     religion = as_factor(s1q08),
     religion = case_when(
-      religion %in% c("6. PEGAN", "5. TRADITIONAL", "8. OTHER (SPECIFY)", 
+      religion %in% c("6. PEGAN", "5. TRADITIONAL", "8. OTHER (SPECIFY)",
                       "7. WAKEFETA") |
         is.na(religion) ~ "OTHER",
       TRUE ~ religion
@@ -83,70 +91,65 @@ design_sampling <- design_sampling %>%
 #------------------------------------------------------------------------------#
 
 # Estimates by region
-tab_01_region <- design_sampling %>%
+tab_01_region <- ESS4_design %>%
   group_by(Region = as_factor(saq01), religion) %>%
-  summarise(
-    P_hat = survey_mean(vartype = c("se", "cv")),
-    T_hat = survey_total(vartype = c("se", "cv"))
-  )
+  summarise(P_hat = survey_mean(vartype = c("se", "cv")),
+            T_hat = survey_total(vartype = c("se", "cv")))
+
 
 # National estimates
-tab_01_tot <- design_sampling %>%
-  group_by(Region = "Ethiopia", religion) %>%
-  summarise(
-    P_hat = survey_mean(vartype = c("se", "cv")), 
-    T_hat = survey_total(vartype = c("se", "cv"))
-  )
+tab_01_tot <- ESS4_design %>%
+  group_by(Region = "ETHIOPIA", religion) %>%
+  summarise(P_hat = survey_mean(vartype = c("se", "cv")),
+            T_hat = survey_total(vartype = c("se", "cv")))
 
 # Estimates by urban/rural zones
-tab_01_zone <- design_sampling %>%
+tab_01_zone <- ESS4_design %>%
   group_by(Region = as_factor(saq14), religion) %>%
-  summarise(
-    P_hat = survey_mean(vartype = c("se", "cv")),
-    T_hat = survey_total(vartype = c("se", "cv"))
-  )
+  summarise(P_hat = survey_mean(vartype = c("se", "cv")),
+            T_hat = survey_total(vartype = c("se", "cv")))
 
 #------------------------------------------------------------------------------#
 #                  Formatting and Displaying Cross-tabulation Tables          #
 #------------------------------------------------------------------------------#
 
-# Proportion table
-temp1 <- bind_rows(tab_01_region, tab_01_zone, tab_01_tot) %>% 
+# Proportions table
+temp1 <- bind_rows(tab_01_region, tab_01_zone, tab_01_tot) %>%
   select(P_hat, religion) %>%
-  mutate(P_hat = round(P_hat * 100, 1)) %>% 
+  mutate(P_hat = round(P_hat * 100, 1)) %>%
   pivot_wider(
     names_from = religion,
     values_from = P_hat,
     values_fill = list(P_hat = 0)
-  ) 
+  )
 
-temp1 %>% 
+temp1 %>%
   select(
-    Region, Orthodox = "1. ORTHODOX",
+    Region,
+    Orthodox = "1. ORTHODOX",
     Catholic = "2. CATHOLIC",
     Protestant = "3. PROTESTANT",
-    Muslim = "4. MUSLEM", 
+    Muslim = "4. MUSLEM",
     Other = OTHER
-  ) %>% 
-  kable(digits = 2)
+  ) 
 
-# Total estimates table
-temp2 <- bind_rows(tab_01_region, tab_01_zone, tab_01_tot) %>% 
+# Absolute Sizes table
+temp2 <- bind_rows(tab_01_region, tab_01_zone, tab_01_tot) %>%
   select(T_hat, religion) %>%
-  mutate(T_hat = round(T_hat)) %>% 
+  mutate(T_hat = round(T_hat)) %>%
   pivot_wider(
     names_from = religion,
     values_from = T_hat,
     values_fill = list(T_hat = 0)
   ) 
 
-temp2 %>% 
+temp2 %>%
   select(
-    Region, Orthodox = "1. ORTHODOX",
+    Region,
+    Orthodox = "1. ORTHODOX",
     Catholic = "2. CATHOLIC",
     Protestant = "3. PROTESTANT",
-    Muslim = "4. MUSLEM", 
+    Muslim = "4. MUSLEM",
     Other = OTHER
-  ) %>% 
-  kable(digits = 2)
+  ) 
 
