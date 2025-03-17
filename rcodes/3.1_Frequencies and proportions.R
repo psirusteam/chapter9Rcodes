@@ -2,9 +2,9 @@
 # 3.1 Frequencies and Proportions
 ################################################################################
 # Author: Andrés Gutiérrez & Stalyn Guerrero
-# 
+#
 # Data Source:
-# https://microdata.worldbank.org/index.php/catalog/3823/data-dictionary 
+# https://microdata.worldbank.org/index.php/catalog/3823/data-dictionary
 # Version:  1
 # Date    :  13-03-2025
 ################################################################################
@@ -54,18 +54,21 @@ HH_data <- HH_data %>%
   )
 
 # Defining the survey design
-design_sampling <- HH_data %>% 
-  mutate(strata = paste0(saq01, "_", saq14)) %>% 
+ESS4_design <- HH_data %>%
+  mutate(strata = paste0(saq01, "_", saq14)) %>%
   as_survey_design(
-    ids = ea_id,  # Primary sampling unit identifier (EA)
-    strata = strata, # Stratification by region (saq01) and urban/rural zone (saq14)
-    weights = pw_w4,  # Final adjusted weight
+    ids = ea_id,
+    # Primary sampling unit identifier (EA)
+    strata = strata,
+    # Stratification by region (saq01) and urban/rural zone (saq14)
+    weights = pw_w4,
+    # Final adjusted weight
     nest = TRUE
   )
 
 # Makes it an error to have a stratum with a single, non-certainty PSU
 options(survey.lonely.psu = "fail") 
-summary(design_sampling)
+summary(ESS4_design)
 
 #------------------------------------------------------------------------------#
 # TABLE 7.3
@@ -77,11 +80,14 @@ summary(design_sampling)
 # Central Statistics Agency of Ethiopia | World Bank
 #------------------------------------------------------------------------------#
 
-tab_01 <- design_sampling %>%
+tab_01 <- ESS4_design %>%
   group_by(item = item_cd_12months) %>%
   summarise(
   N_hat = survey_total(yes_no, na.rm = TRUE, vartype = c("se", "cv")),
-  P_hat = survey_mean(yes_no, na.rm = TRUE, vartype = c("se", "cv", "ci")))
+  # Absolute size
+  P_hat = survey_mean(yes_no, na.rm = TRUE, vartype = c("se", "cv", "ci"))
+  # Proportions
+  )
 
 tab_01 %>%
   transmute(
