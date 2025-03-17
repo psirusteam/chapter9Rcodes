@@ -186,7 +186,7 @@ R2
 
 
 ########################################
-## 5.5.2 Standardized Residuals
+##    Standardized Residuals           #
 ########################################
 
 stdresids <- as.numeric(svystdres(EXP_model)$stdresids)
@@ -224,11 +224,14 @@ ggplot(data = data.frame(stdresids), aes(sample = stdresids)) +
   theme_minimal(base_size = 20) +
   theme(plot.title = element_text(hjust = 0.5))  # Centers the title
 
-########################################
-# Influential Observations
-########################################
+#------------------------------------------------------------------------------#
+#                         Influential Observations                             #
+#------------------------------------------------------------------------------#
 
-## Cook's Distance
+
+########################################
+#        Cook's Distance               #
+########################################
 
 CooksD = data.frame(cook = svyCooksD(EXP_model),
                     id = 1:length(svyCooksD(EXP_model))) %>%
@@ -240,18 +243,21 @@ ggplot(CooksD, aes(y = cook, x = id)) +
              color = "black",
              linetype = "dashed") +  # Horizontal line at 3
   scale_color_manual(values = c("Yes" = "red", "No" = "black")) +
-  scale_y_continuous(breaks = c(0, 3, 6, 9, 12, 15)) +  # Ensure 3 appears on the axis
+  scale_y_continuous(breaks = c(0, 3, 6, 9, 12, 15)) +
   theme_minimal(base_size = 20) +
-  theme(plot.title = element_text(hjust = 0.5)) +  # Centers the title
+  theme(plot.title = element_text(hjust = 0.5)) +  
   labs(title = "Cook's Distance")
 
+########################################
+#          Calculate DFBETAS           #
+########################################
 
-# Calculate DFBETAS
 d_dfbetas <- svydfbetas(EXP_model)$Dfbetas %>%
   t() %>%
   as.data.frame()
 
 # Rename Beta columns
+
 colnames(d_dfbetas)[1:(ncol(d_dfbetas))] <-
   paste0("beta[", seq_len(ncol(d_dfbetas)) - 1, "]")
 
@@ -287,8 +293,9 @@ ggplot(d_dfbetas_long %>% sample_n(min(20000, nrow(d_dfbetas_long))), aes(y = ab
   theme_minimal(base_size = 20) +
   theme(plot.title = element_text(hjust = 0.5))  # Centers the title
 
-## DFFITS Analysis
-
+########################################
+#         DFFITS Analysis              #
+########################################
 
 # Create DFFITS dataframe
 d_dffits <- data.frame(dffits = svydffits(EXP_model)$Dffits,
@@ -299,7 +306,7 @@ cutoff <- svydffits(EXP_model)$cutoff
 
 # Add influence criterion
 d_dffits <- d_dffits %>%
-  mutate(Criterion = ifelse(abs(dffits) > cutoff, "Yes", "No"))  # Translated "Si" to "Yes" and "No" remains the same
+  mutate(Criterion = ifelse(abs(dffits) > cutoff, "Yes", "No"))  
 
 # Plot DFFITS with cutoff threshold
 ggplot(d_dffits, aes(y = abs(dffits), x = id)) +
@@ -314,16 +321,26 @@ ggplot(d_dffits, aes(y = abs(dffits), x = id)) +
   theme_minimal(base_size = 20) +
   theme(plot.title = element_text(hjust = 0.5))  # Centers the title
 
-########################################
-#  Inference on Model Parameters
-########################################
 
+#------------------------------------------------------------------------------#
+#                         Inference on Model Parameters                        #
+#------------------------------------------------------------------------------#
 
 # Extract coefficients and confidence intervals
 coef_df <- tidy(EXP_model, conf.int = TRUE)
-coef_df
+coef_df$beta <-
+  factor (paste0("beta[", 1:nrow(coef_df) -1,"]"),
+          ordered = TRUE,
+          levels =  paste0("beta[", 1:nrow(coef_df) - 1, "]"),
+          labels  = paste0("beta[", 1:nrow(coef_df) - 1, "]"))
 
-ggplot(coef_df, aes(x = reorder(term, estimate), y = estimate)) +
+# Crear expresiones matemáticas para los coeficientes beta
+beta_labels <- setNames(
+  lapply(0:(nrow(coef_df) - 1), function(i) bquote(beta[.(i)])),
+  paste0("beta[", 0:(nrow(coef_df) - 1), "]")
+)
+
+ggplot(coef_df, aes(x = beta, y = estimate)) +
   geom_point(size = 3, color = "blue") +
   geom_errorbar(aes(ymin = conf.low, ymax = conf.high),
                 width = 0.2,
@@ -339,8 +356,6 @@ ggplot(coef_df, aes(x = reorder(term, estimate), y = estimate)) +
   ) +
   theme_minimal(base_size = 16) +
   theme(plot.title = element_text(hjust = 0.5),
-        # Center title
-        plot.subtitle = element_text(hjust = 0.5)   
-        # Center subtitle
-        ) +
-coord_flip()  # Flip for better readability
+        plot.subtitle = element_text(hjust = 0.5)) +
+  scale_x_discrete(labels = beta_labels) +  # Expresiones matemáticas en el eje X
+  coord_flip()  # Flip para mejor legibilidad
