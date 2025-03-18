@@ -143,7 +143,8 @@ observed_values <- ESS4_design$variables$log_expenditure
 ggplot(data = data.frame(observed = observed_values, predicted = predicted_values[,1]), 
        aes(x = observed, y = predicted)) +
   geom_point(alpha = 0.5, color = "blue") +  # Scatter plot with transparency
-  geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed") +  # Reference line
+  geom_abline(intercept = 0, slope = 1, color = "red", linetype = "dashed",
+              linewidth = 1.5) +  # Reference line
   labs(
     title = "Observed vs Predicted Values",
     x = "Observed Log Expenditure",
