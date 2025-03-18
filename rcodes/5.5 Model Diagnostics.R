@@ -1,12 +1,17 @@
 ################################################################################
-# 5.5 Model Diagnostics
+# 5.5 Model Diagnostics                                                        #
 ################################################################################
-# Author: Andrés Gutiérrez, Stalyn Guerrero
+# Authors: Andrés Gutiérrez & Stalyn Guerrero
+# Economic Comission for Latin America and the Caribbean 
+# Statistics Division
 #
 # Description:
-# This script performs model diagnostics for survey-weighted regression models,
-# including coefficient of determination, standardized residuals, influential
-# observations analysis, and various diagnostic plots.
+# This script performs diagnostics on survey-weighted regression models, 
+# evaluating key aspects such as:
+# - Coefficient of determination (R²)
+# - Standardized residuals analysis
+# - Identification of influential observations
+# - Various diagnostic plots for model validation
 #
 # Data Source:
 # https:/microdata.worldbank.org/index.php/catalog/3823/data-dictionary
@@ -18,87 +23,98 @@
 #                           Cleaning R Environment                             #
 #------------------------------------------------------------------------------#
 
+# Remove all objects from the environment to avoid conflicts
 rm(list = ls())
+
+# Perform garbage collection to free memory
 gc()
 
 #------------------------------------------------------------------------------#
 #                                Libraries                                     #
 #------------------------------------------------------------------------------#
 
-library(dplyr)
-library(survey)
-library(srvyr)
-library(data.table)
-library(magrittr)
-library(haven)
-library(stringr)
-library(tidyr)
-library(knitr)
-library(kableExtra)
-library(svydiags)
-library(ggplot2)
+# Load required packages for data handling, survey analysis, and diagnostics
 
-# Ensure the correct use of dplyr's select function
+library(dplyr)        
+library(survey)       
+library(srvyr)       
+library(data.table)  
+library(magrittr)     
+library(haven)        
+library(tidyr)        
+library(svydiags)     # Survey diagnostics
+library(ggplot2)      
+library(broom)       
+
+# Ensure dplyr's select function is correctly used to avoid conflicts
 select <- dplyr::select
 
 #------------------------------------------------------------------------------#
 #                           Loading Dataset                                    #
 #------------------------------------------------------------------------------#
 
-data_sec_regression <-
-  readRDS("data/data_ESS4/data_sec_regression.rds")
+# Load the dataset containing survey information
+IND_data_regression <- readRDS("data/data_ESS4/IND_data_regression.rds")
 
 #------------------------------------------------------------------------------#
 #                        Defining Survey Design                                #
 #------------------------------------------------------------------------------#
 
+# Set survey options to avoid errors in single PSU strata
 options(survey.lonely.psu = "fail")
 
-design_sampling <- data_sec_regression %>%
+# Define the survey design object using weighted data
+ESS4_design <- IND_data_regression %>%
   filter(percapita_expenditure > 0) %>%
   as_survey_design(
-    ids = ea_id,
-    strata = strata,
-    weights = pw_w4,
+    ids = ea_id,         # Primary Sampling Units (PSU)
+    strata = strata,     # Stratification variable
+    weights = pw_w4,     # Sampling weights
     nest = TRUE
   ) %>%
-  mutate(log_expenditure = log(percapita_expenditure + 70))
+  mutate(log_expenditure = log(percapita_expenditure + 70)) # Log transformation
 
 #------------------------------------------------------------------------------#
 #                     Estimating Survey-weighted Model                         #
 #------------------------------------------------------------------------------#
 
-fit_lm <-
-  log_expenditure  ~ -1 + Zone * Religion + Zone + Sexo + age_group
+# Define and estimate a survey-weighted regression model
+EXP_model <- svyglm(
+  log_expenditure ~ 1 + Zone * Religion + Zone + Sexo + age_group,
+  design = ESS4_design
+)
 
-
-fit_svy <- svyglm(fit_lm, design = design_sampling)
-
-# Display model coefficients
-tidy(fit_svy) %>% kable(digits = 2)
-
-#------------------------------------------------------------------------------#
-#                     5.5.1 Coefficient of Determination                        #
-#------------------------------------------------------------------------------#
-
-modNul <-
-  svyglm(log_expenditure ~ 1, design = design_sampling)
-
-s1 <- summary(fit_svy)
-s0 <- summary(modNul)
-
-wSST <- s0$dispersion
-wSSE <- s1$dispersion
-
-R2 = 1 - wSSE / wSST
-R2
+# Display model summary and coefficients
+summary(EXP_model)
+tidy(EXP_model)
 
 #------------------------------------------------------------------------------#
-#                     5.5.2 Standardized Residuals                             #
+#                   Model Fit: R² Calculation                                  #
 #------------------------------------------------------------------------------#
 
-stdresids <- as.numeric(svystdres(fit_svy)$stdresids)
-design_sampling$variables %<>% mutate(stdresids = stdresids)
+# Fit a null model (intercept-only) for R² computation
+null_model <- svyglm(log(percapita_expenditure + 1) ~ 1, design = ESS4_design)
+
+# Extract residual dispersion values
+s1 <- summary(EXP_model)
+s0 <- summary(null_model)
+
+# Compute weighted R² using total variance and residual variance
+wSST <- s0$dispersion  # Total variance
+wSSE <- s1$dispersion  # Residual variance
+
+R2 <- 1 - (wSSE / wSST)  # R² formula
+R2  # Display computed R² value
+
+#------------------------------------------------------------------------------#
+#                     Standardized Residuals Analysis                          #
+#------------------------------------------------------------------------------#
+
+# Compute standardized residuals from the model
+stdresids <- as.numeric(svystdres(EXP_model)$stdresids)
+
+# Attach residuals to the dataset
+# ESS4_design$variables %<>% mutate(stdresids = stdresids)
 
 # Histogram of standardized residuals
 ggplot(data = data.frame(stdresids), aes(x = stdresids)) +
@@ -114,104 +130,97 @@ ggplot(data = data.frame(stdresids), aes(x = stdresids)) +
     color = "black",
     size = 1
   ) +
-  labs(title = "Standardized Residuals", x = "", y = "Density") +
+  labs(title = "Standardized Residuals", x = "Residuals", y = "Density") +
   theme_minimal(base_size = 20) +
   theme(plot.title = element_text(hjust = 0.5))
 
-# Q-Q Plot
+# Q-Q plot to assess normality of residuals
 ggplot(data = data.frame(stdresids), aes(sample = stdresids)) +
   stat_qq() +
   stat_qq_line(color = "red") +
-  labs(title = "Q-Q Plot of Standardized Residuals", x = "Theoretical Quantiles", y = "Sample Quantiles") +
-  theme_minimal(base_size = 20) +
-  theme(plot.title = element_text(hjust = 0.5))
-
-
-# Checking homoscedasticity (constant variance of errors)
-ggplot(data = data.frame(stdresids, fitted = fit_svy$fitted.values),
-       aes(x = fitted, y = stdresids)) +
-  geom_point(alpha = 0.5) +
-  geom_hline(yintercept = 0,
-             color = "red",
-             linetype = "dashed") +
-  labs(title = "Residuals vs Fitted Values",
-       x = "Fitted Values", 
-       y = "Standardized Residuals") +
-  theme_minimal(base_size = 20) +
+  labs(title = "Q-Q Plot of Standardized Residuals",
+       x = "Theoretical Quantiles", y = "Sample Quantiles") +
+  theme_minimal(base_size = 20)+
   theme(plot.title = element_text(hjust = 0.5))
 
 #------------------------------------------------------------------------------#
-#                     5.5.3 Influential Observations Analysis                  #
+#                         Influential Observations                             #
 #------------------------------------------------------------------------------#
 
-## Cook's Distance Analysis
-d_cook = data.frame(cook = svyCooksD(fit_svy),
-                    id = 1:length(svyCooksD(fit_svy)))
+#---------------------#
+# Cook's Distance     #
+#---------------------#
 
-d_cook %<>% mutate(Criterion = ifelse(cook > 3, "Yes", "No"))
+# Compute Cook's Distance and flag influential observations
+CooksD <- data.frame(
+  cook = svyCooksD(EXP_model),
+  id = 1:length(svyCooksD(EXP_model))
+) %>%
+  mutate(Criterion = ifelse(cook > 3, "Yes", "No"))
 
-ggplot(d_cook, aes(y = cook, x = id)) +
+# Scatter plot of Cook's Distance
+ggplot(CooksD, aes(y = cook, x = id)) +
   geom_point(aes(col = Criterion)) +
-  geom_hline(aes(yintercept = 3),
-             color = "black",
-             linetype = "dashed") +
+  geom_hline(aes(yintercept = 3), color = "black", linetype = "dashed") +
   scale_color_manual(values = c("Yes" = "red", "No" = "black")) +
-  labs(title = "Cook's Distance") +
   theme_minimal(base_size = 20) +
-  theme(plot.title = element_text(hjust = 0.5))
+  labs(title = "Cook's Distance", x = "Observation ID", y = "Cook's D")
 
-## DFBETAS Analysis
-# Compute DFBETAS for each observation
-d_dfbetas <- svydfbetas(fit_svy)$Dfbetas %>%
+#---------------------#
+# DFBETAS Analysis    #
+#---------------------#
+
+# Compute DFBETAS for all model coefficients
+d_dfbetas <- svydfbetas(EXP_model)$Dfbetas %>%
   t() %>%
   as.data.frame()
 
-# Rename columns for clarity
-colnames(d_dfbetas)[1:(ncol(d_dfbetas))] <-
-  paste0("beta[", seq_len(ncol(d_dfbetas)) - 1, "]")
+# Rename DFBETAS columns
+colnames(d_dfbetas) <- paste0("beta[", seq_len(ncol(d_dfbetas)) - 1, "]")
 
-# Reshape the data to long format for visualization
+# Convert DFBETAS to long format
 d_dfbetas_long <- d_dfbetas %>%
   mutate(id = row_number()) %>%
-  pivot_longer(cols = -id,
-               names_to = "Variable",
-               values_to = "value")
+  pivot_longer(cols = -id, names_to = "Variable", values_to = "value")
 
-# Define cutoff value for influential observations
-cutoff <- svydfbetas(fit_svy)$cutoff
+# Get threshold for influential observations
+cutoff <- svydfbetas(EXP_model)$cutoff
 
+# Flag influential observations
 d_dfbetas_long <- d_dfbetas_long %>%
   mutate(Criterion = ifelse(abs(value) > cutoff, "Yes", "No"))
 
-
-# Plot DFBETAS values for each observation
-ggplot(d_dfbetas_long , aes(y = abs(value), x = id)) +
+# Plot DFBETAS
+ggplot(d_dfbetas_long ,
+       aes(y = abs(value), x = id)) +
   geom_point(aes(color = Criterion)) +
   geom_hline(aes(yintercept = cutoff), linetype = "dashed") +
   facet_wrap(. ~ Variable, nrow = 4, scales = "free_y") +
   scale_color_manual(values = c("Yes" = "red", "No" = "black")) +
-  labs(title = "DFBETAS Analysis", 
-       x = "Observation ID", 
-       y = expression(abs(beta))) +
-  theme_minimal(base_size = 20) +
-  theme(plot.title = element_text(hjust = 0.5))
+  labs(title = "DFBETAS Analysis", x = "Observation ID", y = expression(abs(beta))) +
+  theme_minimal(base_size = 20)
 
-## DFFITS Analysis
-d_dffits <-
-  data.frame(dffits = svydffits(fit_svy)$Dffits,
-             id = 1:length(svydffits(fit_svy)$Dffits))
-cutoff <- svydffits(fit_svy)$cutoff
+#---------------------#
+# DFFITS Analysis     #
+#---------------------#
 
-d_dffits <-
-  d_dffits %>%
+# Compute DFFITS values
+d_dffits <- data.frame(
+  dffits = svydffits(EXP_model)$Dffits,
+  id = 1:length(svydffits(EXP_model)$Dffits)
+)
+
+# Get influence threshold
+cutoff <- svydffits(EXP_model)$cutoff
+
+# Flag influential observations
+d_dffits <- d_dffits %>%
   mutate(Criterion = ifelse(abs(dffits) > cutoff, "Yes", "No"))
 
+# Plot DFFITS values
 ggplot(d_dffits, aes(y = abs(dffits), x = id)) +
   geom_point(aes(color = Criterion)) +
+  geom_hline(yintercept = cutoff, linetype = "dashed", color = "black") +
   scale_color_manual(values = c("Yes" = "red", "No" = "black")) +
-  geom_hline(yintercept = cutoff,
-             linetype = "dashed",
-             color = "black") +
   labs(title = "DFFITS Influence Analysis", x = "Observation ID", y = expression(abs(DFFITS))) +
-  theme_minimal(base_size = 20) +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme_minimal(base_size = 20)
