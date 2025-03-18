@@ -1,7 +1,9 @@
 ################################################################################
 # 7.1 Bar charts
 ################################################################################
-# Author: Andrés Gutiérrez, Stalyn Guerrero
+# Authors: Andrés Gutiérrez & Stalyn Guerrero
+# Economic Comission for Latin America and the Caribbean 
+# Statistics Division
 # 
 # Description:
 # This section generates bar charts to visualize household spending on 
@@ -34,9 +36,6 @@ library(magrittr)
 library(haven)
 library(stringr)
 library(tidyr)
-library(knitr)
-library(kableExtra)
-library(broom)
 library(ggplot2)
 library(scales)
 library(forcats)
@@ -46,7 +45,7 @@ library(forcats)
 #------------------------------------------------------------------------------#
 
 options(survey.lonely.psu = "fail")
-data_sec <- read_sav("data/data_ESS4/sect7b_hh_w4_v2.sav")
+HH_data <- read_sav("data/data_ESS4/sect7b_hh_w4_v2.sav")
 
 #------------------------------------------------------------------------------#
 #                             7.1 Bar Charts                                   #
@@ -57,14 +56,14 @@ data_sec <- read_sav("data/data_ESS4/sect7b_hh_w4_v2.sav")
 # - Convert missing or non-reported expenditures to zero
 # - Create an indicator variable (yes/no) for whether a household spent on an item
 
-data_sec <- data_sec %>%
+HH_data <- HH_data %>%
   group_by(item = item_cd_12months) %>%
   mutate(expenditure = ifelse(s7q03 == 2, 0, s7q04),  # If no expense, set to 0
          yes_no = ifelse(s7q03 == 2, 0, 1))           # Indicator for spending (1) or not (0)
 
 # Defining survey design
 
-design_sampling <- data_sec %>%
+ESS4_design <- HH_data %>%
   mutate(strata = paste0(saq01, "_", saq14)) %>%
   as_survey_design(
     ids = ea_id,
@@ -81,7 +80,7 @@ design_sampling <- data_sec %>%
 # - `P_hat`: Proportion of households spending on an item
 # - `T_hat`: Total amount spent on each item
 
-tab_03 <- design_sampling %>% summarise(
+tab_03 <- ESS4_design %>% summarise(
   N_hat = survey_total(yes_no, na.rm = TRUE, vartype = c("se", "ci")),
   P_hat = survey_mean(yes_no, na.rm = TRUE, vartype = c("se", "ci")),
   T_hat = survey_total(expenditure, na.rm = TRUE, vartype = c("se", "ci"))
@@ -90,7 +89,6 @@ tab_03 <- design_sampling %>% summarise(
 #------------------------------------------------------------------------------#
 # Bar Chart for Estimated Number of Households Spending on Non-Food Items
 #------------------------------------------------------------------------------#
-
 
 tab_03 <-
   tab_03 %>% mutate(item = fct_reorder(item, N_hat, .desc = FALSE))
@@ -105,14 +103,16 @@ ggplot(data = tab_03, aes(
            position = "dodge",
            fill = "#CCE5FF") +
   geom_errorbar(position = position_dodge(width = 0.9), width = 0.3) +
-  scale_y_continuous(labels = label_number(accuracy = 1)) +
+  scale_y_continuous(labels = label_number(accuracy = 1),
+                     limits = c(0, max(tab_03$N_hat)*1.3) ) +
   labs(
     y = expression(hat(N)),
     x = "",
     title = "Estimated number of households spending on non-food items and
        services in the previous year, Ethiopia 2018/19"
   ) +
-  theme_minimal(20) +
+  theme_minimal(13) +
+  theme(plot.title = element_text(hjust = 0.5)) +  # Centers the title
   coord_flip()
 
 #------------------------------------------------------------------------------#
@@ -131,14 +131,16 @@ ggplot(data = tab_03, aes(
            position = "dodge",
            fill = "#CCE5FF") +
   geom_errorbar(position = position_dodge(width = 0.9), width = 0.3) +  # Error bars for confidence intervals
-  scale_y_continuous(labels = label_number(accuracy = 1)) +  # Format y-axis labels
+  scale_y_continuous(labels = label_number(accuracy = 1),
+                     limits = c(0, max(tab_03$T_hat)*1.3)) +  # Format y-axis labels
   labs(
     y = expression(hat(T)),  # LaTeX-style notation for total expenditure
     x = "",
     title = "Estimated total household expenditure on non-food items and
        services in the previous year, Ethiopia 2018/19"
   ) +
-  theme_minimal(20) +
+  theme_minimal(13) +
+  theme(plot.title = element_text(hjust = 0.5)) +  # Centers the title
   coord_flip()
 
 #------------------------------------------------------------------------------#
@@ -158,12 +160,14 @@ ggplot(data = tab_03, aes(
            position = "dodge",
            fill = "#CCE5FF") +
   geom_errorbar(position = position_dodge(width = 0.9), width = 0.3) +
-  scale_y_continuous(labels = label_number(accuracy = 0.05)) +
+  scale_y_continuous(labels = label_number(accuracy = 0.05),
+                     limits = c(0, max(tab_03$P_hat)*1.3)) +
   labs(
     y = expression(hat(P)),
     x = "",
     title = "Estimated proportion of households that spent on non-food items
        and services in the previous year, Ethiopia 2018/19"
   ) +
-  theme_minimal(20) +
+  theme_minimal(13) +
+  theme(plot.title = element_text(hjust = 0.5)) +  # Centers the title
   coord_flip()
