@@ -1,7 +1,9 @@
 ################################################################################
 # 7.2 Histograms 
 ################################################################################
-# Author: Andrés Gutiérrez, Stalyn Guerrero
+# Authors: Andrés Gutiérrez & Stalyn Guerrero
+# Economic Comission for Latin America and the Caribbean
+# Statistics Division
 # 
 # Description:
 # This section generates histograms to visualize the distribution of per capita 
@@ -37,35 +39,43 @@ library(kableExtra)
 library(broom)      
 library(ggplot2)    
 library(scales)     
-library(forcats)    
+library(forcats)   
+
+# Ensure select function from dplyr is used explicitly
+select <- dplyr::select
 
 #------------------------------------------------------------------------------#
 #                           Loading Datasets                                   #
 #------------------------------------------------------------------------------#
 
 # Load household expenditure dataset (from World Bank survey)
-data_sec_expenditure <- read_sav("data/data_ESS4/sect7b_hh_w4_v2.sav") %>% 
-  mutate(
-    expenditure = ifelse(s7q03 == 2, 0, s7q04), # Assign zero to non-expenditures
-    item = as_factor(item_cd_12months)         # Convert item codes to factors
-  )
+HH_data <- read_sav("data/data_ESS4/sect7b_hh_w4_v2.sav") %>%
+  mutate(expenditure = ifelse(s7q03 == 2, 0, s7q04),
+         # Assign zero to non-expenditures
+         item = as_factor(item_cd_12months)         
+         # Convert item codes to factors
+         )
 
 # Convert data to wide format:
 # - Items become column names
 # - Missing values filled with zero
 # - Calculate total expenditure per household
-data_expenditure <- data_sec_expenditure %>% 
-  select(household_id, item, expenditure) %>% 
-  pivot_wider(names_from = item, values_from = expenditure, values_fill = list(expenditure = 0)) %>% 
+EXP_data <- HH_data %>%
+  select(household_id, item, expenditure) %>%
+  pivot_wider(
+    names_from = item,
+    values_from = expenditure,
+    values_fill = list(expenditure = 0)
+  ) %>%
   mutate(total_expenditure = rowSums(select(., where(is.numeric)), na.rm = TRUE))
 
 
 # Load additional household data and merge with expenditure dataset
-data_sec <- read_sav("data/data_ESS4/sect_cover_hh_w4.sav") %>% 
-  inner_join(data_expenditure)
+EXP2_data <- read_sav("data/data_ESS4/sect_cover_hh_w4.sav") %>% 
+  inner_join(EXP_data)
 
 # Compute per capita expenditure (total household expenditure divided by household size)
-data_sec <- data_sec %>%
+EXP2_data <- EXP2_data %>%
   mutate(percapita_expenditure = total_expenditure / saq09)
 
 #------------------------------------------------------------------------------#
@@ -76,7 +86,7 @@ data_sec <- data_sec %>%
 # - Primary Sampling Unit (PSU) identified by `ea_id`
 # - Stratification based on region (`saq01`) and urban/rural status (`saq14`)
 # - Sampling weights (`pw_w4`) ensure representativity
-design_sampling <- data_sec %>% 
+design_sampling <- EXP2_data %>% 
   mutate(strata = paste0(saq01, "_", saq14)) %>% 
   as_survey_design(
     ids = ea_id,  
@@ -107,11 +117,11 @@ svyhist(
 
 # Create a dataset for visualization:
 # - Combine total household expenditures with item-wise expenditures
-data_sec_expenditure2 <- bind_rows(
-  data_sec %>%
+HH_data2 <- bind_rows(
+  EXP2_data %>%
     transmute(household_id, saq14 = as_factor(saq14),
               expenditure = total_expenditure, pw_w4, item = as_factor("Total")),
-  data_sec_expenditure %>%
+  HH_data %>%
     transmute(household_id, saq14 = as_factor(saq14), expenditure, pw_w4, 
               item = item)
 ) %>% 
@@ -125,7 +135,7 @@ data_sec_expenditure2 <- bind_rows(
 #                      Histogram for Expenditure Distribution                  #
 #------------------------------------------------------------------------------#
 
-ggplot(data_sec_expenditure2, aes(x = expenditure, weight = pw_w4)) +
+ggplot(HH_data2, aes(x = expenditure, weight = pw_w4)) +
   geom_histogram(aes(y = after_stat(density)), fill = "grey80", color = "black", bins = 50) +
   facet_wrap(. ~ item, nrow = 3, ncol = 4) +  # Arrange plots in a 3x4 grid
   scale_x_continuous(limits = c(0, 15000)) +  # Restrict x-axis range
@@ -142,7 +152,7 @@ ggplot(data_sec_expenditure2, aes(x = expenditure, weight = pw_w4)) +
 #          Histogram Comparing Urban vs. Rural Expenditure Distribution        #
 #------------------------------------------------------------------------------#
 
-ggplot(data_sec_expenditure2, aes(x = expenditure, weight = pw_w4,
+ggplot(HH_data2, aes(x = expenditure, weight = pw_w4,
                                   fill = saq14)) +
   geom_histogram(aes(y = after_stat(density)), color = "black", bins = 50, position = "identity") +
   facet_wrap(. ~ item, nrow = 3, ncol = 4) +
