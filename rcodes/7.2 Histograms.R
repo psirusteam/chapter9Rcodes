@@ -108,7 +108,7 @@ svyhist(
   col = "grey80",
   breaks = 100, # Number of bins
   xlab = "Expenditure",
-  probability = TRUE, # Normalize to probability density
+  probability = FALSE, # Normalize to probability density
   xlim = c(0, 10000)  # Limit x-axis range
 )
 
@@ -147,15 +147,14 @@ HH_data2 <- bind_rows(
 #------------------------------------------------------------------------------#
 
 ggplot(HH_data2, aes(x = expenditure, weight = pw_w4)) +
-  geom_histogram(aes(y = after_stat(density)), 
-                 fill = "grey80", 
+  geom_histogram(fill = "grey80", 
                  color = "black", 
                  bins = 20) +
   facet_wrap(. ~ item, nrow = 3, ncol = 4) +  # Arrange plots in a 3x4 grid
   scale_x_continuous(limits = c(0, 10000)) +  # Restrict x-axis range
-  scale_y_continuous(limits = c(0, 0.0005), labels = label_number(accuracy = 0.00005)) +
+  scale_y_continuous(limits = c(0, 5000000), labels = label_number(accuracy = 1)) +
   labs(
-    y = "Probability Density",
+    y = "Estimated Frequency",
     x = "Expenditure",
     title = "Estimated Distribution of Percapita Expenditure by Item"
   ) +
@@ -167,18 +166,17 @@ ggplot(HH_data2, aes(x = expenditure, weight = pw_w4)) +
 #------------------------------------------------------------------------------#
 
 ggplot(HH_data2, aes(x = expenditure, weight = pw_w4,
-                                  fill = saq14)) +
-  geom_histogram(aes(y = after_stat(density)), 
-                 color = "black", 
+                     fill = saq14)) +
+  geom_histogram(color = "black", 
                  bins = 20, 
                  position = "identity",
                  alpha = 0.5) +
   facet_wrap(. ~ item, nrow = 3, ncol = 4) +
   scale_x_continuous(limits = c(0, 10000)) +
-  scale_y_continuous(limits = c(0, 0.0005), labels = label_number(accuracy = 0.00005)) +
+  scale_y_continuous(limits = c(0, 5000000), labels = label_number(accuracy = 1)) +
   scale_fill_manual(values = c("URBAN" = "#E6B9AA", "RURAL" = "blue")) +  # Light pastel colors
   labs(
-    y = "Probability Density",
+    y = "Estimated Frequency",
     x = "Expenditure",
     title = "Estimated Distribution of Percapita Expenditure by Item",
     fill = "Zone"
