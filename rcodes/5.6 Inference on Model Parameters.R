@@ -76,7 +76,7 @@ ESS4_design <- IND_data_regression %>%
 
 # Survey-weighted linear model for log expenditure
 EXP_model <-
-  svyglm(log_expenditure  ~ 1 + Zone * Religion + Zone + Sexo + age_group,
+  svyglm(log_expenditure  ~ 1 + Zone * Religion + Zone + Sex + age_group,
          design = ESS4_design)
 
 # Display model coefficients

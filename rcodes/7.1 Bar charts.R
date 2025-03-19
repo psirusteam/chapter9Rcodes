@@ -72,6 +72,9 @@ ESS4_design <- HH_data %>%
     nest = TRUE
   )
 
+options(survey.lonely.psu = "fail") 
+summary(ESS4_design)
+
 #------------------------------------------------------------------------------#
 # TABLE 7.3 - Spending on Nonfood Items and Services
 #------------------------------------------------------------------------------#
@@ -80,18 +83,21 @@ ESS4_design <- HH_data %>%
 # - `P_hat`: Proportion of households spending on an item
 # - `T_hat`: Total amount spent on each item
 
-tab_03 <- ESS4_design %>% summarise(
-  N_hat = survey_total(yes_no, na.rm = TRUE, vartype = c("se", "ci")),
-  P_hat = survey_mean(yes_no, na.rm = TRUE, vartype = c("se", "ci")),
-  T_hat = survey_total(expenditure, na.rm = TRUE, vartype = c("se", "ci"))
-) %>% mutate(item = as_factor(item))
+tab_03 <- ESS4_design %>%
+  group_by(item) %>%
+  summarise(
+    N_hat = survey_total(yes_no, na.rm = TRUE, vartype = c("se", "ci")),
+    P_hat = survey_mean(yes_no, na.rm = TRUE, vartype = c("se", "ci")),
+    T_hat = survey_total(expenditure, na.rm = TRUE, vartype = c("se", "ci"))
+  ) %>%
+  mutate(item = as_factor(item))
 
 #------------------------------------------------------------------------------#
 # Bar Chart for Estimated Number of Households Spending on Non-Food Items
 #------------------------------------------------------------------------------#
 
-tab_03 <-
-  tab_03 %>% mutate(item = fct_reorder(item, N_hat, .desc = FALSE))
+tab_03 <- tab_03 %>%
+  mutate(item = fct_reorder(item, N_hat, .desc = FALSE))
 
 ggplot(data = tab_03, aes(
   x = item,
@@ -119,7 +125,8 @@ ggplot(data = tab_03, aes(
 # Bar Chart for Estimated Total Household Expenditure on Non-Food Items
 #------------------------------------------------------------------------------#
 
-tab_03 <- tab_03 %>% mutate(item = fct_reorder(item, T_hat, .desc = FALSE))
+tab_03 <- tab_03 %>% 
+  mutate(item = fct_reorder(item, T_hat, .desc = FALSE))
 
 ggplot(data = tab_03, aes(
   x = item,
@@ -147,8 +154,8 @@ ggplot(data = tab_03, aes(
 # Bar Chart for Estimated Proportion of Households Spending on Non-Food Items
 #------------------------------------------------------------------------------#
 
-tab_03 <-
-  tab_03 %>% mutate(item = fct_reorder(item, P_hat, .desc = FALSE))
+tab_03 <- tab_03 %>%
+  mutate(item = fct_reorder(item, P_hat, .desc = FALSE))
 
 ggplot(data = tab_03, aes(
   x = item,

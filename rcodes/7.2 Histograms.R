@@ -72,10 +72,8 @@ EXP_data <- HH_data %>%
 
 # Load additional household data and merge with expenditure dataset
 EXP2_data <- read_sav("data/data_ESS4/sect_cover_hh_w4.sav") %>% 
-  inner_join(EXP_data)
-
-# Compute per capita expenditure (total household expenditure divided by household size)
-EXP2_data <- EXP2_data %>%
+  inner_join(EXP_data) %>%
+  # Compute per capita expenditure
   mutate(percapita_expenditure = total_expenditure / saq09)
 
 #------------------------------------------------------------------------------#
@@ -86,7 +84,7 @@ EXP2_data <- EXP2_data %>%
 # - Primary Sampling Unit (PSU) identified by `ea_id`
 # - Stratification based on region (`saq01`) and urban/rural status (`saq14`)
 # - Sampling weights (`pw_w4`) ensure representativity
-design_sampling <- EXP2_data %>% 
+ESS4_design <- EXP2_data %>% 
   mutate(strata = paste0(saq01, "_", saq14)) %>% 
   as_survey_design(
     ids = ea_id,  
@@ -95,6 +93,9 @@ design_sampling <- EXP2_data %>%
     nest = TRUE  
   )
 
+options(survey.lonely.psu = "fail") 
+summary(ESS4_design)
+
 #------------------------------------------------------------------------------#
 #                      Histogram using Survey-Weighted Data                    #
 #------------------------------------------------------------------------------#
@@ -102,8 +103,8 @@ design_sampling <- EXP2_data %>%
 # Generate a histogram for per capita expenditure using survey weights
 svyhist(
   ~ percapita_expenditure,
-  design_sampling,
-  main = "Population Expenditure",
+  ESS4_design,
+  main = "Estimated Distribution of Percapita Expenditure",
   col = "grey80",
   breaks = 100, # Number of bins
   xlab = "Expenditure",
@@ -119,14 +120,24 @@ svyhist(
 # - Combine total household expenditures with item-wise expenditures
 HH_data2 <- bind_rows(
   EXP2_data %>%
-    transmute(household_id, saq14 = as_factor(saq14),
-              expenditure = total_expenditure, pw_w4, item = as_factor("Total")),
+    transmute(
+      household_id,
+      saq14 = as_factor(saq14),
+      expenditure = total_expenditure,
+      pw_w4,
+      item = as_factor("Total")
+    ),
   HH_data %>%
-    transmute(household_id, saq14 = as_factor(saq14), expenditure, pw_w4, 
-              item = item)
-) %>% 
+    transmute(
+      household_id,
+      saq14 = as_factor(saq14),
+      expenditure,
+      pw_w4,
+      item = item
+    )
+) %>%
   mutate(saq14 = case_when(
-    saq14 == "1. RURAL" ~ "RURAL", 
+    saq14 == "1. RURAL" ~ "RURAL",
     saq14 == "2. URBAN" ~ "URBAN",
     TRUE ~ saq14
   ))
@@ -136,14 +147,17 @@ HH_data2 <- bind_rows(
 #------------------------------------------------------------------------------#
 
 ggplot(HH_data2, aes(x = expenditure, weight = pw_w4)) +
-  geom_histogram(aes(y = after_stat(density)), fill = "grey80", color = "black", bins = 50) +
+  geom_histogram(aes(y = after_stat(density)), 
+                 fill = "grey80", 
+                 color = "black", 
+                 bins = 20) +
   facet_wrap(. ~ item, nrow = 3, ncol = 4) +  # Arrange plots in a 3x4 grid
-  scale_x_continuous(limits = c(0, 15000)) +  # Restrict x-axis range
+  scale_x_continuous(limits = c(0, 10000)) +  # Restrict x-axis range
   scale_y_continuous(limits = c(0, 0.0005), labels = label_number(accuracy = 0.00005)) +
   labs(
     y = "Probability Density",
     x = "Expenditure",
-    title = "Population of Expenditure by Item"
+    title = "Estimated Distribution of Percapita Expenditure by Item"
   ) +
   theme_minimal(base_size = 10) +
   theme(plot.title = element_text(hjust = 0.5))  # Center title
@@ -154,15 +168,19 @@ ggplot(HH_data2, aes(x = expenditure, weight = pw_w4)) +
 
 ggplot(HH_data2, aes(x = expenditure, weight = pw_w4,
                                   fill = saq14)) +
-  geom_histogram(aes(y = after_stat(density)), color = "black", bins = 50, position = "identity") +
+  geom_histogram(aes(y = after_stat(density)), 
+                 color = "black", 
+                 bins = 20, 
+                 position = "identity",
+                 alpha = 0.5) +
   facet_wrap(. ~ item, nrow = 3, ncol = 4) +
-  scale_x_continuous(limits = c(0, 15000)) +
+  scale_x_continuous(limits = c(0, 10000)) +
   scale_y_continuous(limits = c(0, 0.0005), labels = label_number(accuracy = 0.00005)) +
-  scale_fill_manual(values = c("RURAL" = "#E6B9AA", "URBAN" = "#A9CCE9")) +  # Light pastel colors
+  scale_fill_manual(values = c("URBAN" = "#E6B9AA", "RURAL" = "blue")) +  # Light pastel colors
   labs(
     y = "Probability Density",
     x = "Expenditure",
-    title = "Population of Expenditure by Item",
+    title = "Estimated Distribution of Percapita Expenditure by Item",
     fill = "Zone"
   ) +
   theme_minimal(base_size = 10) +

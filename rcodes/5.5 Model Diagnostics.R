@@ -80,7 +80,7 @@ ESS4_design <- IND_data_regression %>%
 
 # Define and estimate a survey-weighted regression model
 EXP_model <- svyglm(
-  log_expenditure ~ 1 + Zone * Religion + Zone + Sexo + age_group,
+  log_expenditure ~ 1 + Zone * Religion + Zone + Sex + age_group,
   design = ESS4_design
 )
 
@@ -224,3 +224,4 @@ ggplot(d_dffits, aes(y = abs(dffits), x = id)) +
   scale_color_manual(values = c("Yes" = "red", "No" = "black")) +
   labs(title = "DFFITS Influence Analysis", x = "Observation ID", y = expression(abs(DFFITS))) +
   theme_minimal(base_size = 20)
+

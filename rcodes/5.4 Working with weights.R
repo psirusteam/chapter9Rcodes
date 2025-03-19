@@ -66,7 +66,7 @@ IND_data_regression <- IND_data_regression %>%
   )
 
 # Calibrate weights using Pfeffermann’s regression-based method
-EXP_model_pw_w4 <- lm(pw_w4 ~ 1 + Zone * Religion + Zone + Sexo + age_group,
+EXP_model_pw_w4 <- lm(pw_w4 ~ 1 + Zone * Religion + Zone + Sex + age_group,
                       data = IND_data_regression)
 
 # Predicted values for weight calibration
@@ -126,7 +126,7 @@ options(survey.lonely.psu = "fail")
 # Define survey designs using different weights
 
 # Design with original weights
-design_sampleing <- IND_data_regression %>%
+ESS4_design <- IND_data_regression %>%
   filter(percapita_expenditure > 0) %>%
   as_survey_design(
     ids = ea_id,         # Primary sampling unit (PSU)
@@ -175,17 +175,17 @@ design_Pfeffermann <- IND_data_regression %>%
 
 # Define the regression model formula
 formula_model <- as.formula(
-  log_expenditure  ~  1 + Zone * Religion + Zone + Sexo + age_group
+  log_expenditure  ~  1 + Zone * Religion + Zone + Sex + age_group
 )
 
 # Estimate models using different survey designs
-EXP_model  <- svyglm(formula_model, design = design_sampleing)
+EXP_model_Classic  <- svyglm(formula_model, design = ESS4_design)
 EXP_model_Senate  <- svyglm(formula_model, design = design_Senate)
 EXP_model_Normalized  <- svyglm(formula_model, design = design_Normalized)
 EXP_model_Pfeffermann  <- svyglm(formula_model, design = design_Pfeffermann)
 
 # Display regression results
-tidy(EXP_model)
+tidy(EXP_model_Classic)
 tidy(EXP_model_Senate)
 tidy(EXP_model_Normalized)
 tidy(EXP_model_Pfeffermann)
