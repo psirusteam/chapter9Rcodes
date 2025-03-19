@@ -54,7 +54,7 @@ HH_data <- read_sav("data/data_ESS4/sect7b_hh_w4_v2.sav") %>%
          # Assign zero to non-expenditures
          item = as_factor(item_cd_12months)         
          # Convert item codes to factors
-         )
+  )
 
 # Convert data to wide format:
 # - Items become column names

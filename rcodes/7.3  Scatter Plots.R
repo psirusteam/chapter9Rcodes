@@ -125,27 +125,8 @@ ggplot(HH_data, aes(y = log_expenditure,
   theme(
     plot.title = element_text(hjust = 0.5),  # Center title
     plot.subtitle = element_text(hjust = 0.5)  # Center subtitle
-  )
-
-#------------------------------------------------------------------------------#
-#          Scatter Plots by Urban vs. Rural Classification                     #
-#------------------------------------------------------------------------------#
-
-# Scatter plot: Log-transformed values by urban/rural classification
-ggplot(HH_data %>% mutate(saq14 = as_factor(saq14)), 
-       aes(y = log_expenditure, 
-           x = log_income, weight = pw_w4)) +
-  geom_point(aes(size = pw_w4), alpha = 0.1) +
-  labs(
-    title = "Relationship Between Expenditure and Income (Log Scale)",
-    subtitle = "Point size represents survey weights",
-    y = "Log Per Capita Expenditure",
-    x = "Log Per Capita Income",
-    size = "Survey Weights"
-  ) + 
-  facet_grid(. ~ saq14) +  # Separate plots by urban/rural classification
-  theme_minimal() +
-  theme(
-    plot.title = element_text(hjust = 0.5),  # Center title
-    plot.subtitle = element_text(hjust = 0.5)  # Center subtitle
-  )
+  ) +
+  geom_smooth(method = "lm", 
+              color = scales::alpha("red", 0.1), 
+              fill= "blue", 
+              alpha = 0.05)
