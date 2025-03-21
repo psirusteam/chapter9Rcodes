@@ -7,6 +7,10 @@ knitr::opts_chunk$set(warning = FALSE,
 
 # 3.2 Totals, means and ratios {-}
 
+This section of the manual focuses on the calculation of totals, means, and ratios using data from the ESS4 survey. It begins by setting up the work environment and loading data on nonfood item expenditures. It then estimates the total and average household expenditure for each item type, along with precision measures.
+
+Next, it calculates the share of each item's expenditure relative to total household spending, at both national and regional levels, and presents the results in a comparative table. The section concludes with a focused analysis of educational expenditure as a share of total consumption, using an aggregated dataset. All results are formatted for clear interpretation and regional comparison.
+
 
 ### Prepare the work environment {-}
 
@@ -127,6 +131,161 @@ tab_02 %>%
     M_hat_cv = round(M_hat_cv * 100, 2)
   ) %>% data.frame() %>% 
     kable(format = "html") %>%
-  kable_styling(font_size = 10, full_width = FALSE)
+  kable_styling(full_width = FALSE)
+```
+
+### Estimation of Ratio {-}
+
+This block estimates the share of expenditure on each nonfood item relative to total household spending, both at the national level and by region, using the `survey_ratio()` function. Two tables are generated: one for Ethiopia as a whole and another disaggregated by region, both including standard errors and coefficients of variation.
+
+```{r}
+#------------------------------------------------------------------------------#
+# Estimation of Ratio                                            #
+#------------------------------------------------------------------------------#
+
+tab_03_R1_total <- ESS4_design %>%
+  group_by(item = item_cd_12months) %>%
+  summarise(R_hat = survey_ratio(
+    expenditure,
+    total_expenditure,
+    na.rm = TRUE,
+    vartype = c("se", "cv")
+  )) %>%
+  mutate(Region = "ETHIOPIA")
+
+tab_03_R1_region <-
+  ESS4_design %>%
+  group_by(item = item_cd_12months, Region = as_factor(saq01)) %>%
+  summarise(R_hat = survey_ratio(
+    expenditure,
+    total_expenditure,
+    na.rm = TRUE,
+    vartype = c("se", "cv")
+  ))
+
+# Combining results
+tab_03_R1 <- bind_rows(tab_03_R1_total, tab_03_R1_region)
+```
+
+In this block, the results are formatted as percentages and paired with their standard errors in parentheses. The table is then reshaped into wide format, displaying regions as columns to facilitate comparison.
+
+```{r, eval=FALSE}
+# Formatting output
+tab_03_R1 <- tab_03_R1 %>%
+  transmute(
+    Region,
+    item = as_factor(item),
+    R_hat = round(R_hat * 100, 2),
+    R_hat = paste0(R_hat, " (", round(R_hat_se * 100, 2), ")")
+  ) %>%
+  pivot_wider(
+    names_from = Region,
+    values_from = R_hat,
+    values_fill = list(n = 0)
+  )
+
+tab_03_R1
+```
+
+```{r, eval=TRUE, echo=FALSE}
+# Formatting output
+tab_03_R1 <- tab_03_R1 %>%
+  transmute(
+    Region,
+    item = as_factor(item),
+    R_hat = round(R_hat * 100, 2),
+    R_hat = paste0(R_hat, " (", round(R_hat_se * 100, 2), ")")
+  ) %>%
+  pivot_wider(
+    names_from = Region,
+    values_from = R_hat,
+    values_fill = list(n = 0)
+  )
+
+tab_03_R1 %>% 
+   kable(format = "html") %>%
+  kable_styling(font_size = 6, full_width = FALSE)
+```
+
+### Estimating the Ratio of Educational Expenditure {-}
+
+This block begins the analysis of educational expenditure by loading an aggregated consumption dataset. The survey design is then defined using the same stratification structure and adjusted weights applied in previous sections. This step is essential to ensure that estimates of educational spending are properly representative of the survey’s sample design.
+
+```{r}
+#------------------------------------------------------------------------------#
+#                Estimating the Ratio of Educational Expenditure               #
+#------------------------------------------------------------------------------#
+
+HH_data <- read_sav("data/data_ESS4/cons_agg_w4.sav")
+
+# Defining the survey design
+ESS4_design <- HH_data %>%
+  mutate(strata = paste0(saq01, "_", saq14)) %>%
+  as_survey_design(
+    ids = ea_id,
+    # Primary sampling unit identifier (EA)
+    strata = strata,
+    # Stratification by region (saq01) and urban/rural zone (saq14)
+    weights = pw_w4,
+    # Final adjusted weight
+    nest = TRUE
+  )
+
+```
+
+#### Estimation of the ratio {-}
+
+This block estimates the share of educational expenditure relative to total household consumption, both at the national level and by region. The survey_ratio() function is used to calculate the ratio between annual educational consumption (`educ_cons_ann`) and total annual consumption (`total_cons_ann`), including precision measures such as standard error and coefficient of variation. National and regional results are combined into a single table for further analysis and visualization.
+
+```{r}
+#------------------------------------------------------------------------------#
+# Estimation of the ratio.                                                     #
+#------------------------------------------------------------------------------#
+
+tab_03_R2_total <- ESS4_design %>%
+  summarise(R_hat = survey_ratio(
+    educ_cons_ann,
+    total_cons_ann,
+    na.rm = TRUE,
+    vartype = c("se", "cv")
+  )) %>% mutate(Region = "ETHIOPIA")
+
+tab_03_R2_region <- ESS4_design %>%
+  group_by(Region = as_factor(saq01)) %>%
+  summarise(R_hat = survey_ratio(
+    educ_cons_ann,
+    total_cons_ann,
+    na.rm = TRUE,
+    vartype = c("se", "cv")
+  ))
+
+
+
+# Combining results
+tab_03_R2 <- bind_rows(tab_03_R2_region, tab_03_R2_total)
+
+```
+
+This final block formats the results of the educational expenditure as a share of total household consumption, expressing them as percentages. Both the estimated ratio (`R_hat`) and its standard error (`R_hat_se`) are included, allowing for easy interpretation and comparison across regions and at the national level.
+
+```{r, echo=TRUE, eval=FALSE}
+# Formatting and displaying results
+tab_03_R2 %>%
+  transmute(Region,
+            R_hat = round(R_hat * 100, 2),
+            R_hat_se = round(R_hat_se * 100, 2))  
+
+```
+
+
+```{r, echo=FALSE, eval=TRUE}
+# Formatting and displaying results
+tab_03_R2 %>%
+  transmute(Region,
+            R_hat = round(R_hat * 100, 2),
+            R_hat_se = round(R_hat_se * 100, 2)) %>% 
+  kable(format = "html") %>%
+  kable_styling(full_width = FALSE)
+
 ```
 

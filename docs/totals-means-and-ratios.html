@@ -164,6 +164,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#prepare-the-work-environment-2"><i class="fa fa-check"></i>Prepare the work environment</a></li>
 <li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-totals-and-means"><i class="fa fa-check"></i>Estimation of totals and means</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-ratio"><i class="fa fa-check"></i>Estimation of Ratio</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimating-the-ratio-of-educational-expenditure"><i class="fa fa-check"></i>Estimating the Ratio of Educational Expenditure</a></li>
 </ul></li>
 <li class="divider"></li>
 <li><a CHAPTER 9 - EXAMPLES IN R </a></li>
@@ -187,6 +189,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="totals-means-and-ratios" class="section level1 unnumbered hasAnchor">
 <h1>3.2 Totals, means and ratios<a href="totals-means-and-ratios.html#totals-means-and-ratios" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>This section of the manual focuses on the calculation of totals, means, and ratios using data from the ESS4 survey. It begins by setting up the work environment and loading data on nonfood item expenditures. It then estimates the total and average household expenditure for each item type, along with precision measures.</p>
+<p>Next, it calculates the share of each item’s expenditure relative to total household spending, at both national and regional levels, and presents the results in a comparative table. The section concludes with a focused analysis of educational expenditure as a share of total consumption, using an aggregated dataset. All results are formatted for clear interpretation and regional comparison.</p>
 <div id="prepare-the-work-environment-2" class="section level3 unnumbered hasAnchor">
 <h3>Prepare the work environment<a href="totals-means-and-ratios.html#prepare-the-work-environment-2" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>This block resets the working environment and loads the necessary packages to continue with data processing and survey analysis in a new section. This structure ensures that each module of the analysis can be executed independently, promoting reproducibility and avoiding conflicts with previous sessions.</p>
@@ -300,120 +304,1033 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb25-17"><a href="totals-means-and-ratios.html#cb25-17" tabindex="-1"></a>    <span class="at">M_hat =</span> <span class="fu">round</span>(M_hat),</span>
 <span id="cb25-18"><a href="totals-means-and-ratios.html#cb25-18" tabindex="-1"></a>    <span class="at">M_hat_cv =</span> <span class="fu">round</span>(M_hat_cv <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>)</span>
 <span id="cb25-19"><a href="totals-means-and-ratios.html#cb25-19" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> <span class="fu">data.frame</span>()</span></code></pre></div>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="totals-means-and-ratios.html#cb26-1" tabindex="-1"></a>tab_02 <span class="ot">&lt;-</span> ESS4_design <span class="sc">%&gt;%</span>   </span>
-<span id="cb26-2"><a href="totals-means-and-ratios.html#cb26-2" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">item =</span> item_cd_12months) <span class="sc">%&gt;%</span></span>
-<span id="cb26-3"><a href="totals-means-and-ratios.html#cb26-3" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb26-4"><a href="totals-means-and-ratios.html#cb26-4" tabindex="-1"></a>    <span class="at">T_hat =</span> <span class="fu">survey_total</span>(expenditure, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)),</span>
-<span id="cb26-5"><a href="totals-means-and-ratios.html#cb26-5" tabindex="-1"></a>    <span class="at">M_hat =</span> <span class="fu">survey_mean</span>(expenditure, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>))</span>
-<span id="cb26-6"><a href="totals-means-and-ratios.html#cb26-6" tabindex="-1"></a>  )</span>
-<span id="cb26-7"><a href="totals-means-and-ratios.html#cb26-7" tabindex="-1"></a></span>
-<span id="cb26-8"><a href="totals-means-and-ratios.html#cb26-8" tabindex="-1"></a>tab_02 <span class="sc">%&gt;%</span></span>
-<span id="cb26-9"><a href="totals-means-and-ratios.html#cb26-9" tabindex="-1"></a>  <span class="fu">transmute</span>(</span>
-<span id="cb26-10"><a href="totals-means-and-ratios.html#cb26-10" tabindex="-1"></a>    <span class="at">item =</span> <span class="fu">as_factor</span>(item),</span>
-<span id="cb26-11"><a href="totals-means-and-ratios.html#cb26-11" tabindex="-1"></a>    <span class="at">T_hat =</span> <span class="fu">round</span>(T_hat),</span>
-<span id="cb26-12"><a href="totals-means-and-ratios.html#cb26-12" tabindex="-1"></a>    <span class="at">T_hat_cv =</span> <span class="fu">round</span>(T_hat_cv <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
-<span id="cb26-13"><a href="totals-means-and-ratios.html#cb26-13" tabindex="-1"></a>    <span class="at">M_hat =</span> <span class="fu">round</span>(M_hat),</span>
-<span id="cb26-14"><a href="totals-means-and-ratios.html#cb26-14" tabindex="-1"></a>    <span class="at">M_hat_cv =</span> <span class="fu">round</span>(M_hat_cv <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>)</span>
-<span id="cb26-15"><a href="totals-means-and-ratios.html#cb26-15" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb26-16"><a href="totals-means-and-ratios.html#cb26-16" tabindex="-1"></a>   <span class="fu">kable</span>(<span class="at">format =</span> <span class="st">&quot;pipe&quot;</span>)</span></code></pre></div>
-<table style="width:100%;">
-<colgroup>
-<col width="69%" />
-<col width="10%" />
-<col width="7%" />
-<col width="5%" />
-<col width="7%" />
-</colgroup>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
-<tr class="header">
-<th align="left">item</th>
-<th align="right">T_hat</th>
-<th align="right">T_hat_cv</th>
-<th align="right">M_hat</th>
-<th align="right">M_hat_cv</th>
+<tr>
+<th style="text-align:left;">
+item
+</th>
+<th style="text-align:right;">
+T_hat
+</th>
+<th style="text-align:right;">
+T_hat_cv
+</th>
+<th style="text-align:right;">
+M_hat
+</th>
+<th style="text-align:right;">
+M_hat_cv
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td align="left">1. Clothes/shoes/fabric for MEN (18 years and older)</td>
-<td align="right">14831623627</td>
-<td align="right">5.16</td>
-<td align="right">739</td>
-<td align="right">5.10</td>
+<tr>
+<td style="text-align:left;">
+<ol style="list-style-type: decimal">
+<li>Clothes/shoes/fabric for MEN (18 years and older)
+</td>
+<td style="text-align:right;">
+14831623627
+</td>
+<td style="text-align:right;">
+5.16
+</td>
+<td style="text-align:right;">
+739
+</td>
+<td style="text-align:right;">
+5.10
+</td>
 </tr>
-<tr class="even">
-<td align="left">2. Clothes/shoes/fabric for WOMEN (18 years and older)</td>
-<td align="right">12372041190</td>
-<td align="right">4.61</td>
-<td align="right">617</td>
-<td align="right">4.58</td>
+<tr>
+<td style="text-align:left;">
+<ol start="2" style="list-style-type: decimal">
+<li>Clothes/shoes/fabric for WOMEN (18 years and older)
+</td>
+<td style="text-align:right;">
+12372041190
+</td>
+<td style="text-align:right;">
+4.61
+</td>
+<td style="text-align:right;">
+617
+</td>
+<td style="text-align:right;">
+4.58
+</td>
 </tr>
-<tr class="odd">
-<td align="left">3. Clothes/shoes/fabric for BOYS (less than 18 years)</td>
-<td align="right">8240485360</td>
-<td align="right">4.18</td>
-<td align="right">411</td>
-<td align="right">3.96</td>
+<tr>
+<td style="text-align:left;">
+<ol start="3" style="list-style-type: decimal">
+<li>Clothes/shoes/fabric for BOYS (less than 18 years)
+</td>
+<td style="text-align:right;">
+8240485360
+</td>
+<td style="text-align:right;">
+4.18
+</td>
+<td style="text-align:right;">
+411
+</td>
+<td style="text-align:right;">
+3.96
+</td>
 </tr>
-<tr class="even">
-<td align="left">4. Clothes/shoes/fabric for GIRLS (less than 18 years)</td>
-<td align="right">7093344006</td>
-<td align="right">4.18</td>
-<td align="right">353</td>
-<td align="right">4.05</td>
+<tr>
+<td style="text-align:left;">
+<ol start="4" style="list-style-type: decimal">
+<li>Clothes/shoes/fabric for GIRLS (less than 18 years)
+</td>
+<td style="text-align:right;">
+7093344006
+</td>
+<td style="text-align:right;">
+4.18
+</td>
+<td style="text-align:right;">
+353
+</td>
+<td style="text-align:right;">
+4.05
+</td>
 </tr>
-<tr class="odd">
-<td align="left">5. Kitchen equipment (cooking pots, etc.)</td>
-<td align="right">1546185290</td>
-<td align="right">9.68</td>
-<td align="right">77</td>
-<td align="right">9.64</td>
+<tr>
+<td style="text-align:left;">
+<ol start="5" style="list-style-type: decimal">
+<li>Kitchen equipment (cooking pots, etc.)
+</td>
+<td style="text-align:right;">
+1546185290
+</td>
+<td style="text-align:right;">
+9.68
+</td>
+<td style="text-align:right;">
+77
+</td>
+<td style="text-align:right;">
+9.64
+</td>
 </tr>
-<tr class="even">
-<td align="left">6. Linens (sheets, towels,blankets)</td>
-<td align="right">3948547743</td>
-<td align="right">7.58</td>
-<td align="right">197</td>
-<td align="right">7.53</td>
+<tr>
+<td style="text-align:left;">
+<ol start="6" style="list-style-type: decimal">
+<li>Linens (sheets, towels,blankets)
+</td>
+<td style="text-align:right;">
+3948547743
+</td>
+<td style="text-align:right;">
+7.58
+</td>
+<td style="text-align:right;">
+197
+</td>
+<td style="text-align:right;">
+7.53
+</td>
 </tr>
-<tr class="odd">
-<td align="left">7. Furniture</td>
-<td align="right">3204286706</td>
-<td align="right">14.43</td>
-<td align="right">160</td>
-<td align="right">14.38</td>
+<tr>
+<td style="text-align:left;">
+<ol start="7" style="list-style-type: decimal">
+<li>Furniture
+</td>
+<td style="text-align:right;">
+3204286706
+</td>
+<td style="text-align:right;">
+14.43
+</td>
+<td style="text-align:right;">
+160
+</td>
+<td style="text-align:right;">
+14.38
+</td>
 </tr>
-<tr class="even">
-<td align="left">8. Lamp/torch/solare power</td>
-<td align="right">1364016013</td>
-<td align="right">12.61</td>
-<td align="right">68</td>
-<td align="right">12.58</td>
+<tr>
+<td style="text-align:left;">
+<ol start="8" style="list-style-type: decimal">
+<li>Lamp/torch/solare power
+</td>
+<td style="text-align:right;">
+1364016013
+</td>
+<td style="text-align:right;">
+12.61
+</td>
+<td style="text-align:right;">
+68
+</td>
+<td style="text-align:right;">
+12.58
+</td>
 </tr>
-<tr class="odd">
-<td align="left">9. Ceremonial expenses</td>
-<td align="right">26850995607</td>
-<td align="right">6.39</td>
-<td align="right">1338</td>
-<td align="right">6.23</td>
+<tr>
+<td style="text-align:left;">
+<ol start="9" style="list-style-type: decimal">
+<li>Ceremonial expenses
+</td>
+<td style="text-align:right;">
+26850995607
+</td>
+<td style="text-align:right;">
+6.39
+</td>
+<td style="text-align:right;">
+1338
+</td>
+<td style="text-align:right;">
+6.23
+</td>
 </tr>
-<tr class="even">
-<td align="left">10. Contributions to informal social security institutions (inc. IDDIR, mahiber..)</td>
-<td align="right">2939856749</td>
-<td align="right">9.22</td>
-<td align="right">146</td>
-<td align="right">9.20</td>
+<tr>
+<td style="text-align:left;">
+<ol start="10" style="list-style-type: decimal">
+<li>Contributions to informal social security institutions (inc. IDDIR, mahiber..)
+</td>
+<td style="text-align:right;">
+2939856749
+</td>
+<td style="text-align:right;">
+9.22
+</td>
+<td style="text-align:right;">
+146
+</td>
+<td style="text-align:right;">
+9.20
+</td>
 </tr>
-<tr class="odd">
-<td align="left">11. Donations to religious institutions (Incl. churches and mosques..)</td>
-<td align="right">3238210354</td>
-<td align="right">10.25</td>
-<td align="right">161</td>
-<td align="right">9.89</td>
+<tr>
+<td style="text-align:left;">
+<ol start="11" style="list-style-type: decimal">
+<li>Donations to religious institutions (Incl. churches and mosques..)
+</td>
+<td style="text-align:right;">
+3238210354
+</td>
+<td style="text-align:right;">
+10.25
+</td>
+<td style="text-align:right;">
+161
+</td>
+<td style="text-align:right;">
+9.89
+</td>
+</tr>
+</tbody>
+</table></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol>
+</div>
+<div id="estimation-of-ratio" class="section level3 unnumbered hasAnchor">
+<h3>Estimation of Ratio<a href="totals-means-and-ratios.html#estimation-of-ratio" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block estimates the share of expenditure on each nonfood item relative to total household spending, both at the national level and by region, using the <code>survey_ratio()</code> function. Two tables are generated: one for Ethiopia as a whole and another disaggregated by region, both including standard errors and coefficients of variation.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="totals-means-and-ratios.html#cb26-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb26-2"><a href="totals-means-and-ratios.html#cb26-2" tabindex="-1"></a><span class="co"># Estimation of Ratio                                            #</span></span>
+<span id="cb26-3"><a href="totals-means-and-ratios.html#cb26-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb26-4"><a href="totals-means-and-ratios.html#cb26-4" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="totals-means-and-ratios.html#cb26-5" tabindex="-1"></a>tab_03_R1_total <span class="ot">&lt;-</span> ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb26-6"><a href="totals-means-and-ratios.html#cb26-6" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">item =</span> item_cd_12months) <span class="sc">%&gt;%</span></span>
+<span id="cb26-7"><a href="totals-means-and-ratios.html#cb26-7" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">R_hat =</span> <span class="fu">survey_ratio</span>(</span>
+<span id="cb26-8"><a href="totals-means-and-ratios.html#cb26-8" tabindex="-1"></a>    expenditure,</span>
+<span id="cb26-9"><a href="totals-means-and-ratios.html#cb26-9" tabindex="-1"></a>    total_expenditure,</span>
+<span id="cb26-10"><a href="totals-means-and-ratios.html#cb26-10" tabindex="-1"></a>    <span class="at">na.rm =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb26-11"><a href="totals-means-and-ratios.html#cb26-11" tabindex="-1"></a>    <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)</span>
+<span id="cb26-12"><a href="totals-means-and-ratios.html#cb26-12" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span></span>
+<span id="cb26-13"><a href="totals-means-and-ratios.html#cb26-13" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Region =</span> <span class="st">&quot;ETHIOPIA&quot;</span>)</span>
+<span id="cb26-14"><a href="totals-means-and-ratios.html#cb26-14" tabindex="-1"></a></span>
+<span id="cb26-15"><a href="totals-means-and-ratios.html#cb26-15" tabindex="-1"></a>tab_03_R1_region <span class="ot">&lt;-</span></span>
+<span id="cb26-16"><a href="totals-means-and-ratios.html#cb26-16" tabindex="-1"></a>  ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb26-17"><a href="totals-means-and-ratios.html#cb26-17" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">item =</span> item_cd_12months, <span class="at">Region =</span> <span class="fu">as_factor</span>(saq01)) <span class="sc">%&gt;%</span></span>
+<span id="cb26-18"><a href="totals-means-and-ratios.html#cb26-18" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">R_hat =</span> <span class="fu">survey_ratio</span>(</span>
+<span id="cb26-19"><a href="totals-means-and-ratios.html#cb26-19" tabindex="-1"></a>    expenditure,</span>
+<span id="cb26-20"><a href="totals-means-and-ratios.html#cb26-20" tabindex="-1"></a>    total_expenditure,</span>
+<span id="cb26-21"><a href="totals-means-and-ratios.html#cb26-21" tabindex="-1"></a>    <span class="at">na.rm =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb26-22"><a href="totals-means-and-ratios.html#cb26-22" tabindex="-1"></a>    <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)</span>
+<span id="cb26-23"><a href="totals-means-and-ratios.html#cb26-23" tabindex="-1"></a>  ))</span>
+<span id="cb26-24"><a href="totals-means-and-ratios.html#cb26-24" tabindex="-1"></a></span>
+<span id="cb26-25"><a href="totals-means-and-ratios.html#cb26-25" tabindex="-1"></a><span class="co"># Combining results</span></span>
+<span id="cb26-26"><a href="totals-means-and-ratios.html#cb26-26" tabindex="-1"></a>tab_03_R1 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(tab_03_R1_total, tab_03_R1_region)</span></code></pre></div>
+<p>In this block, the results are formatted as percentages and paired with their standard errors in parentheses. The table is then reshaped into wide format, displaying regions as columns to facilitate comparison.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="totals-means-and-ratios.html#cb27-1" tabindex="-1"></a><span class="co"># Formatting output</span></span>
+<span id="cb27-2"><a href="totals-means-and-ratios.html#cb27-2" tabindex="-1"></a>tab_03_R1 <span class="ot">&lt;-</span> tab_03_R1 <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="totals-means-and-ratios.html#cb27-3" tabindex="-1"></a>  <span class="fu">transmute</span>(</span>
+<span id="cb27-4"><a href="totals-means-and-ratios.html#cb27-4" tabindex="-1"></a>    Region,</span>
+<span id="cb27-5"><a href="totals-means-and-ratios.html#cb27-5" tabindex="-1"></a>    <span class="at">item =</span> <span class="fu">as_factor</span>(item),</span>
+<span id="cb27-6"><a href="totals-means-and-ratios.html#cb27-6" tabindex="-1"></a>    <span class="at">R_hat =</span> <span class="fu">round</span>(R_hat <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
+<span id="cb27-7"><a href="totals-means-and-ratios.html#cb27-7" tabindex="-1"></a>    <span class="at">R_hat =</span> <span class="fu">paste0</span>(R_hat, <span class="st">&quot; (&quot;</span>, <span class="fu">round</span>(R_hat_se <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>), <span class="st">&quot;)&quot;</span>)</span>
+<span id="cb27-8"><a href="totals-means-and-ratios.html#cb27-8" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb27-9"><a href="totals-means-and-ratios.html#cb27-9" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb27-10"><a href="totals-means-and-ratios.html#cb27-10" tabindex="-1"></a>    <span class="at">names_from =</span> Region,</span>
+<span id="cb27-11"><a href="totals-means-and-ratios.html#cb27-11" tabindex="-1"></a>    <span class="at">values_from =</span> R_hat,</span>
+<span id="cb27-12"><a href="totals-means-and-ratios.html#cb27-12" tabindex="-1"></a>    <span class="at">values_fill =</span> <span class="fu">list</span>(<span class="at">n =</span> <span class="dv">0</span>)</span>
+<span id="cb27-13"><a href="totals-means-and-ratios.html#cb27-13" tabindex="-1"></a>  )</span>
+<span id="cb27-14"><a href="totals-means-and-ratios.html#cb27-14" tabindex="-1"></a></span>
+<span id="cb27-15"><a href="totals-means-and-ratios.html#cb27-15" tabindex="-1"></a>tab_03_R1</span></code></pre></div>
+<table class="table" style="font-size: 6px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+item
+</th>
+<th style="text-align:left;">
+ETHIOPIA
+</th>
+<th style="text-align:left;">
+<ol style="list-style-type: decimal">
+<li>TIGRAY
+</th>
+<th style="text-align:left;">
+<ol start="2" style="list-style-type: decimal">
+<li>AFAR
+</th>
+<th style="text-align:left;">
+<ol start="3" style="list-style-type: decimal">
+<li>AMHARA
+</th>
+<th style="text-align:left;">
+<ol start="4" style="list-style-type: decimal">
+<li>OROMIA
+</th>
+<th style="text-align:left;">
+<ol start="5" style="list-style-type: decimal">
+<li>SOMALI
+</th>
+<th style="text-align:left;">
+<ol start="6" style="list-style-type: decimal">
+<li>BENISHANGUL GUMUZ
+</th>
+<th style="text-align:left;">
+<ol start="7" style="list-style-type: decimal">
+<li>SNNP
+</th>
+<th style="text-align:left;">
+<ol start="12" style="list-style-type: decimal">
+<li>GAMBELA
+</th>
+<th style="text-align:left;">
+<ol start="13" style="list-style-type: decimal">
+<li>HARAR
+</th>
+<th style="text-align:left;">
+<ol start="14" style="list-style-type: decimal">
+<li>ADDIS ABABA
+</th>
+<th style="text-align:left;">
+<ol start="15" style="list-style-type: decimal">
+<li>DIRE DAWA
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<ol style="list-style-type: decimal">
+<li>Clothes/shoes/fabric for MEN (18 years and older)
+</td>
+<td style="text-align:left;">
+17.32 (0.64)
+</td>
+<td style="text-align:left;">
+16.41 (1.99)
+</td>
+<td style="text-align:left;">
+21.76 (2.07)
+</td>
+<td style="text-align:left;">
+15.57 (1.03)
+</td>
+<td style="text-align:left;">
+19.75 (1.47)
+</td>
+<td style="text-align:left;">
+13.9 (1.07)
+</td>
+<td style="text-align:left;">
+18.5 (2.17)
+</td>
+<td style="text-align:left;">
+15.1 (1.31)
+</td>
+<td style="text-align:left;">
+18.94 (1.76)
+</td>
+<td style="text-align:left;">
+16.84 (1.81)
+</td>
+<td style="text-align:left;">
+19.82 (1.77)
+</td>
+<td style="text-align:left;">
+15.91 (1.55)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="2" style="list-style-type: decimal">
+<li>Clothes/shoes/fabric for WOMEN (18 years and older)
+</td>
+<td style="text-align:left;">
+14.45 (0.53)
+</td>
+<td style="text-align:left;">
+17.76 (1.18)
+</td>
+<td style="text-align:left;">
+21.91 (1.81)
+</td>
+<td style="text-align:left;">
+13.04 (0.93)
+</td>
+<td style="text-align:left;">
+14.98 (1.28)
+</td>
+<td style="text-align:left;">
+13.11 (0.9)
+</td>
+<td style="text-align:left;">
+16.16 (1.37)
+</td>
+<td style="text-align:left;">
+11.55 (1.02)
+</td>
+<td style="text-align:left;">
+17.47 (1.75)
+</td>
+<td style="text-align:left;">
+17.3 (1.23)
+</td>
+<td style="text-align:left;">
+18.33 (1.02)
+</td>
+<td style="text-align:left;">
+14.94 (1.31)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="3" style="list-style-type: decimal">
+<li>Clothes/shoes/fabric for BOYS (less than 18 years)
+</td>
+<td style="text-align:left;">
+9.62 (0.38)
+</td>
+<td style="text-align:left;">
+8.87 (0.86)
+</td>
+<td style="text-align:left;">
+14.85 (1.08)
+</td>
+<td style="text-align:left;">
+7.61 (0.67)
+</td>
+<td style="text-align:left;">
+11.38 (0.95)
+</td>
+<td style="text-align:left;">
+16.68 (1.27)
+</td>
+<td style="text-align:left;">
+9.3 (1.31)
+</td>
+<td style="text-align:left;">
+8.89 (0.73)
+</td>
+<td style="text-align:left;">
+10.07 (1.21)
+</td>
+<td style="text-align:left;">
+12.08 (1.48)
+</td>
+<td style="text-align:left;">
+7.16 (0.65)
+</td>
+<td style="text-align:left;">
+11.56 (1.2)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="4" style="list-style-type: decimal">
+<li>Clothes/shoes/fabric for GIRLS (less than 18 years)
+</td>
+<td style="text-align:left;">
+8.28 (0.34)
+</td>
+<td style="text-align:left;">
+7.98 (0.8)
+</td>
+<td style="text-align:left;">
+10.75 (0.79)
+</td>
+<td style="text-align:left;">
+6.17 (0.51)
+</td>
+<td style="text-align:left;">
+9.13 (0.87)
+</td>
+<td style="text-align:left;">
+14.69 (0.94)
+</td>
+<td style="text-align:left;">
+8.06 (1)
+</td>
+<td style="text-align:left;">
+8.97 (0.7)
+</td>
+<td style="text-align:left;">
+8.58 (1.12)
+</td>
+<td style="text-align:left;">
+11.5 (1.49)
+</td>
+<td style="text-align:left;">
+6.59 (0.53)
+</td>
+<td style="text-align:left;">
+8.85 (1.15)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="5" style="list-style-type: decimal">
+<li>Kitchen equipment (cooking pots, etc.)
+</td>
+<td style="text-align:left;">
+1.81 (0.16)
+</td>
+<td style="text-align:left;">
+1.69 (0.58)
+</td>
+<td style="text-align:left;">
+1.21 (0.47)
+</td>
+<td style="text-align:left;">
+2.01 (0.38)
+</td>
+<td style="text-align:left;">
+1.52 (0.28)
+</td>
+<td style="text-align:left;">
+1.27 (0.21)
+</td>
+<td style="text-align:left;">
+2.07 (0.49)
+</td>
+<td style="text-align:left;">
+1.91 (0.31)
+</td>
+<td style="text-align:left;">
+3.87 (0.87)
+</td>
+<td style="text-align:left;">
+2.29 (0.45)
+</td>
+<td style="text-align:left;">
+2.32 (0.46)
+</td>
+<td style="text-align:left;">
+0.95 (0.26)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="6" style="list-style-type: decimal">
+<li>Linens (sheets, towels,blankets)
+</td>
+<td style="text-align:left;">
+4.61 (0.3)
+</td>
+<td style="text-align:left;">
+4.22 (0.63)
+</td>
+<td style="text-align:left;">
+3.31 (0.59)
+</td>
+<td style="text-align:left;">
+4 (0.7)
+</td>
+<td style="text-align:left;">
+4.94 (0.6)
+</td>
+<td style="text-align:left;">
+5.22 (0.8)
+</td>
+<td style="text-align:left;">
+4.18 (0.69)
+</td>
+<td style="text-align:left;">
+5.52 (0.72)
+</td>
+<td style="text-align:left;">
+6.52 (0.97)
+</td>
+<td style="text-align:left;">
+4.55 (0.9)
+</td>
+<td style="text-align:left;">
+3.69 (0.64)
+</td>
+<td style="text-align:left;">
+3.09 (0.55)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="7" style="list-style-type: decimal">
+<li>Furniture
+</td>
+<td style="text-align:left;">
+3.74 (0.49)
+</td>
+<td style="text-align:left;">
+7.05 (2.19)
+</td>
+<td style="text-align:left;">
+1.11 (0.45)
+</td>
+<td style="text-align:left;">
+2.61 (0.77)
+</td>
+<td style="text-align:left;">
+3.83 (1.19)
+</td>
+<td style="text-align:left;">
+1.33 (0.69)
+</td>
+<td style="text-align:left;">
+7.69 (2.72)
+</td>
+<td style="text-align:left;">
+2.58 (0.66)
+</td>
+<td style="text-align:left;">
+4.17 (1.4)
+</td>
+<td style="text-align:left;">
+3.61 (1.23)
+</td>
+<td style="text-align:left;">
+6.42 (1.2)
+</td>
+<td style="text-align:left;">
+7.33 (3.4)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="8" style="list-style-type: decimal">
+<li>Lamp/torch/solare power
+</td>
+<td style="text-align:left;">
+1.59 (0.19)
+</td>
+<td style="text-align:left;">
+1.35 (0.25)
+</td>
+<td style="text-align:left;">
+1.01 (0.23)
+</td>
+<td style="text-align:left;">
+2.12 (0.46)
+</td>
+<td style="text-align:left;">
+1.82 (0.44)
+</td>
+<td style="text-align:left;">
+2.88 (0.53)
+</td>
+<td style="text-align:left;">
+2.17 (0.55)
+</td>
+<td style="text-align:left;">
+1.11 (0.19)
+</td>
+<td style="text-align:left;">
+3.14 (0.81)
+</td>
+<td style="text-align:left;">
+0.64 (0.14)
+</td>
+<td style="text-align:left;">
+0.08 (0.03)
+</td>
+<td style="text-align:left;">
+1.38 (0.59)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="9" style="list-style-type: decimal">
+<li>Ceremonial expenses
+</td>
+<td style="text-align:left;">
+31.36 (1.26)
+</td>
+<td style="text-align:left;">
+31.17 (3.75)
+</td>
+<td style="text-align:left;">
+19.33 (2.73)
+</td>
+<td style="text-align:left;">
+40.7 (2.62)
+</td>
+<td style="text-align:left;">
+23.65 (2.67)
+</td>
+<td style="text-align:left;">
+29.45 (2.79)
+</td>
+<td style="text-align:left;">
+25.88 (3.11)
+</td>
+<td style="text-align:left;">
+34.18 (2.85)
+</td>
+<td style="text-align:left;">
+21.42 (2.97)
+</td>
+<td style="text-align:left;">
+26.15 (3.35)
+</td>
+<td style="text-align:left;">
+30.46 (2.42)
+</td>
+<td style="text-align:left;">
+32.45 (2.74)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="10" style="list-style-type: decimal">
+<li>Contributions to informal social security institutions (inc. IDDIR, mahiber..)
+</td>
+<td style="text-align:left;">
+3.43 (0.27)
+</td>
+<td style="text-align:left;">
+1.23 (0.36)
+</td>
+<td style="text-align:left;">
+1.25 (0.31)
+</td>
+<td style="text-align:left;">
+2.53 (0.46)
+</td>
+<td style="text-align:left;">
+4.8 (0.65)
+</td>
+<td style="text-align:left;">
+0.42 (0.14)
+</td>
+<td style="text-align:left;">
+1.16 (0.32)
+</td>
+<td style="text-align:left;">
+4.39 (0.52)
+</td>
+<td style="text-align:left;">
+1.65 (0.42)
+</td>
+<td style="text-align:left;">
+1.81 (0.29)
+</td>
+<td style="text-align:left;">
+3.41 (0.52)
+</td>
+<td style="text-align:left;">
+1.93 (0.36)
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="11" style="list-style-type: decimal">
+<li>Donations to religious institutions (Incl. churches and mosques..)
+</td>
+<td style="text-align:left;">
+3.78 (0.35)
+</td>
+<td style="text-align:left;">
+2.26 (0.53)
+</td>
+<td style="text-align:left;">
+3.51 (2.18)
+</td>
+<td style="text-align:left;">
+3.64 (0.62)
+</td>
+<td style="text-align:left;">
+4.22 (0.84)
+</td>
+<td style="text-align:left;">
+1.06 (0.43)
+</td>
+<td style="text-align:left;">
+4.81 (1.13)
+</td>
+<td style="text-align:left;">
+5.81 (0.84)
+</td>
+<td style="text-align:left;">
+4.17 (0.71)
+</td>
+<td style="text-align:left;">
+3.22 (0.45)
+</td>
+<td style="text-align:left;">
+1.71 (0.32)
+</td>
+<td style="text-align:left;">
+1.6 (0.74)
+</td>
+</tr>
+</tbody>
+</table></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol>
+</div>
+<div id="estimating-the-ratio-of-educational-expenditure" class="section level3 unnumbered hasAnchor">
+<h3>Estimating the Ratio of Educational Expenditure<a href="totals-means-and-ratios.html#estimating-the-ratio-of-educational-expenditure" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block begins the analysis of educational expenditure by loading an aggregated consumption dataset. The survey design is then defined using the same stratification structure and adjusted weights applied in previous sections. This step is essential to ensure that estimates of educational spending are properly representative of the survey’s sample design.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="totals-means-and-ratios.html#cb28-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb28-2"><a href="totals-means-and-ratios.html#cb28-2" tabindex="-1"></a><span class="co">#                Estimating the Ratio of Educational Expenditure               #</span></span>
+<span id="cb28-3"><a href="totals-means-and-ratios.html#cb28-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb28-4"><a href="totals-means-and-ratios.html#cb28-4" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="totals-means-and-ratios.html#cb28-5" tabindex="-1"></a>HH_data <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/cons_agg_w4.sav&quot;</span>)</span>
+<span id="cb28-6"><a href="totals-means-and-ratios.html#cb28-6" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="totals-means-and-ratios.html#cb28-7" tabindex="-1"></a><span class="co"># Defining the survey design</span></span>
+<span id="cb28-8"><a href="totals-means-and-ratios.html#cb28-8" tabindex="-1"></a>ESS4_design <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb28-9"><a href="totals-means-and-ratios.html#cb28-9" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strata =</span> <span class="fu">paste0</span>(saq01, <span class="st">&quot;_&quot;</span>, saq14)) <span class="sc">%&gt;%</span></span>
+<span id="cb28-10"><a href="totals-means-and-ratios.html#cb28-10" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(</span>
+<span id="cb28-11"><a href="totals-means-and-ratios.html#cb28-11" tabindex="-1"></a>    <span class="at">ids =</span> ea_id,</span>
+<span id="cb28-12"><a href="totals-means-and-ratios.html#cb28-12" tabindex="-1"></a>    <span class="co"># Primary sampling unit identifier (EA)</span></span>
+<span id="cb28-13"><a href="totals-means-and-ratios.html#cb28-13" tabindex="-1"></a>    <span class="at">strata =</span> strata,</span>
+<span id="cb28-14"><a href="totals-means-and-ratios.html#cb28-14" tabindex="-1"></a>    <span class="co"># Stratification by region (saq01) and urban/rural zone (saq14)</span></span>
+<span id="cb28-15"><a href="totals-means-and-ratios.html#cb28-15" tabindex="-1"></a>    <span class="at">weights =</span> pw_w4,</span>
+<span id="cb28-16"><a href="totals-means-and-ratios.html#cb28-16" tabindex="-1"></a>    <span class="co"># Final adjusted weight</span></span>
+<span id="cb28-17"><a href="totals-means-and-ratios.html#cb28-17" tabindex="-1"></a>    <span class="at">nest =</span> <span class="cn">TRUE</span></span>
+<span id="cb28-18"><a href="totals-means-and-ratios.html#cb28-18" tabindex="-1"></a>  )</span></code></pre></div>
+<div id="estimation-of-the-ratio" class="section level4 unnumbered hasAnchor">
+<h4>Estimation of the ratio<a href="totals-means-and-ratios.html#estimation-of-the-ratio" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>This block estimates the share of educational expenditure relative to total household consumption, both at the national level and by region. The survey_ratio() function is used to calculate the ratio between annual educational consumption (<code>educ_cons_ann</code>) and total annual consumption (<code>total_cons_ann</code>), including precision measures such as standard error and coefficient of variation. National and regional results are combined into a single table for further analysis and visualization.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="totals-means-and-ratios.html#cb29-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb29-2"><a href="totals-means-and-ratios.html#cb29-2" tabindex="-1"></a><span class="co"># Estimation of the ratio.                                                     #</span></span>
+<span id="cb29-3"><a href="totals-means-and-ratios.html#cb29-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb29-4"><a href="totals-means-and-ratios.html#cb29-4" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="totals-means-and-ratios.html#cb29-5" tabindex="-1"></a>tab_03_R2_total <span class="ot">&lt;-</span> ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb29-6"><a href="totals-means-and-ratios.html#cb29-6" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">R_hat =</span> <span class="fu">survey_ratio</span>(</span>
+<span id="cb29-7"><a href="totals-means-and-ratios.html#cb29-7" tabindex="-1"></a>    educ_cons_ann,</span>
+<span id="cb29-8"><a href="totals-means-and-ratios.html#cb29-8" tabindex="-1"></a>    total_cons_ann,</span>
+<span id="cb29-9"><a href="totals-means-and-ratios.html#cb29-9" tabindex="-1"></a>    <span class="at">na.rm =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb29-10"><a href="totals-means-and-ratios.html#cb29-10" tabindex="-1"></a>    <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)</span>
+<span id="cb29-11"><a href="totals-means-and-ratios.html#cb29-11" tabindex="-1"></a>  )) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">Region =</span> <span class="st">&quot;ETHIOPIA&quot;</span>)</span>
+<span id="cb29-12"><a href="totals-means-and-ratios.html#cb29-12" tabindex="-1"></a></span>
+<span id="cb29-13"><a href="totals-means-and-ratios.html#cb29-13" tabindex="-1"></a>tab_03_R2_region <span class="ot">&lt;-</span> ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb29-14"><a href="totals-means-and-ratios.html#cb29-14" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">Region =</span> <span class="fu">as_factor</span>(saq01)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-15"><a href="totals-means-and-ratios.html#cb29-15" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">R_hat =</span> <span class="fu">survey_ratio</span>(</span>
+<span id="cb29-16"><a href="totals-means-and-ratios.html#cb29-16" tabindex="-1"></a>    educ_cons_ann,</span>
+<span id="cb29-17"><a href="totals-means-and-ratios.html#cb29-17" tabindex="-1"></a>    total_cons_ann,</span>
+<span id="cb29-18"><a href="totals-means-and-ratios.html#cb29-18" tabindex="-1"></a>    <span class="at">na.rm =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb29-19"><a href="totals-means-and-ratios.html#cb29-19" tabindex="-1"></a>    <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)</span>
+<span id="cb29-20"><a href="totals-means-and-ratios.html#cb29-20" tabindex="-1"></a>  ))</span>
+<span id="cb29-21"><a href="totals-means-and-ratios.html#cb29-21" tabindex="-1"></a></span>
+<span id="cb29-22"><a href="totals-means-and-ratios.html#cb29-22" tabindex="-1"></a></span>
+<span id="cb29-23"><a href="totals-means-and-ratios.html#cb29-23" tabindex="-1"></a></span>
+<span id="cb29-24"><a href="totals-means-and-ratios.html#cb29-24" tabindex="-1"></a><span class="co"># Combining results</span></span>
+<span id="cb29-25"><a href="totals-means-and-ratios.html#cb29-25" tabindex="-1"></a>tab_03_R2 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(tab_03_R2_region, tab_03_R2_total)</span></code></pre></div>
+<p>This final block formats the results of the educational expenditure as a share of total household consumption, expressing them as percentages. Both the estimated ratio (<code>R_hat</code>) and its standard error (<code>R_hat_se</code>) are included, allowing for easy interpretation and comparison across regions and at the national level.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="totals-means-and-ratios.html#cb30-1" tabindex="-1"></a><span class="co"># Formatting and displaying results</span></span>
+<span id="cb30-2"><a href="totals-means-and-ratios.html#cb30-2" tabindex="-1"></a>tab_03_R2 <span class="sc">%&gt;%</span></span>
+<span id="cb30-3"><a href="totals-means-and-ratios.html#cb30-3" tabindex="-1"></a>  <span class="fu">transmute</span>(Region,</span>
+<span id="cb30-4"><a href="totals-means-and-ratios.html#cb30-4" tabindex="-1"></a>            <span class="at">R_hat =</span> <span class="fu">round</span>(R_hat <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
+<span id="cb30-5"><a href="totals-means-and-ratios.html#cb30-5" tabindex="-1"></a>            <span class="at">R_hat_se =</span> <span class="fu">round</span>(R_hat_se <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>))  </span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Region
+</th>
+<th style="text-align:right;">
+R_hat
+</th>
+<th style="text-align:right;">
+R_hat_se
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+TIGRAY
+</td>
+<td style="text-align:right;">
+2.51
+</td>
+<td style="text-align:right;">
+0.43
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AFAR
+</td>
+<td style="text-align:right;">
+0.88
+</td>
+<td style="text-align:right;">
+0.14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AMHARA
+</td>
+<td style="text-align:right;">
+1.41
+</td>
+<td style="text-align:right;">
+0.19
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+OROMIA
+</td>
+<td style="text-align:right;">
+1.56
+</td>
+<td style="text-align:right;">
+0.17
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SOMALI
+</td>
+<td style="text-align:right;">
+1.73
+</td>
+<td style="text-align:right;">
+0.27
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BENISHANGUL GUMUZ
+</td>
+<td style="text-align:right;">
+2.44
+</td>
+<td style="text-align:right;">
+0.60
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SNNP
+</td>
+<td style="text-align:right;">
+2.13
+</td>
+<td style="text-align:right;">
+0.38
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GAMBELA
+</td>
+<td style="text-align:right;">
+2.09
+</td>
+<td style="text-align:right;">
+0.32
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HARAR
+</td>
+<td style="text-align:right;">
+2.85
+</td>
+<td style="text-align:right;">
+0.36
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ADDIS ABABA
+</td>
+<td style="text-align:right;">
+8.87
+</td>
+<td style="text-align:right;">
+1.38
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DIRE DAWA
+</td>
+<td style="text-align:right;">
+3.36
+</td>
+<td style="text-align:right;">
+0.37
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ETHIOPIA
+</td>
+<td style="text-align:right;">
+2.35
+</td>
+<td style="text-align:right;">
+0.17
+</td>
 </tr>
 </tbody>
 </table>
 
+</div>
 </div>
 </div>
             </section>
