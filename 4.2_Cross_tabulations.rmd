@@ -1,0 +1,99 @@
+```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE,
+                      cache = TRUE, 
+                      cache.path = "cache/3.5/")
+```
+
+# 4.2 Cross-tabulations
+
+
+### Prepare the work environment {-}
+
+This block sets up the working environment to analyze data from Section 1 of the **ESS4** household questionnaire. After clearing the memory and loading the required libraries, the corresponding dataset is imported, and the **survey design** is defined. It includes stratification by region and area type (urban/rural), identification of primary sampling units (`ea_id`), and use of adjusted sampling weights (`pw_w4`). This design ensures that subsequent analyses correctly reflect the complex survey structure and produce representative estimates. A summary of the design is printed at the end to verify its proper specification.
+
+
+```{r}
+#------------------------------------------------------------------------------#
+#                           Cleaning R Environment                             #
+#------------------------------------------------------------------------------#
+
+rm(list = ls())
+gc()
+
+#------------------------------------------------------------------------------#
+#                                Libraries                                     #
+#------------------------------------------------------------------------------#
+
+library(tidyverse)
+library(survey)
+library(srvyr)
+library(data.table)
+library(magrittr)
+library(haven)
+library(stringr)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+library(convey)
+
+# Ensure select function from dplyr is used explicitly
+select <- dplyr::select
+
+#------------------------------------------------------------------------------#
+#                        Setting the RAM Memory Limit                          #
+#------------------------------------------------------------------------------#
+
+memory.limit(250000000)
+
+#------------------------------------------------------------------------------#
+#                           Loading Datasets                                   #
+#------------------------------------------------------------------------------#
+
+options(survey.lonely.psu = "fail") 
+HH_data <- read_sav("data/data_ESS4/sect1_hh_w4.sav")
+
+#------------------------------------------------------------------------------#
+#                         Defining Survey Design                              #
+#------------------------------------------------------------------------------#
+
+ESS4_design <- HH_data %>%
+  mutate(strata = paste0(saq01, "_", saq14)) %>%
+  as_survey_design(
+    ids = ea_id,
+    # Primary sampling unit identifier (EA)
+    strata = strata,
+    # Stratification by region (saq01) and urban/rural zone (saq14)
+    weights = pw_w4,
+    # Final adjusted weight
+    nest = TRUE
+  )
+
+options(survey.lonely.psu = "fail")
+summary(ESS4_design)
+
+```
+### Processing Variables for Analysis  {-}
+
+This block processes the variables needed for the analysis. It converts **sex** (`s1q02`) and **religion** (`s1q08`) into factors and recodes less frequent religion categories—such as "PEGAN", "TRADITIONAL", "WAKEFETA", "OTHER (SPECIFY)", and missing values—into a consolidated `"OTHER"` group. Additionally, the dataset is filtered to retain only individuals **aged 10 years or older** (`s1q03a >= 10`), ensuring that the analysis focuses on the population most likely to engage in social or economic activities.
+
+```{r}
+#------------------------------------------------------------------------------#
+#                   Processing Variables for Analysis                         #
+#------------------------------------------------------------------------------#
+
+ESS4_design <- ESS4_design %>%
+  mutate(
+    sexo = as_factor(s1q02),
+    religion = as_factor(s1q08),
+    religion = case_when(
+      religion %in% c("6. PEGAN", "5. TRADITIONAL", "8. OTHER (SPECIFY)",
+                      "7. WAKEFETA") |
+        is.na(religion) ~ "OTHER",
+      TRUE ~ religion
+    )
+  ) %>%
+  filter(s1q03a >= 10)
+
+```
+

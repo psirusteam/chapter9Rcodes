@@ -9,6 +9,7 @@ rmd_files: [
   "3.1_Frequencies_and_proportions.rmd",
   "3.2_Totals_means_and_ratios.rmd",
   "3.3_Correlations.Rmd",
-  "3.4_Percentiles_and_inequality_measures.Rmd"
+  "3.4_Percentiles_and_inequality_measures.Rmd",
+  "4.2_Cross_tabulations.rmd"
  
 ]

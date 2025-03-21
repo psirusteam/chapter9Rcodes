@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3.4 Percentiles and inequality measures | CHAPTER 9 - EXAMPLES IN R</title>
+  <meta name="description" content="3.4 Percentiles and inequality measures | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3.4 Percentiles and inequality measures | CHAPTER 9 - EXAMPLES IN R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="3.4 Percentiles and inequality measures | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="github-repo" content="psirusteam/chapter9Rcodes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3.4 Percentiles and inequality measures | CHAPTER 9 - EXAMPLES IN R" />
+  
+  <meta name="twitter:description" content="3.4 Percentiles and inequality measures | CHAPTER 9 - EXAMPLES IN R" />
+  
+
+<meta name="author" content="" />
+
+
+<meta name="date" content="2025-03-21" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="correlations.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">CHAPTER 9 - EXAMPLES IN R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Abstract</a></li>
+<li class="chapter" data-level="" data-path="accounting-for-the-sampling-design.html"><a href="accounting-for-the-sampling-design.html"><i class="fa fa-check"></i>Accounting for the Sampling Design</a>
+<ul>
+<li class="chapter" data-level="" data-path="sample-design-of-the-ess4-20182019.html"><a href="sample-design-of-the-ess4-20182019.html"><i class="fa fa-check"></i>Sample design of the ESS4 2018/2019</a></li>
+<li class="chapter" data-level="" data-path="data-source.html"><a href="data-source.html"><i class="fa fa-check"></i>Data Source</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html"><i class="fa fa-check"></i>2.3 Using Software to Generate Valid Inferences</a>
+<ul>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#prepare-the-work-environment"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#loading-datasets"><i class="fa fa-check"></i>Loading Datasets</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#defining-the-survey-design"><i class="fa fa-check"></i>Defining the survey design</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html"><i class="fa fa-check"></i>3.1 Frequencies and Proportions</a>
+<ul>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#prepare-the-work-environment-1"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#estimating-totals-and-proportions"><i class="fa fa-check"></i>Estimating totals and proportions</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#formatting-and-presenting-results"><i class="fa fa-check"></i>Formatting and presenting results</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html"><i class="fa fa-check"></i>3.2 Totals, means and ratios</a>
+<ul>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#prepare-the-work-environment-2"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-totals-and-means"><i class="fa fa-check"></i>Estimation of totals and means</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-ratio"><i class="fa fa-check"></i>Estimation of Ratio</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimating-the-ratio-of-educational-expenditure"><i class="fa fa-check"></i>Estimating the Ratio of Educational Expenditure</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html"><i class="fa fa-check"></i>3.3 Correlations</a>
+<ul>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#prepare-the-work-environment-3"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#estimating-correlations"><i class="fa fa-check"></i>Estimating Correlations</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html"><i class="fa fa-check"></i>3.4 Percentiles and inequality measures</a>
+<ul>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#prepare-the-work-environment-4"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#estimating-the-mean-and-median-of-total-other-income"><i class="fa fa-check"></i>Estimating the Mean and Median of Total Other Income</a></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#the-gini-coefficient."><i class="fa fa-check"></i>The Gini Coefficient.</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a CHAPTER 9 - EXAMPLES IN R </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CHAPTER 9 - EXAMPLES IN R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="percentiles-and-inequality-measures" class="section level1 unnumbered hasAnchor">
+<h1>3.4 Percentiles and inequality measures<a href="percentiles-and-inequality-measures.html#percentiles-and-inequality-measures" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>This section estimates key inequality and income access indicators among Ethiopian households using <strong>ESS4</strong> survey data. It begins by processing non-labor income sources, calculating the proportion of households that received each source, along with the mean and median income values. Then, it computes the <strong>Gini coefficient</strong> based on per capita expenditure, taking into account the complex survey design. A per-person expenditure variable is constructed, the survey design is defined using <code>convey</code>, and the Gini is calculated both at the national and regional levels. The final results help characterize income inequality in Ethiopia and highlight regional disparities, providing essential evidence to inform equity-oriented public policy.</p>
+<div id="prepare-the-work-environment-4" class="section level3 unnumbered hasAnchor">
+<h3>Prepare the work environment<a href="percentiles-and-inequality-measures.html#prepare-the-work-environment-4" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block initiates the analysis of <strong>income by source</strong> using data from Section 13 of the <strong>ESS4</strong> household questionnaire. It begins by cleaning the environment, loading the required libraries, and importing the relevant dataset.</p>
+<p>Then, income variables are processed:<br />
+- <code>income</code> is created to reflect the reported value or zero if no income was received.<br />
+- A binary indicator <code>yes_no</code> is defined to flag participation in each income source.</p>
+<p>Next, the <strong>survey design</strong> is defined using stratification by region and area type (urban/rural), primary sampling unit identifiers, and adjusted weights. This setup ensures that all income estimates are representative. A summary of the design is provided as a consistency check before further analysis.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="percentiles-and-inequality-measures.html#cb38-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb38-2"><a href="percentiles-and-inequality-measures.html#cb38-2" tabindex="-1"></a><span class="co">#                           Cleaning R Environment                             #</span></span>
+<span id="cb38-3"><a href="percentiles-and-inequality-measures.html#cb38-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb38-4"><a href="percentiles-and-inequality-measures.html#cb38-4" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="percentiles-and-inequality-measures.html#cb38-5" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb38-6"><a href="percentiles-and-inequality-measures.html#cb38-6" tabindex="-1"></a><span class="fu">gc</span>()</span></code></pre></div>
+<pre><code>##          used (Mb) gc trigger (Mb) max used (Mb)
+## Ncells 542662 29.0    1220220 65.2   660485 35.3
+## Vcells 956517  7.3    8388608 64.0  1770410 13.6</code></pre>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="percentiles-and-inequality-measures.html#cb40-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb40-2"><a href="percentiles-and-inequality-measures.html#cb40-2" tabindex="-1"></a><span class="co">#                                Libraries                                     #</span></span>
+<span id="cb40-3"><a href="percentiles-and-inequality-measures.html#cb40-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb40-4"><a href="percentiles-and-inequality-measures.html#cb40-4" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="percentiles-and-inequality-measures.html#cb40-5" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb40-6"><a href="percentiles-and-inequality-measures.html#cb40-6" tabindex="-1"></a><span class="fu">library</span>(survey)</span>
+<span id="cb40-7"><a href="percentiles-and-inequality-measures.html#cb40-7" tabindex="-1"></a><span class="fu">library</span>(srvyr)</span>
+<span id="cb40-8"><a href="percentiles-and-inequality-measures.html#cb40-8" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb40-9"><a href="percentiles-and-inequality-measures.html#cb40-9" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb40-10"><a href="percentiles-and-inequality-measures.html#cb40-10" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb40-11"><a href="percentiles-and-inequality-measures.html#cb40-11" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb40-12"><a href="percentiles-and-inequality-measures.html#cb40-12" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb40-13"><a href="percentiles-and-inequality-measures.html#cb40-13" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb40-14"><a href="percentiles-and-inequality-measures.html#cb40-14" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb40-15"><a href="percentiles-and-inequality-measures.html#cb40-15" tabindex="-1"></a><span class="fu">library</span>(convey)</span>
+<span id="cb40-16"><a href="percentiles-and-inequality-measures.html#cb40-16" tabindex="-1"></a></span>
+<span id="cb40-17"><a href="percentiles-and-inequality-measures.html#cb40-17" tabindex="-1"></a><span class="co"># Ensure select function from dplyr is used explicitly</span></span>
+<span id="cb40-18"><a href="percentiles-and-inequality-measures.html#cb40-18" tabindex="-1"></a>select <span class="ot">&lt;-</span> dplyr<span class="sc">::</span>select</span>
+<span id="cb40-19"><a href="percentiles-and-inequality-measures.html#cb40-19" tabindex="-1"></a></span>
+<span id="cb40-20"><a href="percentiles-and-inequality-measures.html#cb40-20" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb40-21"><a href="percentiles-and-inequality-measures.html#cb40-21" tabindex="-1"></a><span class="co">#                        Setting the RAM Memory Limit                          #</span></span>
+<span id="cb40-22"><a href="percentiles-and-inequality-measures.html#cb40-22" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb40-23"><a href="percentiles-and-inequality-measures.html#cb40-23" tabindex="-1"></a></span>
+<span id="cb40-24"><a href="percentiles-and-inequality-measures.html#cb40-24" tabindex="-1"></a><span class="fu">memory.limit</span>(<span class="dv">250000000</span>)</span></code></pre></div>
+<pre><code>## [1] Inf</code></pre>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="percentiles-and-inequality-measures.html#cb42-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb42-2"><a href="percentiles-and-inequality-measures.html#cb42-2" tabindex="-1"></a><span class="co">#                           Loading Datasets                                   #</span></span>
+<span id="cb42-3"><a href="percentiles-and-inequality-measures.html#cb42-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb42-4"><a href="percentiles-and-inequality-measures.html#cb42-4" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="percentiles-and-inequality-measures.html#cb42-5" tabindex="-1"></a>HH_data <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/sect13_hh_w4_v2.sav&quot;</span>)</span>
+<span id="cb42-6"><a href="percentiles-and-inequality-measures.html#cb42-6" tabindex="-1"></a></span>
+<span id="cb42-7"><a href="percentiles-and-inequality-measures.html#cb42-7" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb42-8"><a href="percentiles-and-inequality-measures.html#cb42-8" tabindex="-1"></a><span class="co">#                Processing Income Data                                        #</span></span>
+<span id="cb42-9"><a href="percentiles-and-inequality-measures.html#cb42-9" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb42-10"><a href="percentiles-and-inequality-measures.html#cb42-10" tabindex="-1"></a></span>
+<span id="cb42-11"><a href="percentiles-and-inequality-measures.html#cb42-11" tabindex="-1"></a>HH_data <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb42-12"><a href="percentiles-and-inequality-measures.html#cb42-12" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">item =</span> source_cd) <span class="sc">%&gt;%</span></span>
+<span id="cb42-13"><a href="percentiles-and-inequality-measures.html#cb42-13" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">income =</span> <span class="fu">ifelse</span>(s13q01 <span class="sc">==</span> <span class="dv">2</span>, <span class="dv">0</span>, s13q02),</span>
+<span id="cb42-14"><a href="percentiles-and-inequality-measures.html#cb42-14" tabindex="-1"></a>         <span class="at">yes_no =</span> <span class="fu">ifelse</span>(s13q01 <span class="sc">==</span> <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb42-15"><a href="percentiles-and-inequality-measures.html#cb42-15" tabindex="-1"></a></span>
+<span id="cb42-16"><a href="percentiles-and-inequality-measures.html#cb42-16" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb42-17"><a href="percentiles-and-inequality-measures.html#cb42-17" tabindex="-1"></a><span class="co"># Defining Survey Design                                                       #</span></span>
+<span id="cb42-18"><a href="percentiles-and-inequality-measures.html#cb42-18" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb42-19"><a href="percentiles-and-inequality-measures.html#cb42-19" tabindex="-1"></a></span>
+<span id="cb42-20"><a href="percentiles-and-inequality-measures.html#cb42-20" tabindex="-1"></a>ESS4_design <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb42-21"><a href="percentiles-and-inequality-measures.html#cb42-21" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strata =</span> <span class="fu">paste0</span>(saq01, <span class="st">&quot;_&quot;</span>, saq14)) <span class="sc">%&gt;%</span></span>
+<span id="cb42-22"><a href="percentiles-and-inequality-measures.html#cb42-22" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(</span>
+<span id="cb42-23"><a href="percentiles-and-inequality-measures.html#cb42-23" tabindex="-1"></a>    <span class="at">ids =</span> ea_id,</span>
+<span id="cb42-24"><a href="percentiles-and-inequality-measures.html#cb42-24" tabindex="-1"></a>    <span class="co"># Primary sampling unit identifier (EA)</span></span>
+<span id="cb42-25"><a href="percentiles-and-inequality-measures.html#cb42-25" tabindex="-1"></a>    <span class="at">strata =</span> strata,</span>
+<span id="cb42-26"><a href="percentiles-and-inequality-measures.html#cb42-26" tabindex="-1"></a>    <span class="co"># Stratification by region (saq01) and urban/rural zone (saq14)</span></span>
+<span id="cb42-27"><a href="percentiles-and-inequality-measures.html#cb42-27" tabindex="-1"></a>    <span class="at">weights =</span> pw_w4,</span>
+<span id="cb42-28"><a href="percentiles-and-inequality-measures.html#cb42-28" tabindex="-1"></a>    <span class="co"># Final adjusted weight</span></span>
+<span id="cb42-29"><a href="percentiles-and-inequality-measures.html#cb42-29" tabindex="-1"></a>    <span class="at">nest =</span> <span class="cn">TRUE</span></span>
+<span id="cb42-30"><a href="percentiles-and-inequality-measures.html#cb42-30" tabindex="-1"></a>  )</span>
+<span id="cb42-31"><a href="percentiles-and-inequality-measures.html#cb42-31" tabindex="-1"></a></span>
+<span id="cb42-32"><a href="percentiles-and-inequality-measures.html#cb42-32" tabindex="-1"></a><span class="fu">options</span>(<span class="at">survey.lonely.psu =</span> <span class="st">&quot;fail&quot;</span>)</span>
+<span id="cb42-33"><a href="percentiles-and-inequality-measures.html#cb42-33" tabindex="-1"></a><span class="fu">summary</span>(ESS4_design)</span></code></pre></div>
+<pre><code>## Stratified 1 - level Cluster Sampling design (with replacement)
+## With (535) clusters.
+## Called via srvyr
+## Probabilities:
+##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## 3.932e-05 1.997e-04 7.680e-04 2.814e-03 4.164e-03 1.317e-01 
+## Stratum Sizes: 
+##             1_1  1_2 12_1 12_2 13_1 13_2  14_2 15_1 15_2  2_1  2_2  3_1  3_2
+## obs        5502 3962 2730 4200 2660 5040 10892 2240 5866 4186 3150 6706 3794
+## design.PSU   35   19   19   20   18   24    52   14   28   28   15   43   18
+## actual.PSU   35   19   19   20   18   24    52   14   28   28   15   43   18
+##             4_1  4_2  5_1  5_2  6_1  6_2  7_1  7_2
+## obs        6342 4200 4970 3570 2366 2730 5908 3766
+## design.PSU   43   20   35   17   16   13   40   18
+## actual.PSU   43   20   35   17   16   13   40   18
+## Data variables:
+##  [1] &quot;household_id&quot; &quot;source_cd&quot;    &quot;ea_id&quot;        &quot;saq14&quot;        &quot;pw_w4&quot;       
+##  [6] &quot;saq01&quot;        &quot;saq02&quot;        &quot;saq03&quot;        &quot;saq04&quot;        &quot;saq05&quot;       
+## [11] &quot;saq06&quot;        &quot;saq07&quot;        &quot;saq08&quot;        &quot;s13q01&quot;       &quot;s13q02&quot;      
+## [16] &quot;s13q03_1&quot;     &quot;s13q03_2&quot;     &quot;s13q04a&quot;      &quot;s13q04b&quot;      &quot;s13q04c&quot;     
+## [21] &quot;s13q05&quot;       &quot;item&quot;         &quot;income&quot;       &quot;yes_no&quot;       &quot;strata&quot;</code></pre>
+</div>
+<div id="estimating-the-mean-and-median-of-total-other-income" class="section level3 unnumbered hasAnchor">
+<h3>Estimating the Mean and Median of Total Other Income<a href="percentiles-and-inequality-measures.html#estimating-the-mean-and-median-of-total-other-income" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block estimates key indicators to construct <strong>Table 5.3 of the ESS4 report</strong>, which focuses on <strong>non-labor income sources</strong> received over the last 12 months, broken down by type.</p>
+<p>First, it calculates the <strong>mean (<code>M_hat</code>)</strong> and <strong>median (<code>Md_hat</code>)</strong> income for each source (<code>item</code>), including only households that reported receiving income from that source. Then, it estimates the <strong>proportion of households (<code>P_hat</code>)</strong> that reported receiving each income type, based on the binary variable <code>yes_no</code>. Finally, both results are merged into a single table that summarizes the coverage and estimated amounts of income by source across the country.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="percentiles-and-inequality-measures.html#cb44-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb44-2"><a href="percentiles-and-inequality-measures.html#cb44-2" tabindex="-1"></a><span class="co"># Estimation of Income Statistics - TABLE 5.3                                  #</span></span>
+<span id="cb44-3"><a href="percentiles-and-inequality-measures.html#cb44-3" tabindex="-1"></a><span class="co"># Other Income by Source in the Last 12 Months and Median Income by Source,</span></span>
+<span id="cb44-4"><a href="percentiles-and-inequality-measures.html#cb44-4" tabindex="-1"></a><span class="co"># Ethiopia 2018/19</span></span>
+<span id="cb44-5"><a href="percentiles-and-inequality-measures.html#cb44-5" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb44-6"><a href="percentiles-and-inequality-measures.html#cb44-6" tabindex="-1"></a><span class="co"># ESS4 Sampled EAs and Households by Region and by Urban and Rural</span></span>
+<span id="cb44-7"><a href="percentiles-and-inequality-measures.html#cb44-7" tabindex="-1"></a><span class="co"># Ethiopia Socioeconomic Survey (ESS) 2018/19</span></span>
+<span id="cb44-8"><a href="percentiles-and-inequality-measures.html#cb44-8" tabindex="-1"></a><span class="co"># SURVEY REPORT</span></span>
+<span id="cb44-9"><a href="percentiles-and-inequality-measures.html#cb44-9" tabindex="-1"></a><span class="co"># Central Statistics Agency of Ethiopia | World Bank</span></span>
+<span id="cb44-10"><a href="percentiles-and-inequality-measures.html#cb44-10" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb44-11"><a href="percentiles-and-inequality-measures.html#cb44-11" tabindex="-1"></a></span>
+<span id="cb44-12"><a href="percentiles-and-inequality-measures.html#cb44-12" tabindex="-1"></a><span class="co"># Estimating the Mean and Median of Total Other Income</span></span>
+<span id="cb44-13"><a href="percentiles-and-inequality-measures.html#cb44-13" tabindex="-1"></a>tab_06 <span class="ot">&lt;-</span> ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb44-14"><a href="percentiles-and-inequality-measures.html#cb44-14" tabindex="-1"></a>  <span class="fu">group_by</span>(item) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-15"><a href="percentiles-and-inequality-measures.html#cb44-15" tabindex="-1"></a>  <span class="fu">filter</span>(s13q01 <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb44-16"><a href="percentiles-and-inequality-measures.html#cb44-16" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb44-17"><a href="percentiles-and-inequality-measures.html#cb44-17" tabindex="-1"></a>    <span class="at">M_hat  =</span> <span class="fu">survey_mean</span>(income, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)),</span>
+<span id="cb44-18"><a href="percentiles-and-inequality-measures.html#cb44-18" tabindex="-1"></a>    <span class="at">Md_hat =</span> <span class="fu">survey_median</span>(income, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>))</span>
+<span id="cb44-19"><a href="percentiles-and-inequality-measures.html#cb44-19" tabindex="-1"></a>  )</span>
+<span id="cb44-20"><a href="percentiles-and-inequality-measures.html#cb44-20" tabindex="-1"></a></span>
+<span id="cb44-21"><a href="percentiles-and-inequality-measures.html#cb44-21" tabindex="-1"></a><span class="co"># Estimating proportion of HH that received other income sources</span></span>
+<span id="cb44-22"><a href="percentiles-and-inequality-measures.html#cb44-22" tabindex="-1"></a>tab_06_P <span class="ot">&lt;-</span> ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb44-23"><a href="percentiles-and-inequality-measures.html#cb44-23" tabindex="-1"></a>  <span class="fu">group_by</span>(item) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-24"><a href="percentiles-and-inequality-measures.html#cb44-24" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">P_hat  =</span> <span class="fu">survey_mean</span>(yes_no, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)))</span>
+<span id="cb44-25"><a href="percentiles-and-inequality-measures.html#cb44-25" tabindex="-1"></a></span>
+<span id="cb44-26"><a href="percentiles-and-inequality-measures.html#cb44-26" tabindex="-1"></a><span class="co"># Merging income and proportion tables</span></span>
+<span id="cb44-27"><a href="percentiles-and-inequality-measures.html#cb44-27" tabindex="-1"></a>tab_06 <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(tab_06, tab_06_P)</span></code></pre></div>
+<p>This block produces the final formatted output for the estimates of non-labor income sources, resulting in a clear and concise table. For each income source, it presents the proportion of households that reported receiving it (<code>P_hat</code>), along with its standard error and coefficient of variation, allowing for the evaluation of both coverage and estimate precision. It also includes the median income (<code>Md_hat</code>) among recipients, with corresponding measures of uncertainty. All values are rounded to enhance readability and interpretation, making the resulting table suitable for technical reports or comparative analyses.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="percentiles-and-inequality-measures.html#cb45-1" tabindex="-1"></a><span class="co"># Formatting and displaying results</span></span>
+<span id="cb45-2"><a href="percentiles-and-inequality-measures.html#cb45-2" tabindex="-1"></a>tab_06 <span class="sc">%&gt;%</span></span>
+<span id="cb45-3"><a href="percentiles-and-inequality-measures.html#cb45-3" tabindex="-1"></a>  <span class="fu">transmute</span>(</span>
+<span id="cb45-4"><a href="percentiles-and-inequality-measures.html#cb45-4" tabindex="-1"></a>    <span class="at">item =</span> <span class="fu">as_factor</span>(item),</span>
+<span id="cb45-5"><a href="percentiles-and-inequality-measures.html#cb45-5" tabindex="-1"></a>    <span class="at">P_hat =</span> <span class="fu">round</span>(P_hat <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
+<span id="cb45-6"><a href="percentiles-and-inequality-measures.html#cb45-6" tabindex="-1"></a>    <span class="at">P_hat_cv =</span> <span class="fu">round</span>(P_hat_cv <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
+<span id="cb45-7"><a href="percentiles-and-inequality-measures.html#cb45-7" tabindex="-1"></a>    <span class="at">P_hat_se =</span> <span class="fu">round</span>(P_hat_se <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
+<span id="cb45-8"><a href="percentiles-and-inequality-measures.html#cb45-8" tabindex="-1"></a>    <span class="at">Md_hat =</span> <span class="fu">round</span>(Md_hat),</span>
+<span id="cb45-9"><a href="percentiles-and-inequality-measures.html#cb45-9" tabindex="-1"></a>    <span class="at">Md_hat_se =</span> <span class="fu">round</span>(Md_hat_se),</span>
+<span id="cb45-10"><a href="percentiles-and-inequality-measures.html#cb45-10" tabindex="-1"></a>    <span class="at">Md_hat_cv =</span> <span class="fu">round</span>(Md_hat_cv <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>)</span>
+<span id="cb45-11"><a href="percentiles-and-inequality-measures.html#cb45-11" tabindex="-1"></a>  ) </span></code></pre></div>
+<p>The table summarizes the estimated non-labor income sources for the Ethiopian population. For each income type, it shows the proportion of recipient households (P_hat), along with its standard error and coefficient of variation, allowing assessment of both coverage and estimate precision. It also reports the median income (Md_hat) among those who received the income, including precision measures. The most common sources include cash transfers from individuals (10.3%) and food transfers (5.1%), while pensions and land rental show relatively high median values. In contrast, less common sources such as inheritance, asset sales, or rental of tools display higher uncertainty or lack sufficient data for reliable precision estimates.</p>
+<table class="table" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+item
+</th>
+<th style="text-align:right;">
+P_hat
+</th>
+<th style="text-align:right;">
+P_hat_cv
+</th>
+<th style="text-align:right;">
+P_hat_se
+</th>
+<th style="text-align:right;">
+Md_hat
+</th>
+<th style="text-align:right;">
+Md_hat_se
+</th>
+<th style="text-align:right;">
+Md_hat_cv
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<ol start="101" style="list-style-type: decimal">
+<li>Cash Transfer/Gifts from Individuals
+</td>
+<td style="text-align:right;">
+10.33
+</td>
+<td style="text-align:right;">
+7.10
+</td>
+<td style="text-align:right;">
+0.73
+</td>
+<td style="text-align:right;">
+4000
+</td>
+<td style="text-align:right;">
+508
+</td>
+<td style="text-align:right;">
+12.71
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="102" style="list-style-type: decimal">
+<li>Food Transfers/Gifts from Individuals
+</td>
+<td style="text-align:right;">
+5.15
+</td>
+<td style="text-align:right;">
+10.44
+</td>
+<td style="text-align:right;">
+0.54
+</td>
+<td style="text-align:right;">
+500
+</td>
+<td style="text-align:right;">
+203
+</td>
+<td style="text-align:right;">
+40.53
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="103" style="list-style-type: decimal">
+<li>Non-food In-kind Transfers/Gifts form Individuals
+</td>
+<td style="text-align:right;">
+2.49
+</td>
+<td style="text-align:right;">
+15.47
+</td>
+<td style="text-align:right;">
+0.39
+</td>
+<td style="text-align:right;">
+800
+</td>
+<td style="text-align:right;">
+252
+</td>
+<td style="text-align:right;">
+31.48
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="104" style="list-style-type: decimal">
+<li>Savings, Interest or Other Investment Income
+</td>
+<td style="text-align:right;">
+0.23
+</td>
+<td style="text-align:right;">
+48.34
+</td>
+<td style="text-align:right;">
+0.11
+</td>
+<td style="text-align:right;">
+520
+</td>
+<td style="text-align:right;">
+NaN
+</td>
+<td style="text-align:right;">
+NaN
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="105" style="list-style-type: decimal">
+<li>Pension Income
+</td>
+<td style="text-align:right;">
+1.42
+</td>
+<td style="text-align:right;">
+13.46
+</td>
+<td style="text-align:right;">
+0.19
+</td>
+<td style="text-align:right;">
+7000
+</td>
+<td style="text-align:right;">
+1206
+</td>
+<td style="text-align:right;">
+17.23
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="106" style="list-style-type: decimal">
+<li>Income from Shop/Store Rental/Car, truck, other vehicle rental
+</td>
+<td style="text-align:right;">
+2.47
+</td>
+<td style="text-align:right;">
+13.24
+</td>
+<td style="text-align:right;">
+0.33
+</td>
+<td style="text-align:right;">
+6000
+</td>
+<td style="text-align:right;">
+1161
+</td>
+<td style="text-align:right;">
+19.35
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="107" style="list-style-type: decimal">
+<li>Income from Land Rental
+</td>
+<td style="text-align:right;">
+4.02
+</td>
+<td style="text-align:right;">
+12.73
+</td>
+<td style="text-align:right;">
+0.51
+</td>
+<td style="text-align:right;">
+4000
+</td>
+<td style="text-align:right;">
+266
+</td>
+<td style="text-align:right;">
+6.66
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="108" style="list-style-type: decimal">
+<li>Income from Renting Agricultural Tools
+</td>
+<td style="text-align:right;">
+0.17
+</td>
+<td style="text-align:right;">
+50.31
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+2500
+</td>
+<td style="text-align:right;">
+NaN
+</td>
+<td style="text-align:right;">
+NaN
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="109" style="list-style-type: decimal">
+<li>Income from Renting Transport Animals
+</td>
+<td style="text-align:right;">
+0.66
+</td>
+<td style="text-align:right;">
+25.60
+</td>
+<td style="text-align:right;">
+0.17
+</td>
+<td style="text-align:right;">
+600
+</td>
+<td style="text-align:right;">
+1039
+</td>
+<td style="text-align:right;">
+173.14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="110" style="list-style-type: decimal">
+<li>Income from Real Estate Sales
+</td>
+<td style="text-align:right;">
+0.16
+</td>
+<td style="text-align:right;">
+53.31
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+2880
+</td>
+<td style="text-align:right;">
+NaN
+</td>
+<td style="text-align:right;">
+NaN
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="111" style="list-style-type: decimal">
+<li>Income from household Non-Agricultural Asset Sales
+</td>
+<td style="text-align:right;">
+0.98
+</td>
+<td style="text-align:right;">
+24.17
+</td>
+<td style="text-align:right;">
+0.24
+</td>
+<td style="text-align:right;">
+3500
+</td>
+<td style="text-align:right;">
+1759
+</td>
+<td style="text-align:right;">
+50.27
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="112" style="list-style-type: decimal">
+<li>Income from household Agricultural/Fishing Asset Sales
+</td>
+<td style="text-align:right;">
+7.90
+</td>
+<td style="text-align:right;">
+16.88
+</td>
+<td style="text-align:right;">
+1.33
+</td>
+<td style="text-align:right;">
+6500
+</td>
+<td style="text-align:right;">
+882
+</td>
+<td style="text-align:right;">
+13.57
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="113" style="list-style-type: decimal">
+<li>Income from sales of other Fixed Assets (Sale of b/ss enterprises or stocks/shares
+</td>
+<td style="text-align:right;">
+0.89
+</td>
+<td style="text-align:right;">
+33.56
+</td>
+<td style="text-align:right;">
+0.30
+</td>
+<td style="text-align:right;">
+4600
+</td>
+<td style="text-align:right;">
+5830
+</td>
+<td style="text-align:right;">
+126.74
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="114" style="list-style-type: decimal">
+<li>Inheritance/Lottery/Gambling Winnings
+</td>
+<td style="text-align:right;">
+0.18
+</td>
+<td style="text-align:right;">
+47.66
+</td>
+<td style="text-align:right;">
+0.09
+</td>
+<td style="text-align:right;">
+12000
+</td>
+<td style="text-align:right;">
+NaN
+</td>
+<td style="text-align:right;">
+NaN
+</td>
+</tr>
+</tbody>
+</table></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol>
+</div>
+<div id="the-gini-coefficient." class="section level3 unnumbered hasAnchor">
+<h3>The Gini Coefficient.<a href="percentiles-and-inequality-measures.html#the-gini-coefficient." class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block prepares the data required to calculate the Gini coefficient based on per capita expenditure. It begins by loading the nonfood expenditure dataset and computing total household expenditure, considering only items that were actually purchased. This is then merged with the household cover data to retrieve household size (saq09). Using this merged dataset, per capita expenditure is calculated by dividing total expenditure by the number of household members. Lastly, summary statistics of the resulting variable are generated as a preliminary step before inequality estimation.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="percentiles-and-inequality-measures.html#cb46-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb46-2"><a href="percentiles-and-inequality-measures.html#cb46-2" tabindex="-1"></a><span class="co">#                           Loading Datasets                                   #</span></span>
+<span id="cb46-3"><a href="percentiles-and-inequality-measures.html#cb46-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb46-4"><a href="percentiles-and-inequality-measures.html#cb46-4" tabindex="-1"></a></span>
+<span id="cb46-5"><a href="percentiles-and-inequality-measures.html#cb46-5" tabindex="-1"></a>EXP_data <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/sect7b_hh_w4_v2.sav&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb46-6"><a href="percentiles-and-inequality-measures.html#cb46-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">expenditure =</span> <span class="fu">ifelse</span>(s7q03 <span class="sc">==</span> <span class="dv">2</span>, <span class="dv">0</span>, s7q04)) <span class="sc">%&gt;%</span></span>
+<span id="cb46-7"><a href="percentiles-and-inequality-measures.html#cb46-7" tabindex="-1"></a>  <span class="fu">group_by</span>(household_id) <span class="sc">%&gt;%</span></span>
+<span id="cb46-8"><a href="percentiles-and-inequality-measures.html#cb46-8" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_expenditure =</span> <span class="fu">sum</span>(expenditure, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb46-9"><a href="percentiles-and-inequality-measures.html#cb46-9" tabindex="-1"></a></span>
+<span id="cb46-10"><a href="percentiles-and-inequality-measures.html#cb46-10" tabindex="-1"></a>HH_data <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/sect_cover_hh_w4.sav&quot;</span>)</span>
+<span id="cb46-11"><a href="percentiles-and-inequality-measures.html#cb46-11" tabindex="-1"></a></span>
+<span id="cb46-12"><a href="percentiles-and-inequality-measures.html#cb46-12" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb46-13"><a href="percentiles-and-inequality-measures.html#cb46-13" tabindex="-1"></a><span class="co">#                      Processing Per Capita Expenditure                       #</span></span>
+<span id="cb46-14"><a href="percentiles-and-inequality-measures.html#cb46-14" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb46-15"><a href="percentiles-and-inequality-measures.html#cb46-15" tabindex="-1"></a></span>
+<span id="cb46-16"><a href="percentiles-and-inequality-measures.html#cb46-16" tabindex="-1"></a><span class="co"># Merging household data with expenditure data</span></span>
+<span id="cb46-17"><a href="percentiles-and-inequality-measures.html#cb46-17" tabindex="-1"></a>HH_data <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span> <span class="fu">inner_join</span>(EXP_data)</span>
+<span id="cb46-18"><a href="percentiles-and-inequality-measures.html#cb46-18" tabindex="-1"></a></span>
+<span id="cb46-19"><a href="percentiles-and-inequality-measures.html#cb46-19" tabindex="-1"></a>HH_data <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb46-20"><a href="percentiles-and-inequality-measures.html#cb46-20" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percapita_expenditure =</span> total_expenditure <span class="sc">/</span> saq09)</span>
+<span id="cb46-21"><a href="percentiles-and-inequality-measures.html#cb46-21" tabindex="-1"></a></span>
+<span id="cb46-22"><a href="percentiles-and-inequality-measures.html#cb46-22" tabindex="-1"></a><span class="co"># Summary statistics</span></span>
+<span id="cb46-23"><a href="percentiles-and-inequality-measures.html#cb46-23" tabindex="-1"></a><span class="fu">summary</span>(HH_data<span class="sc">$</span>percapita_expenditure)</span></code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##     0.0   335.7   800.0  1470.2  1706.7 58378.0</code></pre>
+<p>This block defines the <strong>survey design</strong> based on the previously processed household data and prepares it for inequality analysis using the <code>convey</code> package. A stratification variable is created by combining the region (<code>saq01</code>) and the urban/rural classification (<code>saq14</code>), while the primary sampling units (<code>ea_id</code>) and final adjusted weights (<code>pw_w4</code>) are specified. The design is then prepared using <code>convey_prep()</code>, which is essential for computing measures such as the <strong>Gini coefficient</strong> under a complex survey framework. Finally, a summary of the prepared design is displayed to verify its structure before proceeding with the analysis.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="percentiles-and-inequality-measures.html#cb48-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb48-2"><a href="percentiles-and-inequality-measures.html#cb48-2" tabindex="-1"></a><span class="co">#                          Defining the Survey Design                          #</span></span>
+<span id="cb48-3"><a href="percentiles-and-inequality-measures.html#cb48-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb48-4"><a href="percentiles-and-inequality-measures.html#cb48-4" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="percentiles-and-inequality-measures.html#cb48-5" tabindex="-1"></a>ESS4_design <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb48-6"><a href="percentiles-and-inequality-measures.html#cb48-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strata =</span> <span class="fu">paste0</span>(saq01, <span class="st">&quot;_&quot;</span>, saq14)) <span class="sc">%&gt;%</span></span>
+<span id="cb48-7"><a href="percentiles-and-inequality-measures.html#cb48-7" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(</span>
+<span id="cb48-8"><a href="percentiles-and-inequality-measures.html#cb48-8" tabindex="-1"></a>    <span class="at">ids =</span> ea_id,</span>
+<span id="cb48-9"><a href="percentiles-and-inequality-measures.html#cb48-9" tabindex="-1"></a>    <span class="co"># Primary sampling unit identifier (EA)</span></span>
+<span id="cb48-10"><a href="percentiles-and-inequality-measures.html#cb48-10" tabindex="-1"></a>    <span class="at">strata =</span> strata,</span>
+<span id="cb48-11"><a href="percentiles-and-inequality-measures.html#cb48-11" tabindex="-1"></a>    <span class="co"># Stratification by region (saq01) and urban/rural zone (saq14)</span></span>
+<span id="cb48-12"><a href="percentiles-and-inequality-measures.html#cb48-12" tabindex="-1"></a>    <span class="at">weights =</span> pw_w4,</span>
+<span id="cb48-13"><a href="percentiles-and-inequality-measures.html#cb48-13" tabindex="-1"></a>    <span class="co"># Final adjusted weight</span></span>
+<span id="cb48-14"><a href="percentiles-and-inequality-measures.html#cb48-14" tabindex="-1"></a>    <span class="at">nest =</span> <span class="cn">TRUE</span></span>
+<span id="cb48-15"><a href="percentiles-and-inequality-measures.html#cb48-15" tabindex="-1"></a>  )</span>
+<span id="cb48-16"><a href="percentiles-and-inequality-measures.html#cb48-16" tabindex="-1"></a></span>
+<span id="cb48-17"><a href="percentiles-and-inequality-measures.html#cb48-17" tabindex="-1"></a>design_gini <span class="ot">&lt;-</span> <span class="fu">convey_prep</span>(ESS4_design)</span>
+<span id="cb48-18"><a href="percentiles-and-inequality-measures.html#cb48-18" tabindex="-1"></a><span class="fu">options</span>(<span class="at">survey.lonely.psu =</span> <span class="st">&quot;fail&quot;</span>)</span>
+<span id="cb48-19"><a href="percentiles-and-inequality-measures.html#cb48-19" tabindex="-1"></a><span class="fu">summary</span>(design_gini)</span></code></pre></div>
+<pre><code>## Stratified 1 - level Cluster Sampling design (with replacement)
+## With (535) clusters.
+## Called via srvyr
+## Probabilities:
+##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## 3.932e-05 1.997e-04 7.680e-04 2.814e-03 4.164e-03 1.317e-01 
+## Stratum Sizes: 
+##            1_1 1_2 12_1 12_2 13_1 13_2 14_2 15_1 15_2 2_1 2_2 3_1 3_2 4_1 4_2
+## obs        393 283  195  300  190  360  778  160  419 299 225 479 271 453 300
+## design.PSU  35  19   19   20   18   24   52   14   28  28  15  43  18  43  20
+## actual.PSU  35  19   19   20   18   24   52   14   28  28  15  43  18  43  20
+##            5_1 5_2 6_1 6_2 7_1 7_2
+## obs        355 255 169 195 422 269
+## design.PSU  35  17  16  13  40  18
+## actual.PSU  35  17  16  13  40  18
+## Data variables:
+##  [1] &quot;household_id&quot;          &quot;ea_id&quot;                 &quot;saq14&quot;                
+##  [4] &quot;pw_w4&quot;                 &quot;saq01&quot;                 &quot;saq02&quot;                
+##  [7] &quot;saq03&quot;                 &quot;saq04&quot;                 &quot;saq05&quot;                
+## [10] &quot;saq06&quot;                 &quot;saq07&quot;                 &quot;saq08&quot;                
+## [13] &quot;saq09&quot;                 &quot;saq11&quot;                 &quot;saq12&quot;                
+## [16] &quot;saq13&quot;                 &quot;saq17&quot;                 &quot;saq18&quot;                
+## [19] &quot;InterviewStart&quot;        &quot;saq21&quot;                 &quot;total_expenditure&quot;    
+## [22] &quot;percapita_expenditure&quot; &quot;strata&quot;</code></pre>
+<p>This block computes the Gini coefficient of per capita expenditure using the complex survey design. It first estimates the national value, then uses map_df() to calculate regional Gini coefficients (saq01). Each estimate includes its standard error, allowing assessment of inequality both nationally and by region.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="percentiles-and-inequality-measures.html#cb50-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb50-2"><a href="percentiles-and-inequality-measures.html#cb50-2" tabindex="-1"></a><span class="co">#          Computing Gini Coefficient based on expenditure                     #</span></span>
+<span id="cb50-3"><a href="percentiles-and-inequality-measures.html#cb50-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb50-4"><a href="percentiles-and-inequality-measures.html#cb50-4" tabindex="-1"></a></span>
+<span id="cb50-5"><a href="percentiles-and-inequality-measures.html#cb50-5" tabindex="-1"></a><span class="co"># National Gini coefficient</span></span>
+<span id="cb50-6"><a href="percentiles-and-inequality-measures.html#cb50-6" tabindex="-1"></a>tab_07_tot <span class="ot">&lt;-</span> <span class="fu">svygini</span>(<span class="sc">~</span> percapita_expenditure,</span>
+<span id="cb50-7"><a href="percentiles-and-inequality-measures.html#cb50-7" tabindex="-1"></a>                      <span class="at">design =</span> design_gini) <span class="sc">%&gt;%</span></span>
+<span id="cb50-8"><a href="percentiles-and-inequality-measures.html#cb50-8" tabindex="-1"></a>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb50-9"><a href="percentiles-and-inequality-measures.html#cb50-9" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Region =</span> <span class="st">&quot;ETHIOPIA&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb50-10"><a href="percentiles-and-inequality-measures.html#cb50-10" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">SE =</span> percapita_expenditure)</span>
+<span id="cb50-11"><a href="percentiles-and-inequality-measures.html#cb50-11" tabindex="-1"></a></span>
+<span id="cb50-12"><a href="percentiles-and-inequality-measures.html#cb50-12" tabindex="-1"></a><span class="co"># Regional Gini coefficient</span></span>
+<span id="cb50-13"><a href="percentiles-and-inequality-measures.html#cb50-13" tabindex="-1"></a>tab_07_region <span class="ot">&lt;-</span> <span class="fu">map_df</span>(</span>
+<span id="cb50-14"><a href="percentiles-and-inequality-measures.html#cb50-14" tabindex="-1"></a>  <span class="fu">unique</span>(HH_data<span class="sc">$</span>saq01),</span>
+<span id="cb50-15"><a href="percentiles-and-inequality-measures.html#cb50-15" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">svygini</span>( <span class="sc">~</span> percapita_expenditure, <span class="at">design =</span> design_gini <span class="sc">%&gt;%</span></span>
+<span id="cb50-16"><a href="percentiles-and-inequality-measures.html#cb50-16" tabindex="-1"></a>               <span class="fu">filter</span>(saq01 <span class="sc">==</span> .x)) <span class="sc">%&gt;%</span></span>
+<span id="cb50-17"><a href="percentiles-and-inequality-measures.html#cb50-17" tabindex="-1"></a>    <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb50-18"><a href="percentiles-and-inequality-measures.html#cb50-18" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Region =</span> <span class="fu">as_factor</span>(.x))) <span class="sc">%&gt;%</span></span>
+<span id="cb50-19"><a href="percentiles-and-inequality-measures.html#cb50-19" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">SE =</span> percapita_expenditure)</span></code></pre></div>
+<p>This block merges the national and regional results into a single table, with Gini coefficients and their standard errors rounded and expressed as percentages.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="percentiles-and-inequality-measures.html#cb51-1" tabindex="-1"></a><span class="co"># Combining results</span></span>
+<span id="cb51-2"><a href="percentiles-and-inequality-measures.html#cb51-2" tabindex="-1"></a>tab_07 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(tab_07_region, tab_07_tot) <span class="sc">%&gt;%</span></span>
+<span id="cb51-3"><a href="percentiles-and-inequality-measures.html#cb51-3" tabindex="-1"></a>  <span class="fu">transmute</span>(Region,</span>
+<span id="cb51-4"><a href="percentiles-and-inequality-measures.html#cb51-4" tabindex="-1"></a>            <span class="at">gini =</span> <span class="fu">round</span>(gini <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),</span>
+<span id="cb51-5"><a href="percentiles-and-inequality-measures.html#cb51-5" tabindex="-1"></a>            <span class="at">SE =</span> <span class="fu">round</span>(SE <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>),)  </span>
+<span id="cb51-6"><a href="percentiles-and-inequality-measures.html#cb51-6" tabindex="-1"></a><span class="fu">rownames</span>(tab_07) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb51-7"><a href="percentiles-and-inequality-measures.html#cb51-7" tabindex="-1"></a></span>
+<span id="cb51-8"><a href="percentiles-and-inequality-measures.html#cb51-8" tabindex="-1"></a>tab_07 </span></code></pre></div>
+<p>The table shows the Gini coefficient values for per capita expenditure in Ethiopia, both nationally and by region. At the national level, the Gini is estimated at 58.68%, indicating a high degree of inequality in expenditure distribution.</p>
+<p>Regionally, the highest inequality levels are found in Benishangul Gumuz (67.41%), Gambela (61.40%), and SNNP (61.19%). Conversely, Somali (49.28%), Addis Ababa (53.46%), and Dire Dawa (53.81%) show relatively lower inequality. These findings highlight significant regional disparities, which are crucial for informing targeted policy interventions.</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Region
+</th>
+<th style="text-align:right;">
+gini
+</th>
+<th style="text-align:right;">
+SE
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+TIGRAY
+</td>
+<td style="text-align:right;">
+60.19
+</td>
+<td style="text-align:right;">
+2.61
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AFAR
+</td>
+<td style="text-align:right;">
+54.22
+</td>
+<td style="text-align:right;">
+4.04
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AMHARA
+</td>
+<td style="text-align:right;">
+56.16
+</td>
+<td style="text-align:right;">
+2.08
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+OROMIA
+</td>
+<td style="text-align:right;">
+57.28
+</td>
+<td style="text-align:right;">
+2.33
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SOMALI
+</td>
+<td style="text-align:right;">
+49.28
+</td>
+<td style="text-align:right;">
+2.88
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BENISHANGUL GUMUZ
+</td>
+<td style="text-align:right;">
+67.41
+</td>
+<td style="text-align:right;">
+3.44
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SNNP
+</td>
+<td style="text-align:right;">
+61.19
+</td>
+<td style="text-align:right;">
+2.83
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GAMBELA
+</td>
+<td style="text-align:right;">
+61.40
+</td>
+<td style="text-align:right;">
+3.10
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HARAR
+</td>
+<td style="text-align:right;">
+58.90
+</td>
+<td style="text-align:right;">
+2.94
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ADDIS ABABA
+</td>
+<td style="text-align:right;">
+53.46
+</td>
+<td style="text-align:right;">
+1.84
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DIRE DAWA
+</td>
+<td style="text-align:right;">
+53.81
+</td>
+<td style="text-align:right;">
+2.40
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ETHIOPIA
+</td>
+<td style="text-align:right;">
+58.68
+</td>
+<td style="text-align:right;">
+1.12
+</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="correlations.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/psirusteam/chapter9Rcodes/3.4_Percentiles_and_inequality_measures.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["CHAPTER 9 - EXAMPLES IN R.pdf", "CHAPTER 9 - EXAMPLES IN R.epub", "CHAPTER 9 - EXAMPLES IN R.mobi"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"tconfig": null
+});
+});
+</script>
+
+</body>
+
+</html>
