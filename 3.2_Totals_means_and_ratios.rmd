@@ -1,0 +1,132 @@
+```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE,
+                      cache = TRUE, 
+                      cache.path = "cache/3.2/")
+```
+
+# 3.2 Totals, means and ratios {-}
+
+
+### Prepare the work environment {-}
+
+This block resets the working environment and loads the necessary packages to continue with data processing and survey analysis in a new section. This structure ensures that each module of the analysis can be executed independently, promoting reproducibility and avoiding conflicts with previous sessions.
+
+```{r, echo=TRUE,warning=FALSE,error=FALSE,menssage = FALSE}
+
+#------------------------------------------------------------------------------#
+#                           Cleaning R Environment                             #
+#------------------------------------------------------------------------------#
+
+rm(list = ls())
+gc()
+
+#------------------------------------------------------------------------------#
+#                                Libraries                                     #
+#------------------------------------------------------------------------------#
+
+library(tidyverse)
+library(survey)
+library(srvyr)
+library(data.table)
+library(magrittr)
+library(haven)
+library(stringr)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+
+# Ensure select function from dplyr is used explicitly
+select <- dplyr::select
+
+#------------------------------------------------------------------------------#
+#                        Setting the RAM Memory Limit                          #
+#------------------------------------------------------------------------------#
+
+memory.limit(250000000)
+```
+
+This block loads data from section 7b of the household questionnaire, related to expenditures on nonfood items, and calculates the total expenditure per household. It then defines the survey design using the same stratification structure and primary sampling units as in previous sections, in order to apply the adjusted weights in the analysis. This step is essential to produce representative estimates of expenditure and its distribution across households.
+
+```{r read_data, echo=TRUE,warning=FALSE,error=FALSE,menssage = FALSE}
+
+#------------------------------------------------------------------------------#
+#                           Loading Datasets                                   #
+#------------------------------------------------------------------------------#
+
+HH_data <- read_sav("data/data_ESS4/sect7b_hh_w4_v2.sav")
+
+#------------------------------------------------------------------------------#
+#                Calculating Ratio of Expenditures                            #
+#------------------------------------------------------------------------------#
+
+# Processing data
+HH_data <- HH_data %>%
+  mutate(expenditure = ifelse(s7q03 == 2, 0, s7q04)) %>%
+  group_by(household_id) %>%
+  mutate(total_expenditure = sum(expenditure, na.rm = TRUE))
+
+# Defining the survey design
+ESS4_design <- HH_data %>%
+  mutate(strata = paste0(saq01, "_", saq14)) %>%
+  as_survey_design(
+    ids = ea_id,
+    # Primary sampling unit identifier (EA)
+    strata = strata,
+    # Stratification by region (saq01) and urban/rural zone (saq14)
+    weights = pw_w4,
+    # Final adjusted weight
+    nest = TRUE
+  )
+
+options(survey.lonely.psu = "fail")
+summary(ESS4_design)
+```
+
+### Estimation of totals and means {-}
+
+This block estimates the total expenditure and the average expenditure per household on nonfood items, disaggregated by item type. Using the previously defined survey design, the estimates are calculated along with their corresponding precision measures: standard error and coefficient of variation. The results are then rounded and displayed in a readable table to facilitate analysis and interpretation.
+
+```{r resul_table, echo=TRUE, eval=FALSE, error=FALSE, message=FALSE,warning=FALSE}
+#------------------------------------------------------------------------------#
+# Estimation of totals and means
+#------------------------------------------------------------------------------#
+
+tab_02 <- ESS4_design %>%   
+  group_by(item = item_cd_12months) %>%
+  summarise(
+    T_hat = survey_total(expenditure, na.rm = TRUE, vartype = c("se", "cv")),
+    M_hat = survey_mean(expenditure, na.rm = TRUE, vartype = c("se", "cv"))
+  )
+
+tab_02 %>%
+  transmute(
+    item = as_factor(item),
+    T_hat = round(T_hat),
+    T_hat_cv = round(T_hat_cv * 100, 2),
+    M_hat = round(M_hat),
+    M_hat_cv = round(M_hat_cv * 100, 2)
+  ) %>% data.frame()
+```
+
+
+```{r resul_table2, echo=FALSE, eval=TRUE, error=FALSE, message=FALSE,warning=FALSE}
+tab_02 <- ESS4_design %>%   
+  group_by(item = item_cd_12months) %>%
+  summarise(
+    T_hat = survey_total(expenditure, na.rm = TRUE, vartype = c("se", "cv")),
+    M_hat = survey_mean(expenditure, na.rm = TRUE, vartype = c("se", "cv"))
+  )
+
+tab_02 %>%
+  transmute(
+    item = as_factor(item),
+    T_hat = round(T_hat),
+    T_hat_cv = round(T_hat_cv * 100, 2),
+    M_hat = round(M_hat),
+    M_hat_cv = round(M_hat_cv * 100, 2)
+  ) %>% data.frame() %>% 
+    kable(format = "html") %>%
+  kable_styling(font_size = 10, full_width = FALSE)
+```
+

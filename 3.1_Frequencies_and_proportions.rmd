@@ -1,0 +1,171 @@
+```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE,
+                      cache = TRUE, 
+                      cache.path = "cache/3.1/")
+```
+
+# 3.1 Frequencies and Proportions {-}
+
+This code block sets up the working environment for a new section of the analysis, focused on calculating frequencies and proportions based on the ESS4 survey design. Although this structure was defined earlier in the manual, it is repeated here to ensure that execution remains self-contained, reproducible, and free from interference from previous sections.
+
+### Prepare the work environment {-}
+
+This code block marks the beginning of a **new working session**, following the same methodological line established earlier. Its main purpose is to prepare a clean, efficient, and fully loaded environment to continue with the processing and analysis of the survey data.  
+
+By resetting the R environment, reloading the necessary libraries, and adjusting the memory settings, this ensures that any subsequent analysis is carried out in a controlled manner, free from interference by previous objects or configurations. This approach is especially useful when working with modular scripts, such as in a manual, as it allows each section to be executed independently, ensuring **reproducibility** and **consistency** throughout the entire workflow.
+
+```{r, echo=TRUE,warning=FALSE,error=FALSE,menssage = FALSE}
+
+#------------------------------------------------------------------------------#
+#                           Cleaning R Environment                             #
+#------------------------------------------------------------------------------#
+
+rm(list = ls())
+gc()
+
+#------------------------------------------------------------------------------#
+#                                Libraries                                     #
+#------------------------------------------------------------------------------#
+
+library(tidyverse)
+library(survey)
+library(srvyr)
+library(data.table)
+library(magrittr)
+library(haven)
+library(stringr)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+
+# Ensure select function from dplyr is used explicitly
+select <- dplyr::select
+
+#------------------------------------------------------------------------------#
+#                        Setting the RAM Memory Limit                          #
+#------------------------------------------------------------------------------#
+
+memory.limit(250000000)
+
+```
+
+
+This block continues the analysis, focusing on the processing of **household consumption expenditure** and **participation** in various items over the past 12 months. The dataset from section 7b of the questionnaire is loaded, and two variables are created: one for the **amount spent** (`expenditure`) and a binary indicator (`yes_no`) that reflects whether or not the household incurred that expense.  
+
+Next, the **survey design** is defined using the same structure as before: strata are created by combining region and urban/rural classification, primary sampling units (`ea_id`) are specified, and the adjusted sampling weights (`pw_w4`) are applied. The summary of the design allows for validation before proceeding with the analysis.
+
+
+```{r read_data, echo=TRUE, eval=TRUE, error=FALSE, message=FALSE,warning=FALSE}
+#------------------------------------------------------------------------------#
+#                           Loading Datasets                                   #
+#------------------------------------------------------------------------------#
+HH_data <- read_sav("data/data_ESS4/sect7b_hh_w4_v2.sav")
+
+# Processing expenditure and response indicators
+HH_data <- HH_data %>%
+  group_by(item = item_cd_12months) %>%
+  mutate(
+    expenditure = ifelse(s7q03 == 2, 0, s7q04),
+    yes_no = ifelse(s7q03 == 2, 0, 1)
+  )
+
+# Defining the survey design
+ESS4_design <- HH_data %>%
+  mutate(strata = paste0(saq01, "_", saq14)) %>%
+  as_survey_design(
+    ids = ea_id,
+    # Primary sampling unit identifier (EA)
+    strata = strata,
+    # Stratification by region (saq01) and urban/rural zone (saq14)
+    weights = pw_w4,
+    # Final adjusted weight
+    nest = TRUE
+  )
+
+# Makes it an error to have a stratum with a single, non-certainty PSU
+options(survey.lonely.psu = "fail") 
+summary(ESS4_design)
+```
+
+
+### Estimating totals and proportions {-}
+
+This block calculates key indicators related to **household spending on nonfood items and services**, grouping the data by item type (`item_cd_12months`). Based on the defined survey design, two main estimates are produced:  
+
+- **`N_hat`**: the estimated total number of households reporting expenditures on each item, along with its standard error and coefficient of variation.  
+- **`P_hat`**: the estimated proportion of households who reported spending, including its standard error, coefficient of variation, and a 95% confidence interval.  
+
+These estimates provide insight into both the magnitude and coverage of consumption across different categories of goods and services at the national level.
+
+
+```{r TABLE_7_3, echo=TRUE, eval=TRUE, error=FALSE, message=FALSE,warning=FALSE}
+#------------------------------------------------------------------------------#
+# TABLE 7.3
+# Spending on Nonfood Items and Services
+#
+# ESS4 Sampled EAs and Households by Region and by Urban and Rural  
+# Ethiopia Socioeconomic Survey (ESS) 2018/19
+# SURVEY REPORT
+# Central Statistics Agency of Ethiopia | World Bank
+#------------------------------------------------------------------------------#
+
+tab_01 <- ESS4_design %>%
+  group_by(item = item_cd_12months) %>%
+  summarise(
+  N_hat = survey_total(yes_no, na.rm = TRUE, vartype = c("se", "cv")),
+  # Absolute size
+  P_hat = survey_mean(yes_no, na.rm = TRUE, vartype = c("se", "cv", "ci"))
+  # Proportions
+  )
+```
+
+### Formatting and presenting results {-}
+
+In this block, the previously computed results are transformed into a reader-friendly table. Item codes are converted into factors, and all estimates are rounded for clarity, including:  
+- The total number of households (`N_hat`),  
+- The proportion of households (`P_hat`),  
+- Standard errors, coefficients of variation, and confidence intervals.  
+
+This step facilitates interpretation and prepares the table for inclusion in technical reports or analytical documents, such as the official ESS4 survey report.
+
+The resulting table provides a summary of **nonfood items and services** purchased by Ethiopian households over the past 12 months, with estimates based on the **ESS4** survey design. It includes key precision measures such as the **coefficient of variation (`*_cv`)**, **standard error (`*_se`)**, and the **95% confidence interval (`*_low`, `*_upp`)**.
+
+
+```{r resul_table, echo=TRUE, eval=FALSE, error=FALSE, message=FALSE,warning=FALSE}
+tab_01 %>%
+  transmute(
+    item = as_factor(item),
+    N_hat = round(N_hat),
+    N_hat_cv = round(N_hat_cv * 100, 2),
+    P_hat = round(P_hat * 100, 2),
+    P_hat_cv = round(P_hat_cv * 100, 2),
+    P_hat_se = round(P_hat_se * 100, 2),
+    P_hat_low = round(P_hat_low * 100, 2),
+    P_hat_upp = round(P_hat_upp * 100, 2)
+  ) %>% data.frame()
+
+
+```
+
+
+```{r resul_table2, echo=FALSE, eval=TRUE, error=FALSE, message=FALSE,warning=FALSE}
+tab_01 %>%
+  transmute(
+    item = as_factor(item),
+    N_hat = round(N_hat),
+    N_hat_cv = round(N_hat_cv * 100, 2),
+    P_hat = round(P_hat * 100, 2),
+    P_hat_cv = round(P_hat_cv * 100, 2),
+    P_hat_se = round(P_hat_se * 100, 2),
+    P_hat_low = round(P_hat_low * 100, 2),
+    P_hat_upp = round(P_hat_upp * 100, 2)
+  ) %>% data.frame() %>% 
+ kable(format = "html") %>%
+ kable_styling(font_size = 10, full_width = FALSE)
+
+
+```
+
+
+

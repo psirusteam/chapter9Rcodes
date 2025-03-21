@@ -6,6 +6,7 @@ new_session: yes
 rmd_files: [
   "index.rmd", 
   "2.3_Using_Software_to_Generate_Valid_Inferences.rmd",
-   "03DescriptiveParameters.Rmd"
+  "3.1_Frequencies_and_proportions.rmd",
+  "3.2_Totals_means_and_ratios.rmd"
  
 ]
