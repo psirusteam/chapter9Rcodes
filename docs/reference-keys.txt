@@ -1,12 +1,3 @@
-tab:merge-data
-accounting-for-the-sampling-design
-loading-datasets
-descriptive-analysis-of-sampled-households
-table-1.1a---enumeration-areas-eas-and-households-by-region-and-urbanrural-classification
-counting-enumeration-areas-eas-by-region-and-ruralurban-classification
-counting-households-by-region-and-ruralurban-classification
-merging-household-and-ea-counts
-defining-survey-design-for-statistical-inference
 descriptive-parameters
 ethiopia-socioeconomic-survey-ess4-sampling-design-and-data-source
 sampling-design
