@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4.2 Cross-tabulations | CHAPTER 9 - EXAMPLES IN R</title>
+  <meta name="description" content="4.2 Cross-tabulations | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4.2 Cross-tabulations | CHAPTER 9 - EXAMPLES IN R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="4.2 Cross-tabulations | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="github-repo" content="psirusteam/chapter9Rcodes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4.2 Cross-tabulations | CHAPTER 9 - EXAMPLES IN R" />
+  
+  <meta name="twitter:description" content="4.2 Cross-tabulations | CHAPTER 9 - EXAMPLES IN R" />
+  
+
+<meta name="author" content="" />
+
+
+<meta name="date" content="2025-03-21" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="percentiles-and-inequality-measures.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">CHAPTER 9 - EXAMPLES IN R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Abstract</a></li>
+<li class="chapter" data-level="" data-path="accounting-for-the-sampling-design.html"><a href="accounting-for-the-sampling-design.html"><i class="fa fa-check"></i>Accounting for the Sampling Design</a>
+<ul>
+<li class="chapter" data-level="" data-path="sample-design-of-the-ess4-20182019.html"><a href="sample-design-of-the-ess4-20182019.html"><i class="fa fa-check"></i>Sample design of the ESS4 2018/2019</a></li>
+<li class="chapter" data-level="" data-path="data-source.html"><a href="data-source.html"><i class="fa fa-check"></i>Data Source</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html"><i class="fa fa-check"></i>2.3 Using Software to Generate Valid Inferences</a>
+<ul>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#prepare-the-work-environment"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#loading-datasets"><i class="fa fa-check"></i>Loading Datasets</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#defining-the-survey-design"><i class="fa fa-check"></i>Defining the survey design</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html"><i class="fa fa-check"></i>3.1 Frequencies and Proportions</a>
+<ul>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#prepare-the-work-environment-1"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#estimating-totals-and-proportions"><i class="fa fa-check"></i>Estimating totals and proportions</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#formatting-and-presenting-results"><i class="fa fa-check"></i>Formatting and presenting results</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html"><i class="fa fa-check"></i>3.2 Totals, means and ratios</a>
+<ul>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#prepare-the-work-environment-2"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-totals-and-means"><i class="fa fa-check"></i>Estimation of totals and means</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-ratio"><i class="fa fa-check"></i>Estimation of Ratio</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimating-the-ratio-of-educational-expenditure"><i class="fa fa-check"></i>Estimating the Ratio of Educational Expenditure</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html"><i class="fa fa-check"></i>3.3 Correlations</a>
+<ul>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#prepare-the-work-environment-3"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#estimating-correlations"><i class="fa fa-check"></i>Estimating Correlations</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html"><i class="fa fa-check"></i>3.4 Percentiles and inequality measures</a>
+<ul>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#prepare-the-work-environment-4"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#estimating-the-mean-and-median-of-total-other-income"><i class="fa fa-check"></i>Estimating the Mean and Median of Total Other Income</a></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#the-gini-coefficient."><i class="fa fa-check"></i>The Gini Coefficient.</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html"><i class="fa fa-check"></i>4.2 Cross-tabulations</a>
+<ul>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#prepare-the-work-environment-5"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#processing-variables-for-analysis"><i class="fa fa-check"></i>Processing Variables for Analysis</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#estimating-proportions-and-totals-by-religion"><i class="fa fa-check"></i>Estimating Proportions and Totals by Religion</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#formatting-and-displaying-cross-tabulation-tables"><i class="fa fa-check"></i>Formatting and Displaying Cross-tabulation Tables</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a CHAPTER 9 - EXAMPLES IN R </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CHAPTER 9 - EXAMPLES IN R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="cross-tabulations" class="section level1 unnumbered hasAnchor">
+<h1>4.2 Cross-tabulations<a href="cross-tabulations.html#cross-tabulations" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="prepare-the-work-environment-5" class="section level3 unnumbered hasAnchor">
+<h3>Prepare the work environment<a href="cross-tabulations.html#prepare-the-work-environment-5" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block sets up the working environment to analyze data from Section 1 of the <strong>ESS4</strong> household questionnaire. After clearing the memory and loading the required libraries, the corresponding dataset is imported, and the <strong>survey design</strong> is defined. It includes stratification by region and area type (urban/rural), identification of primary sampling units (<code>ea_id</code>), and use of adjusted sampling weights (<code>pw_w4</code>). This design ensures that subsequent analyses correctly reflect the complex survey structure and produce representative estimates. A summary of the design is printed at the end to verify its proper specification.</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="cross-tabulations.html#cb52-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb52-2"><a href="cross-tabulations.html#cb52-2" tabindex="-1"></a><span class="co">#                           Cleaning R Environment                             #</span></span>
+<span id="cb52-3"><a href="cross-tabulations.html#cb52-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb52-4"><a href="cross-tabulations.html#cb52-4" tabindex="-1"></a></span>
+<span id="cb52-5"><a href="cross-tabulations.html#cb52-5" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb52-6"><a href="cross-tabulations.html#cb52-6" tabindex="-1"></a><span class="fu">gc</span>()</span></code></pre></div>
+<pre><code>##          used (Mb) gc trigger (Mb) max used (Mb)
+## Ncells 542656 29.0    1220202 65.2   660485 35.3
+## Vcells 956925  7.4    8388608 64.0  1770406 13.6</code></pre>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="cross-tabulations.html#cb54-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb54-2"><a href="cross-tabulations.html#cb54-2" tabindex="-1"></a><span class="co">#                                Libraries                                     #</span></span>
+<span id="cb54-3"><a href="cross-tabulations.html#cb54-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb54-4"><a href="cross-tabulations.html#cb54-4" tabindex="-1"></a></span>
+<span id="cb54-5"><a href="cross-tabulations.html#cb54-5" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb54-6"><a href="cross-tabulations.html#cb54-6" tabindex="-1"></a><span class="fu">library</span>(survey)</span>
+<span id="cb54-7"><a href="cross-tabulations.html#cb54-7" tabindex="-1"></a><span class="fu">library</span>(srvyr)</span>
+<span id="cb54-8"><a href="cross-tabulations.html#cb54-8" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb54-9"><a href="cross-tabulations.html#cb54-9" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb54-10"><a href="cross-tabulations.html#cb54-10" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb54-11"><a href="cross-tabulations.html#cb54-11" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb54-12"><a href="cross-tabulations.html#cb54-12" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb54-13"><a href="cross-tabulations.html#cb54-13" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb54-14"><a href="cross-tabulations.html#cb54-14" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb54-15"><a href="cross-tabulations.html#cb54-15" tabindex="-1"></a><span class="fu">library</span>(convey)</span>
+<span id="cb54-16"><a href="cross-tabulations.html#cb54-16" tabindex="-1"></a></span>
+<span id="cb54-17"><a href="cross-tabulations.html#cb54-17" tabindex="-1"></a><span class="co"># Ensure select function from dplyr is used explicitly</span></span>
+<span id="cb54-18"><a href="cross-tabulations.html#cb54-18" tabindex="-1"></a>select <span class="ot">&lt;-</span> dplyr<span class="sc">::</span>select</span>
+<span id="cb54-19"><a href="cross-tabulations.html#cb54-19" tabindex="-1"></a></span>
+<span id="cb54-20"><a href="cross-tabulations.html#cb54-20" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb54-21"><a href="cross-tabulations.html#cb54-21" tabindex="-1"></a><span class="co">#                        Setting the RAM Memory Limit                          #</span></span>
+<span id="cb54-22"><a href="cross-tabulations.html#cb54-22" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb54-23"><a href="cross-tabulations.html#cb54-23" tabindex="-1"></a></span>
+<span id="cb54-24"><a href="cross-tabulations.html#cb54-24" tabindex="-1"></a><span class="fu">memory.limit</span>(<span class="dv">250000000</span>)</span></code></pre></div>
+<pre><code>## [1] Inf</code></pre>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="cross-tabulations.html#cb56-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb56-2"><a href="cross-tabulations.html#cb56-2" tabindex="-1"></a><span class="co">#                           Loading Datasets                                   #</span></span>
+<span id="cb56-3"><a href="cross-tabulations.html#cb56-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb56-4"><a href="cross-tabulations.html#cb56-4" tabindex="-1"></a></span>
+<span id="cb56-5"><a href="cross-tabulations.html#cb56-5" tabindex="-1"></a><span class="fu">options</span>(<span class="at">survey.lonely.psu =</span> <span class="st">&quot;fail&quot;</span>) </span>
+<span id="cb56-6"><a href="cross-tabulations.html#cb56-6" tabindex="-1"></a>HH_data <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/sect1_hh_w4.sav&quot;</span>)</span>
+<span id="cb56-7"><a href="cross-tabulations.html#cb56-7" tabindex="-1"></a></span>
+<span id="cb56-8"><a href="cross-tabulations.html#cb56-8" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb56-9"><a href="cross-tabulations.html#cb56-9" tabindex="-1"></a><span class="co">#                         Defining Survey Design                              #</span></span>
+<span id="cb56-10"><a href="cross-tabulations.html#cb56-10" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb56-11"><a href="cross-tabulations.html#cb56-11" tabindex="-1"></a></span>
+<span id="cb56-12"><a href="cross-tabulations.html#cb56-12" tabindex="-1"></a>ESS4_design <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb56-13"><a href="cross-tabulations.html#cb56-13" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strata =</span> <span class="fu">paste0</span>(saq01, <span class="st">&quot;_&quot;</span>, saq14)) <span class="sc">%&gt;%</span></span>
+<span id="cb56-14"><a href="cross-tabulations.html#cb56-14" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(</span>
+<span id="cb56-15"><a href="cross-tabulations.html#cb56-15" tabindex="-1"></a>    <span class="at">ids =</span> ea_id,</span>
+<span id="cb56-16"><a href="cross-tabulations.html#cb56-16" tabindex="-1"></a>    <span class="co"># Primary sampling unit identifier (EA)</span></span>
+<span id="cb56-17"><a href="cross-tabulations.html#cb56-17" tabindex="-1"></a>    <span class="at">strata =</span> strata,</span>
+<span id="cb56-18"><a href="cross-tabulations.html#cb56-18" tabindex="-1"></a>    <span class="co"># Stratification by region (saq01) and urban/rural zone (saq14)</span></span>
+<span id="cb56-19"><a href="cross-tabulations.html#cb56-19" tabindex="-1"></a>    <span class="at">weights =</span> pw_w4,</span>
+<span id="cb56-20"><a href="cross-tabulations.html#cb56-20" tabindex="-1"></a>    <span class="co"># Final adjusted weight</span></span>
+<span id="cb56-21"><a href="cross-tabulations.html#cb56-21" tabindex="-1"></a>    <span class="at">nest =</span> <span class="cn">TRUE</span></span>
+<span id="cb56-22"><a href="cross-tabulations.html#cb56-22" tabindex="-1"></a>  )</span>
+<span id="cb56-23"><a href="cross-tabulations.html#cb56-23" tabindex="-1"></a></span>
+<span id="cb56-24"><a href="cross-tabulations.html#cb56-24" tabindex="-1"></a><span class="fu">options</span>(<span class="at">survey.lonely.psu =</span> <span class="st">&quot;fail&quot;</span>)</span>
+<span id="cb56-25"><a href="cross-tabulations.html#cb56-25" tabindex="-1"></a><span class="fu">summary</span>(ESS4_design)</span></code></pre></div>
+<pre><code>## Stratified 1 - level Cluster Sampling design (with replacement)
+## With (535) clusters.
+## Called via srvyr
+## Probabilities:
+##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## 3.932e-05 1.647e-04 7.503e-04 2.545e-03 3.839e-03 1.317e-01 
+## Stratum Sizes: 
+##             1_1 1_2 12_1 12_2 13_1 13_2 14_2 15_1 15_2  2_1 2_2  3_1 3_2  4_1
+## obs        1822 944  956 1304  896 1207 2956  797 1524 1552 750 2173 835 2384
+## design.PSU   35  19   19   20   18   24   52   14   28   28  15   43  18   43
+## actual.PSU   35  19   19   20   18   24   52   14   28   28  15   43  18   43
+##             4_2  5_1  5_2 6_1 6_2  7_1  7_2
+## obs        1099 2089 1406 807 704 2226 1072
+## design.PSU   20   35   17  16  13   40   18
+## actual.PSU   20   35   17  16  13   40   18
+## Data variables:
+##  [1] &quot;household_id&quot;  &quot;individual_id&quot; &quot;ea_id&quot;         &quot;saq14&quot;        
+##  [5] &quot;pw_w4&quot;         &quot;saq01&quot;         &quot;saq02&quot;         &quot;saq03&quot;        
+##  [9] &quot;saq04&quot;         &quot;saq05&quot;         &quot;saq06&quot;         &quot;saq07&quot;        
+## [13] &quot;saq08&quot;         &quot;s1q00&quot;         &quot;s1q01&quot;         &quot;s1q02&quot;        
+## [17] &quot;s1q03a&quot;        &quot;s1q03b&quot;        &quot;s1q04&quot;         &quot;s1q05&quot;        
+## [21] &quot;s1q06&quot;         &quot;s1q23&quot;         &quot;s1q23_os&quot;      &quot;s1q07&quot;        
+## [25] &quot;s1q08&quot;         &quot;s1q08_os&quot;      &quot;s1q09&quot;         &quot;s1q10&quot;        
+## [29] &quot;s1q11&quot;         &quot;s1q12&quot;         &quot;s1q13&quot;         &quot;s1q14&quot;        
+## [33] &quot;s1q15&quot;         &quot;s1q16&quot;         &quot;s1q17&quot;         &quot;s1q18&quot;        
+## [37] &quot;s1q19&quot;         &quot;s1q20&quot;         &quot;s1q21&quot;         &quot;s1q21_os&quot;     
+## [41] &quot;s1q22&quot;         &quot;s1q22_os&quot;      &quot;strata&quot;</code></pre>
+</div>
+<div id="processing-variables-for-analysis" class="section level3 unnumbered hasAnchor">
+<h3>Processing Variables for Analysis<a href="cross-tabulations.html#processing-variables-for-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block processes the variables needed for the analysis. It converts <strong>sex</strong> (<code>s1q02</code>) and <strong>religion</strong> (<code>s1q08</code>) into factors and recodes less frequent religion categories—such as “PEGAN”, “TRADITIONAL”, “WAKEFETA”, “OTHER (SPECIFY)”, and missing values—into a consolidated <code>"OTHER"</code> group. Additionally, the dataset is filtered to retain only individuals <strong>aged 10 years or older</strong> (<code>s1q03a &gt;= 10</code>), ensuring that the analysis focuses on the population most likely to engage in social or economic activities.</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="cross-tabulations.html#cb58-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb58-2"><a href="cross-tabulations.html#cb58-2" tabindex="-1"></a><span class="co">#                   Processing Variables for Analysis                         #</span></span>
+<span id="cb58-3"><a href="cross-tabulations.html#cb58-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb58-4"><a href="cross-tabulations.html#cb58-4" tabindex="-1"></a></span>
+<span id="cb58-5"><a href="cross-tabulations.html#cb58-5" tabindex="-1"></a>ESS4_design <span class="ot">&lt;-</span> ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb58-6"><a href="cross-tabulations.html#cb58-6" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb58-7"><a href="cross-tabulations.html#cb58-7" tabindex="-1"></a>    <span class="at">sexo =</span> <span class="fu">as_factor</span>(s1q02),</span>
+<span id="cb58-8"><a href="cross-tabulations.html#cb58-8" tabindex="-1"></a>    <span class="at">religion =</span> <span class="fu">as_factor</span>(s1q08),</span>
+<span id="cb58-9"><a href="cross-tabulations.html#cb58-9" tabindex="-1"></a>    <span class="at">religion =</span> <span class="fu">case_when</span>(</span>
+<span id="cb58-10"><a href="cross-tabulations.html#cb58-10" tabindex="-1"></a>      religion <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;6. PEGAN&quot;</span>, <span class="st">&quot;5. TRADITIONAL&quot;</span>, <span class="st">&quot;8. OTHER (SPECIFY)&quot;</span>,</span>
+<span id="cb58-11"><a href="cross-tabulations.html#cb58-11" tabindex="-1"></a>                      <span class="st">&quot;7. WAKEFETA&quot;</span>) <span class="sc">|</span></span>
+<span id="cb58-12"><a href="cross-tabulations.html#cb58-12" tabindex="-1"></a>        <span class="fu">is.na</span>(religion) <span class="sc">~</span> <span class="st">&quot;OTHER&quot;</span>,</span>
+<span id="cb58-13"><a href="cross-tabulations.html#cb58-13" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> religion</span>
+<span id="cb58-14"><a href="cross-tabulations.html#cb58-14" tabindex="-1"></a>    )</span>
+<span id="cb58-15"><a href="cross-tabulations.html#cb58-15" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb58-16"><a href="cross-tabulations.html#cb58-16" tabindex="-1"></a>  <span class="fu">filter</span>(s1q03a <span class="sc">&gt;=</span> <span class="dv">10</span>)</span></code></pre></div>
+</div>
+<div id="estimating-proportions-and-totals-by-religion" class="section level3 unnumbered hasAnchor">
+<h3>Estimating Proportions and Totals by Religion<a href="cross-tabulations.html#estimating-proportions-and-totals-by-religion" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block estimates the religious distribution of the population aged 10 and above, computing proportions and total population counts using the complex survey design. First, estimates are calculated by administrative region (<code>saq01</code>) and religion. Then, a national-level estimate is generated by grouping the entire sample under “ETHIOPIA”. Lastly, the same indicators are estimated by urban and rural areas (<code>saq14</code>). For each region or area and religion combination, the output includes the estimated proportion (<code>P_hat</code>) and the population total (<code>T_hat</code>), along with standard errors and coefficients of variation—ensuring both accurate interpretation and comparative analysis.</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="cross-tabulations.html#cb59-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb59-2"><a href="cross-tabulations.html#cb59-2" tabindex="-1"></a><span class="co">#               Estimating Proportions and Totals by Religion                 #</span></span>
+<span id="cb59-3"><a href="cross-tabulations.html#cb59-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb59-4"><a href="cross-tabulations.html#cb59-4" tabindex="-1"></a></span>
+<span id="cb59-5"><a href="cross-tabulations.html#cb59-5" tabindex="-1"></a><span class="co"># Estimates by region</span></span>
+<span id="cb59-6"><a href="cross-tabulations.html#cb59-6" tabindex="-1"></a>tab_01_region <span class="ot">&lt;-</span> ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb59-7"><a href="cross-tabulations.html#cb59-7" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">Region =</span> <span class="fu">as_factor</span>(saq01), religion) <span class="sc">%&gt;%</span></span>
+<span id="cb59-8"><a href="cross-tabulations.html#cb59-8" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">P_hat =</span> <span class="fu">survey_mean</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)),</span>
+<span id="cb59-9"><a href="cross-tabulations.html#cb59-9" tabindex="-1"></a>            <span class="at">T_hat =</span> <span class="fu">survey_total</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)))</span>
+<span id="cb59-10"><a href="cross-tabulations.html#cb59-10" tabindex="-1"></a></span>
+<span id="cb59-11"><a href="cross-tabulations.html#cb59-11" tabindex="-1"></a></span>
+<span id="cb59-12"><a href="cross-tabulations.html#cb59-12" tabindex="-1"></a><span class="co"># National estimates</span></span>
+<span id="cb59-13"><a href="cross-tabulations.html#cb59-13" tabindex="-1"></a>tab_01_tot <span class="ot">&lt;-</span> ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb59-14"><a href="cross-tabulations.html#cb59-14" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">Region =</span> <span class="st">&quot;ETHIOPIA&quot;</span>, religion) <span class="sc">%&gt;%</span></span>
+<span id="cb59-15"><a href="cross-tabulations.html#cb59-15" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">P_hat =</span> <span class="fu">survey_mean</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)),</span>
+<span id="cb59-16"><a href="cross-tabulations.html#cb59-16" tabindex="-1"></a>            <span class="at">T_hat =</span> <span class="fu">survey_total</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)))</span>
+<span id="cb59-17"><a href="cross-tabulations.html#cb59-17" tabindex="-1"></a></span>
+<span id="cb59-18"><a href="cross-tabulations.html#cb59-18" tabindex="-1"></a><span class="co"># Estimates by urban/rural zones</span></span>
+<span id="cb59-19"><a href="cross-tabulations.html#cb59-19" tabindex="-1"></a>tab_01_zone <span class="ot">&lt;-</span> ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb59-20"><a href="cross-tabulations.html#cb59-20" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">Region =</span> <span class="fu">as_factor</span>(saq14), religion) <span class="sc">%&gt;%</span></span>
+<span id="cb59-21"><a href="cross-tabulations.html#cb59-21" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">P_hat =</span> <span class="fu">survey_mean</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)),</span>
+<span id="cb59-22"><a href="cross-tabulations.html#cb59-22" tabindex="-1"></a>            <span class="at">T_hat =</span> <span class="fu">survey_total</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)))</span></code></pre></div>
+</div>
+<div id="formatting-and-displaying-cross-tabulation-tables" class="section level3 unnumbered hasAnchor">
+<h3>Formatting and Displaying Cross-tabulation Tables<a href="cross-tabulations.html#formatting-and-displaying-cross-tabulation-tables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block displays the final table of religious affiliation proportions, reorganized for clarity and comparative analysis. It combines estimates by region, area (urban/rural), and national level, then selects the estimated proportion (<code>P_hat</code>) and religion, and reshapes the data into wide format. The proportions are expressed as percentages rounded to one decimal place. Finally, the table is filtered to show only the most relevant religious groups: Orthodox, Catholic, Protestant, Muslim, and Other. This simplified presentation is ideal for technical reports or visualizations that require a clear view of differences across geographic or social groups.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="cross-tabulations.html#cb60-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb60-2"><a href="cross-tabulations.html#cb60-2" tabindex="-1"></a><span class="co">#                  Formatting and Displaying Cross-tabulation Tables          #</span></span>
+<span id="cb60-3"><a href="cross-tabulations.html#cb60-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb60-4"><a href="cross-tabulations.html#cb60-4" tabindex="-1"></a></span>
+<span id="cb60-5"><a href="cross-tabulations.html#cb60-5" tabindex="-1"></a><span class="co"># Proportions table</span></span>
+<span id="cb60-6"><a href="cross-tabulations.html#cb60-6" tabindex="-1"></a>temp1 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(tab_01_region, tab_01_zone, tab_01_tot) <span class="sc">%&gt;%</span></span>
+<span id="cb60-7"><a href="cross-tabulations.html#cb60-7" tabindex="-1"></a>  <span class="fu">select</span>(P_hat, religion) <span class="sc">%&gt;%</span></span>
+<span id="cb60-8"><a href="cross-tabulations.html#cb60-8" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">P_hat =</span> <span class="fu">round</span>(P_hat <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb60-9"><a href="cross-tabulations.html#cb60-9" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb60-10"><a href="cross-tabulations.html#cb60-10" tabindex="-1"></a>    <span class="at">names_from =</span> religion,</span>
+<span id="cb60-11"><a href="cross-tabulations.html#cb60-11" tabindex="-1"></a>    <span class="at">values_from =</span> P_hat,</span>
+<span id="cb60-12"><a href="cross-tabulations.html#cb60-12" tabindex="-1"></a>    <span class="at">values_fill =</span> <span class="fu">list</span>(<span class="at">P_hat =</span> <span class="dv">0</span>)</span>
+<span id="cb60-13"><a href="cross-tabulations.html#cb60-13" tabindex="-1"></a>  )</span>
+<span id="cb60-14"><a href="cross-tabulations.html#cb60-14" tabindex="-1"></a></span>
+<span id="cb60-15"><a href="cross-tabulations.html#cb60-15" tabindex="-1"></a>temp1 <span class="sc">%&gt;%</span></span>
+<span id="cb60-16"><a href="cross-tabulations.html#cb60-16" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb60-17"><a href="cross-tabulations.html#cb60-17" tabindex="-1"></a>    Region,</span>
+<span id="cb60-18"><a href="cross-tabulations.html#cb60-18" tabindex="-1"></a>    <span class="at">Orthodox =</span> <span class="st">&quot;1. ORTHODOX&quot;</span>,</span>
+<span id="cb60-19"><a href="cross-tabulations.html#cb60-19" tabindex="-1"></a>    <span class="at">Catholic =</span> <span class="st">&quot;2. CATHOLIC&quot;</span>,</span>
+<span id="cb60-20"><a href="cross-tabulations.html#cb60-20" tabindex="-1"></a>    <span class="at">Protestant =</span> <span class="st">&quot;3. PROTESTANT&quot;</span>,</span>
+<span id="cb60-21"><a href="cross-tabulations.html#cb60-21" tabindex="-1"></a>    <span class="at">Muslim =</span> <span class="st">&quot;4. MUSLEM&quot;</span>,</span>
+<span id="cb60-22"><a href="cross-tabulations.html#cb60-22" tabindex="-1"></a>    <span class="at">Other =</span> OTHER</span>
+<span id="cb60-23"><a href="cross-tabulations.html#cb60-23" tabindex="-1"></a>  ) </span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Region
+</th>
+<th style="text-align:right;">
+Orthodox
+</th>
+<th style="text-align:right;">
+Catholic
+</th>
+<th style="text-align:right;">
+Protestant
+</th>
+<th style="text-align:right;">
+Muslim
+</th>
+<th style="text-align:right;">
+Other
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<ol style="list-style-type: decimal">
+<li>TIGRAY
+</td>
+<td style="text-align:right;">
+92.2
+</td>
+<td style="text-align:right;">
+2.1
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+1.7
+</td>
+<td style="text-align:right;">
+4.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="2" style="list-style-type: decimal">
+<li>AFAR
+</td>
+<td style="text-align:right;">
+8.2
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+2.2
+</td>
+<td style="text-align:right;">
+83.5
+</td>
+<td style="text-align:right;">
+6.1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="3" style="list-style-type: decimal">
+<li>AMHARA
+</td>
+<td style="text-align:right;">
+71.7
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+21.1
+</td>
+<td style="text-align:right;">
+6.6
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="4" style="list-style-type: decimal">
+<li>OROMIA
+</td>
+<td style="text-align:right;">
+27.8
+</td>
+<td style="text-align:right;">
+1.8
+</td>
+<td style="text-align:right;">
+24.9
+</td>
+<td style="text-align:right;">
+36.6
+</td>
+<td style="text-align:right;">
+9.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="5" style="list-style-type: decimal">
+<li>SOMALI
+</td>
+<td style="text-align:right;">
+0.6
+</td>
+<td style="text-align:right;">
+0.0
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+98.0
+</td>
+<td style="text-align:right;">
+1.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="6" style="list-style-type: decimal">
+<li>BENISHANGUL GUMUZ
+</td>
+<td style="text-align:right;">
+36.3
+</td>
+<td style="text-align:right;">
+0.7
+</td>
+<td style="text-align:right;">
+11.2
+</td>
+<td style="text-align:right;">
+45.5
+</td>
+<td style="text-align:right;">
+6.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="7" style="list-style-type: decimal">
+<li>SNNP
+</td>
+<td style="text-align:right;">
+21.6
+</td>
+<td style="text-align:right;">
+0.7
+</td>
+<td style="text-align:right;">
+54.6
+</td>
+<td style="text-align:right;">
+15.7
+</td>
+<td style="text-align:right;">
+7.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="12" style="list-style-type: decimal">
+<li>GAMBELA
+</td>
+<td style="text-align:right;">
+29.8
+</td>
+<td style="text-align:right;">
+6.1
+</td>
+<td style="text-align:right;">
+51.1
+</td>
+<td style="text-align:right;">
+8.8
+</td>
+<td style="text-align:right;">
+4.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="13" style="list-style-type: decimal">
+<li>HARAR
+</td>
+<td style="text-align:right;">
+23.6
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+3.8
+</td>
+<td style="text-align:right;">
+69.4
+</td>
+<td style="text-align:right;">
+3.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="14" style="list-style-type: decimal">
+<li>ADDIS ABABA
+</td>
+<td style="text-align:right;">
+74.9
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+9.3
+</td>
+<td style="text-align:right;">
+15.0
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="15" style="list-style-type: decimal">
+<li>DIRE DAWA
+</td>
+<td style="text-align:right;">
+35.5
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+4.2
+</td>
+<td style="text-align:right;">
+58.1
+</td>
+<td style="text-align:right;">
+1.8
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol style="list-style-type: decimal">
+<li>RURAL
+</td>
+<td style="text-align:right;">
+37.2
+</td>
+<td style="text-align:right;">
+1.3
+</td>
+<td style="text-align:right;">
+20.9
+</td>
+<td style="text-align:right;">
+31.4
+</td>
+<td style="text-align:right;">
+9.2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="2" style="list-style-type: decimal">
+<li>URBAN
+</td>
+<td style="text-align:right;">
+54.5
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+<td style="text-align:right;">
+21.8
+</td>
+<td style="text-align:right;">
+22.9
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ETHIOPIA
+</td>
+<td style="text-align:right;">
+41.9
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+21.2
+</td>
+<td style="text-align:right;">
+29.1
+</td>
+<td style="text-align:right;">
+6.8
+</td>
+</tr>
+</tbody>
+</table></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol>
+<p>This block generates and formats a table of absolute population sizes by religious affiliation, based on the survey design. Using the combined results by region, area (urban/rural), and national level, it selects the estimated population totals (<code>T_hat</code>) and the religion variable. The values are rounded and reshaped into a wide-format table, with religions as columns. The final table displays only the main categories: Orthodox, Catholic, Protestant, Muslim, and Other. This output provides an estimate of the number of individuals aged 10 and above affiliated with each religion, disaggregated by region or area type.</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="cross-tabulations.html#cb61-1" tabindex="-1"></a><span class="co"># Absolute Sizes table</span></span>
+<span id="cb61-2"><a href="cross-tabulations.html#cb61-2" tabindex="-1"></a>temp2 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(tab_01_region, tab_01_zone, tab_01_tot) <span class="sc">%&gt;%</span></span>
+<span id="cb61-3"><a href="cross-tabulations.html#cb61-3" tabindex="-1"></a>  <span class="fu">select</span>(T_hat, religion) <span class="sc">%&gt;%</span></span>
+<span id="cb61-4"><a href="cross-tabulations.html#cb61-4" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">T_hat =</span> <span class="fu">round</span>(T_hat)) <span class="sc">%&gt;%</span></span>
+<span id="cb61-5"><a href="cross-tabulations.html#cb61-5" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb61-6"><a href="cross-tabulations.html#cb61-6" tabindex="-1"></a>    <span class="at">names_from =</span> religion,</span>
+<span id="cb61-7"><a href="cross-tabulations.html#cb61-7" tabindex="-1"></a>    <span class="at">values_from =</span> T_hat,</span>
+<span id="cb61-8"><a href="cross-tabulations.html#cb61-8" tabindex="-1"></a>    <span class="at">values_fill =</span> <span class="fu">list</span>(<span class="at">T_hat =</span> <span class="dv">0</span>)</span>
+<span id="cb61-9"><a href="cross-tabulations.html#cb61-9" tabindex="-1"></a>  ) </span>
+<span id="cb61-10"><a href="cross-tabulations.html#cb61-10" tabindex="-1"></a></span>
+<span id="cb61-11"><a href="cross-tabulations.html#cb61-11" tabindex="-1"></a>temp2 <span class="sc">%&gt;%</span></span>
+<span id="cb61-12"><a href="cross-tabulations.html#cb61-12" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb61-13"><a href="cross-tabulations.html#cb61-13" tabindex="-1"></a>    Region,</span>
+<span id="cb61-14"><a href="cross-tabulations.html#cb61-14" tabindex="-1"></a>    <span class="at">Orthodox =</span> <span class="st">&quot;1. ORTHODOX&quot;</span>,</span>
+<span id="cb61-15"><a href="cross-tabulations.html#cb61-15" tabindex="-1"></a>    <span class="at">Catholic =</span> <span class="st">&quot;2. CATHOLIC&quot;</span>,</span>
+<span id="cb61-16"><a href="cross-tabulations.html#cb61-16" tabindex="-1"></a>    <span class="at">Protestant =</span> <span class="st">&quot;3. PROTESTANT&quot;</span>,</span>
+<span id="cb61-17"><a href="cross-tabulations.html#cb61-17" tabindex="-1"></a>    <span class="at">Muslim =</span> <span class="st">&quot;4. MUSLEM&quot;</span>,</span>
+<span id="cb61-18"><a href="cross-tabulations.html#cb61-18" tabindex="-1"></a>    <span class="at">Other =</span> OTHER</span>
+<span id="cb61-19"><a href="cross-tabulations.html#cb61-19" tabindex="-1"></a>  ) </span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Region
+</th>
+<th style="text-align:right;">
+Orthodox
+</th>
+<th style="text-align:right;">
+Catholic
+</th>
+<th style="text-align:right;">
+Protestant
+</th>
+<th style="text-align:right;">
+Muslim
+</th>
+<th style="text-align:right;">
+Other
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+<ol style="list-style-type: decimal">
+<li>TIGRAY
+</td>
+<td style="text-align:right;">
+3918416
+</td>
+<td style="text-align:right;">
+90616
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+70593
+</td>
+<td style="text-align:right;">
+168421
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="2" style="list-style-type: decimal">
+<li>AFAR
+</td>
+<td style="text-align:right;">
+46553
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+12526
+</td>
+<td style="text-align:right;">
+475602
+</td>
+<td style="text-align:right;">
+34677
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="3" style="list-style-type: decimal">
+<li>AMHARA
+</td>
+<td style="text-align:right;">
+11576000
+</td>
+<td style="text-align:right;">
+35300
+</td>
+<td style="text-align:right;">
+73597
+</td>
+<td style="text-align:right;">
+3401683
+</td>
+<td style="text-align:right;">
+1057761
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="4" style="list-style-type: decimal">
+<li>OROMIA
+</td>
+<td style="text-align:right;">
+6924343
+</td>
+<td style="text-align:right;">
+440773
+</td>
+<td style="text-align:right;">
+6206179
+</td>
+<td style="text-align:right;">
+9142683
+</td>
+<td style="text-align:right;">
+2233299
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="5" style="list-style-type: decimal">
+<li>SOMALI
+</td>
+<td style="text-align:right;">
+21033
+</td>
+<td style="text-align:right;">
+1445
+</td>
+<td style="text-align:right;">
+3248
+</td>
+<td style="text-align:right;">
+3293124
+</td>
+<td style="text-align:right;">
+42153
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="6" style="list-style-type: decimal">
+<li>BENISHANGUL GUMUZ
+</td>
+<td style="text-align:right;">
+241389
+</td>
+<td style="text-align:right;">
+4544
+</td>
+<td style="text-align:right;">
+74695
+</td>
+<td style="text-align:right;">
+302755
+</td>
+<td style="text-align:right;">
+41819
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="7" style="list-style-type: decimal">
+<li>SNNP
+</td>
+<td style="text-align:right;">
+2946567
+</td>
+<td style="text-align:right;">
+97681
+</td>
+<td style="text-align:right;">
+7461357
+</td>
+<td style="text-align:right;">
+2147076
+</td>
+<td style="text-align:right;">
+1010342
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="12" style="list-style-type: decimal">
+<li>GAMBELA
+</td>
+<td style="text-align:right;">
+84131
+</td>
+<td style="text-align:right;">
+17155
+</td>
+<td style="text-align:right;">
+144558
+</td>
+<td style="text-align:right;">
+24853
+</td>
+<td style="text-align:right;">
+11981
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="13" style="list-style-type: decimal">
+<li>HARAR
+</td>
+<td style="text-align:right;">
+42907
+</td>
+<td style="text-align:right;">
+338
+</td>
+<td style="text-align:right;">
+7001
+</td>
+<td style="text-align:right;">
+126355
+</td>
+<td style="text-align:right;">
+5429
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="14" style="list-style-type: decimal">
+<li>ADDIS ABABA
+</td>
+<td style="text-align:right;">
+2337560
+</td>
+<td style="text-align:right;">
+14534
+</td>
+<td style="text-align:right;">
+290894
+</td>
+<td style="text-align:right;">
+469778
+</td>
+<td style="text-align:right;">
+9085
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="15" style="list-style-type: decimal">
+<li>DIRE DAWA
+</td>
+<td style="text-align:right;">
+108171
+</td>
+<td style="text-align:right;">
+1431
+</td>
+<td style="text-align:right;">
+12717
+</td>
+<td style="text-align:right;">
+177047
+</td>
+<td style="text-align:right;">
+5587
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol style="list-style-type: decimal">
+<li>RURAL
+</td>
+<td style="text-align:right;">
+18316384
+</td>
+<td style="text-align:right;">
+629418
+</td>
+<td style="text-align:right;">
+10307786
+</td>
+<td style="text-align:right;">
+15450070
+</td>
+<td style="text-align:right;">
+4551967
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+<ol start="2" style="list-style-type: decimal">
+<li>URBAN
+</td>
+<td style="text-align:right;">
+9930687
+</td>
+<td style="text-align:right;">
+74400
+</td>
+<td style="text-align:right;">
+3978986
+</td>
+<td style="text-align:right;">
+4181478
+</td>
+<td style="text-align:right;">
+68588
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ETHIOPIA
+</td>
+<td style="text-align:right;">
+28247071
+</td>
+<td style="text-align:right;">
+703818
+</td>
+<td style="text-align:right;">
+14286772
+</td>
+<td style="text-align:right;">
+19631549
+</td>
+<td style="text-align:right;">
+4620555
+</td>
+</tr>
+</tbody>
+</table></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol></li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="percentiles-and-inequality-measures.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/psirusteam/chapter9Rcodes/4.2_Cross_tabulations.rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["CHAPTER 9 - EXAMPLES IN R.pdf", "CHAPTER 9 - EXAMPLES IN R.epub", "CHAPTER 9 - EXAMPLES IN R.mobi"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"tconfig": null
+});
+});
+</script>
+
+</body>
+
+</html>
