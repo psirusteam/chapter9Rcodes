@@ -1,0 +1,170 @@
+```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE,
+                      cache = TRUE, 
+                      cache.path = "cache/3.3/")
+```
+
+# 3.3 Correlations {-}
+
+This section estimates **correlations between educational expenditure and other types of household spending** using the complex survey design from the **ESS4** dataset. It explores the relationship between educational spending and two key components of consumption: **utilities** and **food away from home**.
+
+The estimates are presented at three levels:  
+1. **National**, capturing the overall association.  
+2. **By area type (urban/rural)**, to explore territorial differences.  
+3. **By region**, providing a detailed subnational analysis.
+
+The results include correlation coefficients along with their standard errors, allowing for the assessment of both the strength and precision of the associations observed.
+
+
+### Prepare the work environment {-}
+
+This block sets up the working environment, loads an aggregated individual-level consumption dataset, and defines the **survey design** for analysis. The data is stratified by region and area type (urban/rural), and both the primary sampling units (`ea_id`) and adjusted weights (`pw_w4`) are specified. Applying this structure ensures that all estimates reflect the representativeness of the survey design. Finally, a summary of the design is displayed as a preliminary validation step.
+
+```{r, echo=TRUE,warning=FALSE,error=FALSE,menssage = FALSE}
+
+#------------------------------------------------------------------------------#
+#                           Cleaning R Environment                             #
+#------------------------------------------------------------------------------#
+
+rm(list = ls())
+gc()
+
+#------------------------------------------------------------------------------#
+#                                Libraries                                     #
+#------------------------------------------------------------------------------#
+
+library(tidyverse)
+library(survey)
+library(srvyr)
+library(data.table)
+library(magrittr)
+library(haven)
+library(stringr)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+
+# Ensure select function from dplyr is used explicitly
+select <- dplyr::select
+
+#------------------------------------------------------------------------------#
+#                           Loading Datasets                                   #
+#------------------------------------------------------------------------------#
+
+IND_data <- read_sav("data/data_ESS4/cons_agg_w4.sav") %>%
+  mutate(strata = paste0(saq01, "_", saq14))
+
+#------------------------------------------------------------------------------#
+#                       Defining Survey Design                                #
+#------------------------------------------------------------------------------#
+ESS4_design <- IND_data %>%
+  as_survey_design(
+    ids = ea_id,
+    # Primary sampling unit identifier (EA)
+    strata = strata,
+    # Stratification by region (saq01) and urban/rural zone (saq14)
+    weights = pw_w4,
+    # Final adjusted weight
+    nest = TRUE
+  )
+
+options(survey.lonely.psu = "fail")
+summary(ESS4_design)
+```
+
+###  Estimating Correlations  {-}
+
+This block calculates the overall correlation between annual educational expenditure and two types of spending: utilities and food away from home. The estimates account for the complex survey design.
+
+```{r, echo=TRUE, eval=FALSE}
+#------------------------------------------------------------------------------#
+#                   Estimating Correlations                                    #
+#------------------------------------------------------------------------------#
+
+# Overall correlation
+ESS4_design %>% summarise(
+  corr1 = survey_corr(educ_cons_ann, utilities_cons_ann),
+  corr2 = survey_corr(educ_cons_ann, fafh_cons_ann)
+)
+```
+The table shows the **national-level estimated correlations** between annual educational expenditure and two types of spending:  
+
+- **`corr1`**: correlation between educational spending and utility expenses, estimated at **0.19**, indicating a **moderate positive association**.  
+- **`corr2`**: correlation between educational spending and food away from home, estimated at **0.06**, suggesting a **weak association**.  
+
+Both estimates include their respective **standard errors**, allowing for an assessment of precision within the context of the complex survey design.
+
+
+```{r, echo=FALSE, eval=TRUE}
+ESS4_design %>% summarise(
+  corr1 = survey_corr(educ_cons_ann, utilities_cons_ann),
+  corr2 = survey_corr(educ_cons_ann, fafh_cons_ann)
+) %>%  kable(format = "html") %>%
+  kable_styling(full_width = FALSE)
+```
+
+This block estimates the correlation by area type (urban or rural), allowing us to identify differences in spending patterns depending on geographic setting.
+
+```{r, echo=TRUE, eval=FALSE}
+# Correlation grouped by urban/rural area
+ESS4_design %>%
+  group_by(area = as_factor(saq14)) %>%
+  summarise(
+    corr1 = survey_corr(educ_cons_ann, utilities_cons_ann),
+    corr2 = survey_corr(educ_cons_ann, fafh_cons_ann)
+  ) 
+```
+
+The table shows the **correlations between educational expenditure and other types of spending**, broken down by area of residence:
+
+- In **rural areas**, the correlation between educational spending and utilities (`corr1`) is **moderate (0.19)** but has **higher uncertainty** (standard error = 0.073). The correlation with food away from home (`corr2`) is **nearly zero (0.009)**.
+  
+- In **urban areas**, the correlation with utilities remains **positive (0.16)** and is more precise (standard error = 0.025). The correlation with food away from home is **slightly higher (0.039)** than in rural areas but still weak.
+
+These results suggest that the link between educational and utility spending is consistent across areas, while the relationship with food away from home is weak—particularly in rural settings.
+
+
+```{r, echo=FALSE, eval=TRUE}
+ESS4_design %>%
+  group_by(area = as_factor(saq14)) %>%
+  summarise(
+    corr1 = survey_corr(educ_cons_ann, utilities_cons_ann),
+    corr2 = survey_corr(educ_cons_ann, fafh_cons_ann)
+  ) %>%  kable(format = "html") %>%
+  kable_styling(full_width = FALSE)
+```
+
+This block estimates the correlation between expenditure variables by region, providing a more detailed view of consumption relationships at the subnational level.
+
+```{r, echo=TRUE, eval=FALSE}
+# Correlation grouped by region
+ESS4_design %>% 
+  group_by(Region = as_factor(saq01)) %>%
+  summarise(
+    corr1 = survey_corr(educ_cons_ann, utilities_cons_ann), 
+    corr2 = survey_corr(educ_cons_ann, fafh_cons_ann)
+  )
+
+```
+
+The table displays **regional correlations** between educational expenditure and two types of spending: **utilities (corr1)** and **food away from home (corr2)**, along with their standard errors.
+
+- In most regions, the correlation between **education and utilities** is **positive and moderate**, with the highest values in **Dire Dawa (0.33)**, **Somali (0.31)**, **Amhara (0.24)**, and **Harar (0.23)**. This suggests that households investing more in education also tend to spend more on utilities in those areas.
+
+- The correlation with **food away from home** is **weaker and more variable**. Notably, **Tigray (0.25)** shows a stronger positive association, while **Benishangul Gumuz (-0.07)** and **Dire Dawa (-0.04)** show **negative correlations**, possibly reflecting different spending trade-offs or priorities.
+
+- The **standard errors** indicate precision: **Addis Ababa** has the most precise estimates, while regions like **SNNP** and **Tigray** show greater uncertainty.
+
+
+```{r, echo=FALSE, eval=TRUE}
+# Correlation grouped by region
+ESS4_design %>% 
+  group_by(Region = as_factor(saq01)) %>%
+  summarise(
+    corr1 = survey_corr(educ_cons_ann, utilities_cons_ann), 
+    corr2 = survey_corr(educ_cons_ann, fafh_cons_ann)
+  ) %>%  kable(format = "html") %>%
+  kable_styling(full_width = FALSE)
+
+```

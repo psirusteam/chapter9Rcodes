@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3.3 Correlations | CHAPTER 9 - EXAMPLES IN R</title>
+  <meta name="description" content="3.3 Correlations | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3.3 Correlations | CHAPTER 9 - EXAMPLES IN R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="3.3 Correlations | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="github-repo" content="psirusteam/chapter9Rcodes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3.3 Correlations | CHAPTER 9 - EXAMPLES IN R" />
+  
+  <meta name="twitter:description" content="3.3 Correlations | CHAPTER 9 - EXAMPLES IN R" />
+  
+
+<meta name="author" content="" />
+
+
+<meta name="date" content="2025-03-21" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="totals-means-and-ratios.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">CHAPTER 9 - EXAMPLES IN R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Abstract</a></li>
+<li class="chapter" data-level="" data-path="accounting-for-the-sampling-design.html"><a href="accounting-for-the-sampling-design.html"><i class="fa fa-check"></i>Accounting for the Sampling Design</a>
+<ul>
+<li class="chapter" data-level="" data-path="sample-design-of-the-ess4-20182019.html"><a href="sample-design-of-the-ess4-20182019.html"><i class="fa fa-check"></i>Sample design of the ESS4 2018/2019</a></li>
+<li class="chapter" data-level="" data-path="data-source.html"><a href="data-source.html"><i class="fa fa-check"></i>Data Source</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html"><i class="fa fa-check"></i>2.3 Using Software to Generate Valid Inferences</a>
+<ul>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#prepare-the-work-environment"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#loading-datasets"><i class="fa fa-check"></i>Loading Datasets</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#defining-the-survey-design"><i class="fa fa-check"></i>Defining the survey design</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html"><i class="fa fa-check"></i>3.1 Frequencies and Proportions</a>
+<ul>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#prepare-the-work-environment-1"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#estimating-totals-and-proportions"><i class="fa fa-check"></i>Estimating totals and proportions</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#formatting-and-presenting-results"><i class="fa fa-check"></i>Formatting and presenting results</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html"><i class="fa fa-check"></i>3.2 Totals, means and ratios</a>
+<ul>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#prepare-the-work-environment-2"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-totals-and-means"><i class="fa fa-check"></i>Estimation of totals and means</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-ratio"><i class="fa fa-check"></i>Estimation of Ratio</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimating-the-ratio-of-educational-expenditure"><i class="fa fa-check"></i>Estimating the Ratio of Educational Expenditure</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html"><i class="fa fa-check"></i>3.3 Correlations</a>
+<ul>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#prepare-the-work-environment-3"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#estimating-correlations"><i class="fa fa-check"></i>Estimating Correlations</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a CHAPTER 9 - EXAMPLES IN R </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CHAPTER 9 - EXAMPLES IN R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="correlations" class="section level1 unnumbered hasAnchor">
+<h1>3.3 Correlations<a href="correlations.html#correlations" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>This section estimates <strong>correlations between educational expenditure and other types of household spending</strong> using the complex survey design from the <strong>ESS4</strong> dataset. It explores the relationship between educational spending and two key components of consumption: <strong>utilities</strong> and <strong>food away from home</strong>.</p>
+<p>The estimates are presented at three levels:<br />
+1. <strong>National</strong>, capturing the overall association.<br />
+2. <strong>By area type (urban/rural)</strong>, to explore territorial differences.<br />
+3. <strong>By region</strong>, providing a detailed subnational analysis.</p>
+<p>The results include correlation coefficients along with their standard errors, allowing for the assessment of both the strength and precision of the associations observed.</p>
+<div id="prepare-the-work-environment-3" class="section level3 unnumbered hasAnchor">
+<h3>Prepare the work environment<a href="correlations.html#prepare-the-work-environment-3" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block sets up the working environment, loads an aggregated individual-level consumption dataset, and defines the <strong>survey design</strong> for analysis. The data is stratified by region and area type (urban/rural), and both the primary sampling units (<code>ea_id</code>) and adjusted weights (<code>pw_w4</code>) are specified. Applying this structure ensures that all estimates reflect the representativeness of the survey design. Finally, a summary of the design is displayed as a preliminary validation step.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="correlations.html#cb31-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb31-2"><a href="correlations.html#cb31-2" tabindex="-1"></a><span class="co">#                           Cleaning R Environment                             #</span></span>
+<span id="cb31-3"><a href="correlations.html#cb31-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb31-4"><a href="correlations.html#cb31-4" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="correlations.html#cb31-5" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb31-6"><a href="correlations.html#cb31-6" tabindex="-1"></a><span class="fu">gc</span>()</span></code></pre></div>
+<pre><code>##          used (Mb) gc trigger (Mb) max used (Mb)
+## Ncells 542546 29.0    1219888 65.2   660485 35.3
+## Vcells 955799  7.3    8388608 64.0  1770406 13.6</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="correlations.html#cb33-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb33-2"><a href="correlations.html#cb33-2" tabindex="-1"></a><span class="co">#                                Libraries                                     #</span></span>
+<span id="cb33-3"><a href="correlations.html#cb33-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb33-4"><a href="correlations.html#cb33-4" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="correlations.html#cb33-5" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb33-6"><a href="correlations.html#cb33-6" tabindex="-1"></a><span class="fu">library</span>(survey)</span>
+<span id="cb33-7"><a href="correlations.html#cb33-7" tabindex="-1"></a><span class="fu">library</span>(srvyr)</span>
+<span id="cb33-8"><a href="correlations.html#cb33-8" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb33-9"><a href="correlations.html#cb33-9" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb33-10"><a href="correlations.html#cb33-10" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb33-11"><a href="correlations.html#cb33-11" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb33-12"><a href="correlations.html#cb33-12" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb33-13"><a href="correlations.html#cb33-13" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb33-14"><a href="correlations.html#cb33-14" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb33-15"><a href="correlations.html#cb33-15" tabindex="-1"></a></span>
+<span id="cb33-16"><a href="correlations.html#cb33-16" tabindex="-1"></a><span class="co"># Ensure select function from dplyr is used explicitly</span></span>
+<span id="cb33-17"><a href="correlations.html#cb33-17" tabindex="-1"></a>select <span class="ot">&lt;-</span> dplyr<span class="sc">::</span>select</span>
+<span id="cb33-18"><a href="correlations.html#cb33-18" tabindex="-1"></a></span>
+<span id="cb33-19"><a href="correlations.html#cb33-19" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb33-20"><a href="correlations.html#cb33-20" tabindex="-1"></a><span class="co">#                           Loading Datasets                                   #</span></span>
+<span id="cb33-21"><a href="correlations.html#cb33-21" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb33-22"><a href="correlations.html#cb33-22" tabindex="-1"></a></span>
+<span id="cb33-23"><a href="correlations.html#cb33-23" tabindex="-1"></a>IND_data <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/cons_agg_w4.sav&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-24"><a href="correlations.html#cb33-24" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strata =</span> <span class="fu">paste0</span>(saq01, <span class="st">&quot;_&quot;</span>, saq14))</span>
+<span id="cb33-25"><a href="correlations.html#cb33-25" tabindex="-1"></a></span>
+<span id="cb33-26"><a href="correlations.html#cb33-26" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb33-27"><a href="correlations.html#cb33-27" tabindex="-1"></a><span class="co">#                       Defining Survey Design                                #</span></span>
+<span id="cb33-28"><a href="correlations.html#cb33-28" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb33-29"><a href="correlations.html#cb33-29" tabindex="-1"></a>ESS4_design <span class="ot">&lt;-</span> IND_data <span class="sc">%&gt;%</span></span>
+<span id="cb33-30"><a href="correlations.html#cb33-30" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(</span>
+<span id="cb33-31"><a href="correlations.html#cb33-31" tabindex="-1"></a>    <span class="at">ids =</span> ea_id,</span>
+<span id="cb33-32"><a href="correlations.html#cb33-32" tabindex="-1"></a>    <span class="co"># Primary sampling unit identifier (EA)</span></span>
+<span id="cb33-33"><a href="correlations.html#cb33-33" tabindex="-1"></a>    <span class="at">strata =</span> strata,</span>
+<span id="cb33-34"><a href="correlations.html#cb33-34" tabindex="-1"></a>    <span class="co"># Stratification by region (saq01) and urban/rural zone (saq14)</span></span>
+<span id="cb33-35"><a href="correlations.html#cb33-35" tabindex="-1"></a>    <span class="at">weights =</span> pw_w4,</span>
+<span id="cb33-36"><a href="correlations.html#cb33-36" tabindex="-1"></a>    <span class="co"># Final adjusted weight</span></span>
+<span id="cb33-37"><a href="correlations.html#cb33-37" tabindex="-1"></a>    <span class="at">nest =</span> <span class="cn">TRUE</span></span>
+<span id="cb33-38"><a href="correlations.html#cb33-38" tabindex="-1"></a>  )</span>
+<span id="cb33-39"><a href="correlations.html#cb33-39" tabindex="-1"></a></span>
+<span id="cb33-40"><a href="correlations.html#cb33-40" tabindex="-1"></a><span class="fu">options</span>(<span class="at">survey.lonely.psu =</span> <span class="st">&quot;fail&quot;</span>)</span>
+<span id="cb33-41"><a href="correlations.html#cb33-41" tabindex="-1"></a><span class="fu">summary</span>(ESS4_design)</span></code></pre></div>
+<pre><code>## Stratified 1 - level Cluster Sampling design (with replacement)
+## With (535) clusters.
+## Called via srvyr
+## Probabilities:
+##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## 3.932e-05 1.997e-04 7.680e-04 2.814e-03 4.164e-03 1.317e-01 
+## Stratum Sizes: 
+##            1_1 1_2 12_1 12_2 13_1 13_2 14_2 15_1 15_2 2_1 2_2 3_1 3_2 4_1 4_2
+## obs        393 283  195  300  190  360  778  160  419 299 225 479 271 453 300
+## design.PSU  35  19   19   20   18   24   52   14   28  28  15  43  18  43  20
+## actual.PSU  35  19   19   20   18   24   52   14   28  28  15  43  18  43  20
+##            5_1 5_2 6_1 6_2 7_1 7_2
+## obs        355 255 169 195 422 269
+## design.PSU  35  17  16  13  40  18
+## actual.PSU  35  17  16  13  40  18
+## Data variables:
+##  [1] &quot;household_id&quot;        &quot;ea_id&quot;               &quot;saq01&quot;              
+##  [4] &quot;saq14&quot;               &quot;pw_w4&quot;               &quot;adulteq&quot;            
+##  [7] &quot;hh_size&quot;             &quot;food_cons_ann&quot;       &quot;nonfood_cons_ann&quot;   
+## [10] &quot;educ_cons_ann&quot;       &quot;fafh_cons_ann&quot;       &quot;utilities_cons_ann&quot; 
+## [13] &quot;total_cons_ann&quot;      &quot;nom_foodcons_aeq&quot;    &quot;nom_nonfoodcons_aeq&quot;
+## [16] &quot;nom_educcons_aeq&quot;    &quot;nom_utilities_aeq&quot;   &quot;nom_totcons_aeq&quot;    
+## [19] &quot;spat_totcons_aeq&quot;    &quot;cons_quint&quot;          &quot;strata&quot;</code></pre>
+</div>
+<div id="estimating-correlations" class="section level3 unnumbered hasAnchor">
+<h3>Estimating Correlations<a href="correlations.html#estimating-correlations" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block calculates the overall correlation between annual educational expenditure and two types of spending: utilities and food away from home. The estimates account for the complex survey design.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="correlations.html#cb35-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb35-2"><a href="correlations.html#cb35-2" tabindex="-1"></a><span class="co">#                   Estimating Correlations                                    #</span></span>
+<span id="cb35-3"><a href="correlations.html#cb35-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb35-4"><a href="correlations.html#cb35-4" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="correlations.html#cb35-5" tabindex="-1"></a><span class="co"># Overall correlation</span></span>
+<span id="cb35-6"><a href="correlations.html#cb35-6" tabindex="-1"></a>ESS4_design <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(</span>
+<span id="cb35-7"><a href="correlations.html#cb35-7" tabindex="-1"></a>  <span class="at">corr1 =</span> <span class="fu">survey_corr</span>(educ_cons_ann, utilities_cons_ann),</span>
+<span id="cb35-8"><a href="correlations.html#cb35-8" tabindex="-1"></a>  <span class="at">corr2 =</span> <span class="fu">survey_corr</span>(educ_cons_ann, fafh_cons_ann)</span>
+<span id="cb35-9"><a href="correlations.html#cb35-9" tabindex="-1"></a>)</span></code></pre></div>
+<p>The table shows the <strong>national-level estimated correlations</strong> between annual educational expenditure and two types of spending:</p>
+<ul>
+<li><strong><code>corr1</code></strong>: correlation between educational spending and utility expenses, estimated at <strong>0.19</strong>, indicating a <strong>moderate positive association</strong>.<br />
+</li>
+<li><strong><code>corr2</code></strong>: correlation between educational spending and food away from home, estimated at <strong>0.06</strong>, suggesting a <strong>weak association</strong>.</li>
+</ul>
+<p>Both estimates include their respective <strong>standard errors</strong>, allowing for an assessment of precision within the context of the complex survey design.</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+corr1
+</th>
+<th style="text-align:right;">
+corr1_se
+</th>
+<th style="text-align:right;">
+corr2
+</th>
+<th style="text-align:right;">
+corr2_se
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.1906679
+</td>
+<td style="text-align:right;">
+0.0313768
+</td>
+<td style="text-align:right;">
+0.0551461
+</td>
+<td style="text-align:right;">
+0.0250799
+</td>
+</tr>
+</tbody>
+</table>
+<p>This block estimates the correlation by area type (urban or rural), allowing us to identify differences in spending patterns depending on geographic setting.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="correlations.html#cb36-1" tabindex="-1"></a><span class="co"># Correlation grouped by urban/rural area</span></span>
+<span id="cb36-2"><a href="correlations.html#cb36-2" tabindex="-1"></a>ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb36-3"><a href="correlations.html#cb36-3" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">area =</span> <span class="fu">as_factor</span>(saq14)) <span class="sc">%&gt;%</span></span>
+<span id="cb36-4"><a href="correlations.html#cb36-4" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb36-5"><a href="correlations.html#cb36-5" tabindex="-1"></a>    <span class="at">corr1 =</span> <span class="fu">survey_corr</span>(educ_cons_ann, utilities_cons_ann),</span>
+<span id="cb36-6"><a href="correlations.html#cb36-6" tabindex="-1"></a>    <span class="at">corr2 =</span> <span class="fu">survey_corr</span>(educ_cons_ann, fafh_cons_ann)</span>
+<span id="cb36-7"><a href="correlations.html#cb36-7" tabindex="-1"></a>  ) </span></code></pre></div>
+<p>The table shows the <strong>correlations between educational expenditure and other types of spending</strong>, broken down by area of residence:</p>
+<ul>
+<li><p>In <strong>rural areas</strong>, the correlation between educational spending and utilities (<code>corr1</code>) is <strong>moderate (0.19)</strong> but has <strong>higher uncertainty</strong> (standard error = 0.073). The correlation with food away from home (<code>corr2</code>) is <strong>nearly zero (0.009)</strong>.</p></li>
+<li><p>In <strong>urban areas</strong>, the correlation with utilities remains <strong>positive (0.16)</strong> and is more precise (standard error = 0.025). The correlation with food away from home is <strong>slightly higher (0.039)</strong> than in rural areas but still weak.</p></li>
+</ul>
+<p>These results suggest that the link between educational and utility spending is consistent across areas, while the relationship with food away from home is weak—particularly in rural settings.</p>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+area
+</th>
+<th style="text-align:right;">
+corr1
+</th>
+<th style="text-align:right;">
+corr1_se
+</th>
+<th style="text-align:right;">
+corr2
+</th>
+<th style="text-align:right;">
+corr2_se
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+RURAL
+</td>
+<td style="text-align:right;">
+0.1910101
+</td>
+<td style="text-align:right;">
+0.0729421
+</td>
+<td style="text-align:right;">
+0.0091824
+</td>
+<td style="text-align:right;">
+0.0257959
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+URBAN
+</td>
+<td style="text-align:right;">
+0.1582441
+</td>
+<td style="text-align:right;">
+0.0248202
+</td>
+<td style="text-align:right;">
+0.0391755
+</td>
+<td style="text-align:right;">
+0.0221427
+</td>
+</tr>
+</tbody>
+</table>
+<p>This block estimates the correlation between expenditure variables by region, providing a more detailed view of consumption relationships at the subnational level.</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="correlations.html#cb37-1" tabindex="-1"></a><span class="co"># Correlation grouped by region</span></span>
+<span id="cb37-2"><a href="correlations.html#cb37-2" tabindex="-1"></a>ESS4_design <span class="sc">%&gt;%</span> </span>
+<span id="cb37-3"><a href="correlations.html#cb37-3" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">Region =</span> <span class="fu">as_factor</span>(saq01)) <span class="sc">%&gt;%</span></span>
+<span id="cb37-4"><a href="correlations.html#cb37-4" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb37-5"><a href="correlations.html#cb37-5" tabindex="-1"></a>    <span class="at">corr1 =</span> <span class="fu">survey_corr</span>(educ_cons_ann, utilities_cons_ann), </span>
+<span id="cb37-6"><a href="correlations.html#cb37-6" tabindex="-1"></a>    <span class="at">corr2 =</span> <span class="fu">survey_corr</span>(educ_cons_ann, fafh_cons_ann)</span>
+<span id="cb37-7"><a href="correlations.html#cb37-7" tabindex="-1"></a>  )</span></code></pre></div>
+<p>The table displays <strong>regional correlations</strong> between educational expenditure and two types of spending: <strong>utilities (corr1)</strong> and <strong>food away from home (corr2)</strong>, along with their standard errors.</p>
+<ul>
+<li><p>In most regions, the correlation between <strong>education and utilities</strong> is <strong>positive and moderate</strong>, with the highest values in <strong>Dire Dawa (0.33)</strong>, <strong>Somali (0.31)</strong>, <strong>Amhara (0.24)</strong>, and <strong>Harar (0.23)</strong>. This suggests that households investing more in education also tend to spend more on utilities in those areas.</p></li>
+<li><p>The correlation with <strong>food away from home</strong> is <strong>weaker and more variable</strong>. Notably, <strong>Tigray (0.25)</strong> shows a stronger positive association, while <strong>Benishangul Gumuz (-0.07)</strong> and <strong>Dire Dawa (-0.04)</strong> show <strong>negative correlations</strong>, possibly reflecting different spending trade-offs or priorities.</p></li>
+<li><p>The <strong>standard errors</strong> indicate precision: <strong>Addis Ababa</strong> has the most precise estimates, while regions like <strong>SNNP</strong> and <strong>Tigray</strong> show greater uncertainty.</p></li>
+</ul>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Region
+</th>
+<th style="text-align:right;">
+corr1
+</th>
+<th style="text-align:right;">
+corr1_se
+</th>
+<th style="text-align:right;">
+corr2
+</th>
+<th style="text-align:right;">
+corr2_se
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+TIGRAY
+</td>
+<td style="text-align:right;">
+0.1909944
+</td>
+<td style="text-align:right;">
+0.0809238
+</td>
+<td style="text-align:right;">
+0.2539895
+</td>
+<td style="text-align:right;">
+0.0621995
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AFAR
+</td>
+<td style="text-align:right;">
+0.1700086
+</td>
+<td style="text-align:right;">
+0.0586904
+</td>
+<td style="text-align:right;">
+-0.0021256
+</td>
+<td style="text-align:right;">
+0.0574260
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AMHARA
+</td>
+<td style="text-align:right;">
+0.2370307
+</td>
+<td style="text-align:right;">
+0.0570303
+</td>
+<td style="text-align:right;">
+0.0401066
+</td>
+<td style="text-align:right;">
+0.0363661
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+OROMIA
+</td>
+<td style="text-align:right;">
+0.2096871
+</td>
+<td style="text-align:right;">
+0.0381022
+</td>
+<td style="text-align:right;">
+-0.0103300
+</td>
+<td style="text-align:right;">
+0.0372057
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SOMALI
+</td>
+<td style="text-align:right;">
+0.3050576
+</td>
+<td style="text-align:right;">
+0.0560321
+</td>
+<td style="text-align:right;">
+0.0536496
+</td>
+<td style="text-align:right;">
+0.0709755
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BENISHANGUL GUMUZ
+</td>
+<td style="text-align:right;">
+0.0079110
+</td>
+<td style="text-align:right;">
+0.0272672
+</td>
+<td style="text-align:right;">
+-0.0658016
+</td>
+<td style="text-align:right;">
+0.0232147
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SNNP
+</td>
+<td style="text-align:right;">
+0.2022214
+</td>
+<td style="text-align:right;">
+0.0712977
+</td>
+<td style="text-align:right;">
+0.0467115
+</td>
+<td style="text-align:right;">
+0.0269180
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GAMBELA
+</td>
+<td style="text-align:right;">
+0.1174653
+</td>
+<td style="text-align:right;">
+0.0444969
+</td>
+<td style="text-align:right;">
+0.0224387
+</td>
+<td style="text-align:right;">
+0.0497909
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HARAR
+</td>
+<td style="text-align:right;">
+0.2334025
+</td>
+<td style="text-align:right;">
+0.0598253
+</td>
+<td style="text-align:right;">
+0.0476901
+</td>
+<td style="text-align:right;">
+0.0362023
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ADDIS ABABA
+</td>
+<td style="text-align:right;">
+0.1816015
+</td>
+<td style="text-align:right;">
+0.0214595
+</td>
+<td style="text-align:right;">
+0.0152325
+</td>
+<td style="text-align:right;">
+0.0212303
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DIRE DAWA
+</td>
+<td style="text-align:right;">
+0.3336417
+</td>
+<td style="text-align:right;">
+0.0726053
+</td>
+<td style="text-align:right;">
+-0.0382218
+</td>
+<td style="text-align:right;">
+0.0236171
+</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="totals-means-and-ratios.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/psirusteam/chapter9Rcodes/3.3_Correlations.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["CHAPTER 9 - EXAMPLES IN R.pdf", "CHAPTER 9 - EXAMPLES IN R.epub", "CHAPTER 9 - EXAMPLES IN R.mobi"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"tconfig": null
+});
+});
+</script>
+
+</body>
+
+</html>
