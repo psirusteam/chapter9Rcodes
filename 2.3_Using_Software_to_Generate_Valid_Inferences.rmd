@@ -44,7 +44,7 @@ This **R** code sets up a clean and optimized environment for data analysis befo
 
 Finally, the code adjusts the available RAM memory limit, optimizing performance for large-scale data processing. This setup is particularly useful in survey analysis and statistical studies that involve working with extensive datasets and computationally intensive calculations.
 
-```{r setup, include=FALSE}
+```{r setup, include=TRUE}
 #------------------------------------------------------------------------------#
 #                           Cleaning R Environment                             #
 #------------------------------------------------------------------------------#
@@ -78,7 +78,7 @@ memory.limit(250000000)
 
 ```
 
-## Loading Datasets {-}
+### Loading Datasets {-}
 
 This **R** code loads and prepares a dataset for the **ESS4** survey analysis. It uses the `read_sav()` function to import a **SPSS (.sav)** file, ensuring the correct reading of the database. Then, the `select()` function is applied to extract only the key variables, including unique household and enumeration area identifiers, geographic location information, and stratification into urban and rural areas. Additionally, the final adjusted sampling weight is included, which is essential for obtaining representative estimates.  
 
@@ -195,7 +195,7 @@ data.frame(survey_counts) %>%
   kable( align = "c", format = "pipe")
 ```
 
-## Defining the survey design {-}
+### Defining the survey design {-}
 
 This code defines the **survey design** for the **ESS4** survey using the `survey` package in **R**, ensuring that the analysis accurately reflects the sample structure.  
 

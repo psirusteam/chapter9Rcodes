@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="data-source.html"/>
-<link rel="next" href="loading-datasets.html"/>
+<link rel="next" href="descriptive-parameters.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -148,8 +148,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html"><i class="fa fa-check"></i>2.3 Using Software to Generate Valid Inferences</a>
 <ul>
-<li class="chapter" data-level="" data-path="loading-datasets.html"><a href="loading-datasets.html"><i class="fa fa-check"></i>Loading Datasets</a></li>
-<li class="chapter" data-level="" data-path="defining-the-survey-design.html"><a href="defining-the-survey-design.html"><i class="fa fa-check"></i>Defining the survey design</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#loading-datasets"><i class="fa fa-check"></i>Loading Datasets</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#defining-the-survey-design"><i class="fa fa-check"></i>Defining the survey design</a></li>
 </ul></li>
 <li class="chapter" data-level="1" data-path="descriptive-parameters.html"><a href="descriptive-parameters.html"><i class="fa fa-check"></i><b>1</b> Descriptive Parameters</a>
 <ul>
@@ -188,6 +188,294 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1>2.3 Using Software to Generate Valid Inferences<a href="using-software-to-generate-valid-inferences.html#using-software-to-generate-valid-inferences" class="anchor-section" aria-label="Anchor link to header"></a></h1>
 <p>This <strong>R</strong> code sets up a clean and optimized environment for data analysis before executing any processing. First, it removes all previously loaded objects from memory and performs garbage collection to free up resources, preventing potential conflicts with data from previous sessions. Then, it loads a set of essential libraries for data manipulation and analysis, including packages specialized in survey data, efficient handling of large datasets, and formatting of results. Additionally, it ensures that the <code>select</code> function from <code>dplyr</code> is explicitly used to avoid conflicts with other libraries.</p>
 <p>Finally, the code adjusts the available RAM memory limit, optimizing performance for large-scale data processing. This setup is particularly useful in survey analysis and statistical studies that involve working with extensive datasets and computationally intensive calculations.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="using-software-to-generate-valid-inferences.html#cb1-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb1-2"><a href="using-software-to-generate-valid-inferences.html#cb1-2" tabindex="-1"></a><span class="co">#                           Cleaning R Environment                             #</span></span>
+<span id="cb1-3"><a href="using-software-to-generate-valid-inferences.html#cb1-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb1-4"><a href="using-software-to-generate-valid-inferences.html#cb1-4" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="using-software-to-generate-valid-inferences.html#cb1-5" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb1-6"><a href="using-software-to-generate-valid-inferences.html#cb1-6" tabindex="-1"></a><span class="fu">gc</span>()</span></code></pre></div>
+<pre><code>##          used (Mb) gc trigger (Mb) max used (Mb)
+## Ncells 542487 29.0    1219720 65.2   660485 35.3
+## Vcells 958338  7.4    8388608 64.0  1770410 13.6</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="using-software-to-generate-valid-inferences.html#cb3-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb3-2"><a href="using-software-to-generate-valid-inferences.html#cb3-2" tabindex="-1"></a><span class="co">#                                Libraries                                     #</span></span>
+<span id="cb3-3"><a href="using-software-to-generate-valid-inferences.html#cb3-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb3-4"><a href="using-software-to-generate-valid-inferences.html#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="using-software-to-generate-valid-inferences.html#cb3-5" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-6"><a href="using-software-to-generate-valid-inferences.html#cb3-6" tabindex="-1"></a><span class="fu">library</span>(survey)</span>
+<span id="cb3-7"><a href="using-software-to-generate-valid-inferences.html#cb3-7" tabindex="-1"></a><span class="fu">library</span>(srvyr)</span>
+<span id="cb3-8"><a href="using-software-to-generate-valid-inferences.html#cb3-8" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb3-9"><a href="using-software-to-generate-valid-inferences.html#cb3-9" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb3-10"><a href="using-software-to-generate-valid-inferences.html#cb3-10" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb3-11"><a href="using-software-to-generate-valid-inferences.html#cb3-11" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb3-12"><a href="using-software-to-generate-valid-inferences.html#cb3-12" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb3-13"><a href="using-software-to-generate-valid-inferences.html#cb3-13" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb3-14"><a href="using-software-to-generate-valid-inferences.html#cb3-14" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb3-15"><a href="using-software-to-generate-valid-inferences.html#cb3-15" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="using-software-to-generate-valid-inferences.html#cb3-16" tabindex="-1"></a><span class="co"># Ensure select function from dplyr is used explicitly</span></span>
+<span id="cb3-17"><a href="using-software-to-generate-valid-inferences.html#cb3-17" tabindex="-1"></a>select <span class="ot">&lt;-</span> dplyr<span class="sc">::</span>select</span>
+<span id="cb3-18"><a href="using-software-to-generate-valid-inferences.html#cb3-18" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="using-software-to-generate-valid-inferences.html#cb3-19" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb3-20"><a href="using-software-to-generate-valid-inferences.html#cb3-20" tabindex="-1"></a><span class="co">#                        Setting the RAM Memory Limit                          #</span></span>
+<span id="cb3-21"><a href="using-software-to-generate-valid-inferences.html#cb3-21" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb3-22"><a href="using-software-to-generate-valid-inferences.html#cb3-22" tabindex="-1"></a></span>
+<span id="cb3-23"><a href="using-software-to-generate-valid-inferences.html#cb3-23" tabindex="-1"></a><span class="fu">memory.limit</span>(<span class="dv">250000000</span>)</span></code></pre></div>
+<pre><code>## [1] Inf</code></pre>
+<div id="loading-datasets" class="section level3 unnumbered hasAnchor">
+<h3>Loading Datasets<a href="using-software-to-generate-valid-inferences.html#loading-datasets" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This <strong>R</strong> code loads and prepares a dataset for the <strong>ESS4</strong> survey analysis. It uses the <code>read_sav()</code> function to import a <strong>SPSS (.sav)</strong> file, ensuring the correct reading of the database. Then, the <code>select()</code> function is applied to extract only the key variables, including unique household and enumeration area identifiers, geographic location information, and stratification into urban and rural areas. Additionally, the final adjusted sampling weight is included, which is essential for obtaining representative estimates.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="using-software-to-generate-valid-inferences.html#cb5-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb5-2"><a href="using-software-to-generate-valid-inferences.html#cb5-2" tabindex="-1"></a><span class="co">#                           Loading Datasets                                   #</span></span>
+<span id="cb5-3"><a href="using-software-to-generate-valid-inferences.html#cb5-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb5-4"><a href="using-software-to-generate-valid-inferences.html#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="using-software-to-generate-valid-inferences.html#cb5-5" tabindex="-1"></a><span class="co"># Household identification; location; household size and field staff identification </span></span>
+<span id="cb5-6"><a href="using-software-to-generate-valid-inferences.html#cb5-6" tabindex="-1"></a>HH_data <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/sect_cover_hh_w4.sav&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="using-software-to-generate-valid-inferences.html#cb5-7" tabindex="-1"></a>  <span class="fu">select</span>(household_id, <span class="co"># Unique Household Identifier</span></span>
+<span id="cb5-8"><a href="using-software-to-generate-valid-inferences.html#cb5-8" tabindex="-1"></a>         ea_id,        <span class="co"># Unique Enumeration Area Identifier</span></span>
+<span id="cb5-9"><a href="using-software-to-generate-valid-inferences.html#cb5-9" tabindex="-1"></a>         saq14,        <span class="co"># Area = Rural/Urban</span></span>
+<span id="cb5-10"><a href="using-software-to-generate-valid-inferences.html#cb5-10" tabindex="-1"></a>         saq02,        <span class="co"># Zone Code</span></span>
+<span id="cb5-11"><a href="using-software-to-generate-valid-inferences.html#cb5-11" tabindex="-1"></a>         saq01,        <span class="co"># Region Code</span></span>
+<span id="cb5-12"><a href="using-software-to-generate-valid-inferences.html#cb5-12" tabindex="-1"></a>         pw_w4         <span class="co"># Final adjusted sampling weight</span></span>
+<span id="cb5-13"><a href="using-software-to-generate-valid-inferences.html#cb5-13" tabindex="-1"></a>         )</span></code></pre></div>
+<p>This code generates two summary tables that count the <strong>enumeration areas</strong> and <strong>households</strong> by region and type of area (urban/rural).</p>
+<p>First, the <strong><code>ea_counts_by_region</code></strong> table calculates the number of <strong>enumeration areas (EA)</strong> in each region and zone. To achieve this, unique EAs are identified and grouped by region and area type (urban or rural). The structure is then reorganized using <code>pivot_wider()</code> to display the rural and urban categories as separate columns. Finally, the total number of EAs per region is calculated, and the columns are renamed for better clarity.</p>
+<p>On the other hand, the <strong><code>hh_counts_by_region</code></strong> table follows a similar process, but instead of counting EAs, it counts the number of <strong>households</strong> by region and area type. Unique households are extracted along with their respective region and zone, then grouped and counted by category. Subsequently, the data is reorganized using <code>pivot_wider()</code>, allowing urban and rural households to be distinguished in separate columns. Finally, the total number of households per region is calculated, and the columns are renamed to ensure a clear and consistent format.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="using-software-to-generate-valid-inferences.html#cb6-1" tabindex="-1"></a>ea_counts_by_region <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="using-software-to-generate-valid-inferences.html#cb6-2" tabindex="-1"></a>  <span class="fu">distinct</span>(ea_id, saq14, saq01) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="using-software-to-generate-valid-inferences.html#cb6-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">saq14 =</span> <span class="fu">as_factor</span>(saq14), <span class="at">saq01 =</span> <span class="fu">as_factor</span>(saq01)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="using-software-to-generate-valid-inferences.html#cb6-4" tabindex="-1"></a>  <span class="fu">group_by</span>(saq01, saq14) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="using-software-to-generate-valid-inferences.html#cb6-5" tabindex="-1"></a>  <span class="fu">tally</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-6"><a href="using-software-to-generate-valid-inferences.html#cb6-6" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb6-7"><a href="using-software-to-generate-valid-inferences.html#cb6-7" tabindex="-1"></a>    <span class="at">names_from =</span> saq14,</span>
+<span id="cb6-8"><a href="using-software-to-generate-valid-inferences.html#cb6-8" tabindex="-1"></a>    <span class="at">values_from =</span> n,</span>
+<span id="cb6-9"><a href="using-software-to-generate-valid-inferences.html#cb6-9" tabindex="-1"></a>    <span class="at">values_fill =</span> <span class="fu">list</span>(<span class="at">n =</span> <span class="dv">0</span>)</span>
+<span id="cb6-10"><a href="using-software-to-generate-valid-inferences.html#cb6-10" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-11"><a href="using-software-to-generate-valid-inferences.html#cb6-11" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ea_counts_by_region =</span> RURAL <span class="sc">+</span> URBAN) <span class="sc">%&gt;%</span></span>
+<span id="cb6-12"><a href="using-software-to-generate-valid-inferences.html#cb6-12" tabindex="-1"></a>  <span class="fu">rename_with</span>( <span class="sc">~</span> <span class="fu">paste0</span>(., <span class="st">&quot;_ea_id&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;RURAL&quot;</span>, <span class="st">&quot;URBAN&quot;</span>))</span>
+<span id="cb6-13"><a href="using-software-to-generate-valid-inferences.html#cb6-13" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="using-software-to-generate-valid-inferences.html#cb6-14" tabindex="-1"></a><span class="co"># Count of Households (HH) by region and area (urban/rural) categories</span></span>
+<span id="cb6-15"><a href="using-software-to-generate-valid-inferences.html#cb6-15" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="using-software-to-generate-valid-inferences.html#cb6-16" tabindex="-1"></a>hh_counts_by_region <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb6-17"><a href="using-software-to-generate-valid-inferences.html#cb6-17" tabindex="-1"></a>  <span class="fu">distinct</span>(household_id, saq01, saq14) <span class="sc">%&gt;%</span></span>
+<span id="cb6-18"><a href="using-software-to-generate-valid-inferences.html#cb6-18" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">saq14 =</span> <span class="fu">as_factor</span>(saq14), <span class="at">saq01 =</span> <span class="fu">as_factor</span>(saq01)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-19"><a href="using-software-to-generate-valid-inferences.html#cb6-19" tabindex="-1"></a>  <span class="fu">group_by</span>(saq01, saq14) <span class="sc">%&gt;%</span></span>
+<span id="cb6-20"><a href="using-software-to-generate-valid-inferences.html#cb6-20" tabindex="-1"></a>  <span class="fu">tally</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-21"><a href="using-software-to-generate-valid-inferences.html#cb6-21" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb6-22"><a href="using-software-to-generate-valid-inferences.html#cb6-22" tabindex="-1"></a>    <span class="at">names_from =</span> saq14,</span>
+<span id="cb6-23"><a href="using-software-to-generate-valid-inferences.html#cb6-23" tabindex="-1"></a>    <span class="at">values_from =</span> n,</span>
+<span id="cb6-24"><a href="using-software-to-generate-valid-inferences.html#cb6-24" tabindex="-1"></a>    <span class="at">values_fill =</span> <span class="fu">list</span>(<span class="at">n =</span> <span class="dv">0</span>)</span>
+<span id="cb6-25"><a href="using-software-to-generate-valid-inferences.html#cb6-25" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-26"><a href="using-software-to-generate-valid-inferences.html#cb6-26" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">TOTAL_HH =</span> RURAL <span class="sc">+</span> URBAN) <span class="sc">%&gt;%</span></span>
+<span id="cb6-27"><a href="using-software-to-generate-valid-inferences.html#cb6-27" tabindex="-1"></a>  <span class="fu">rename_with</span>( <span class="sc">~</span> <span class="fu">paste0</span>(., <span class="st">&quot;_HH&quot;</span>), <span class="fu">c</span>(<span class="st">&quot;RURAL&quot;</span>, <span class="st">&quot;URBAN&quot;</span>))</span>
+<span id="cb6-28"><a href="using-software-to-generate-valid-inferences.html#cb6-28" tabindex="-1"></a></span>
+<span id="cb6-29"><a href="using-software-to-generate-valid-inferences.html#cb6-29" tabindex="-1"></a><span class="co"># Merging both datasets on saq01</span></span>
+<span id="cb6-30"><a href="using-software-to-generate-valid-inferences.html#cb6-30" tabindex="-1"></a>temp <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(hh_counts_by_region, ea_counts_by_region)</span></code></pre></div>
+<p>This <strong>R</strong> code generates a final summary of the survey results, including an additional row with the total consolidated for <strong>“ETHIOPIA”</strong>. To achieve this, it combines the regional data stored in <code>temp</code> with a new row representing the sum of all regions. This aggregation is performed using <code>summarise_if(is.numeric, sum)</code>, ensuring that all numeric variables are correctly summed, while the region column (<code>saq01</code>) is manually assigned as “ETHIOPIA”.</p>
+<p>Next, the dataset is reorganized using <code>select()</code>, where key variables are renamed for better clarity. The resulting table includes the number of <strong>rural and urban households</strong>, the <strong>number of enumeration areas</strong> for each type of zone, and the <strong>total counts</strong> of households and enumeration areas. Finally, it is converted into a <strong>data frame</strong> to facilitate manipulation and visualization. This process provides a structured view of the distribution of the population and enumeration areas, allowing for both regional analysis and a consolidated national overview.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="using-software-to-generate-valid-inferences.html#cb7-1" tabindex="-1"></a><span class="co"># Summarizing the results including an additional row for &quot;ETHIOPIA&quot;</span></span>
+<span id="cb7-2"><a href="using-software-to-generate-valid-inferences.html#cb7-2" tabindex="-1"></a>survey_counts <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb7-3"><a href="using-software-to-generate-valid-inferences.html#cb7-3" tabindex="-1"></a>  temp,</span>
+<span id="cb7-4"><a href="using-software-to-generate-valid-inferences.html#cb7-4" tabindex="-1"></a>  temp <span class="sc">%&gt;%</span> <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span> <span class="fu">summarise_if</span>(is.numeric, sum) <span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a href="using-software-to-generate-valid-inferences.html#cb7-5" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">saq01 =</span> <span class="st">&quot;ETHIOPIA&quot;</span>)</span>
+<span id="cb7-6"><a href="using-software-to-generate-valid-inferences.html#cb7-6" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-7"><a href="using-software-to-generate-valid-inferences.html#cb7-7" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb7-8"><a href="using-software-to-generate-valid-inferences.html#cb7-8" tabindex="-1"></a>    <span class="at">Region =</span> saq01,</span>
+<span id="cb7-9"><a href="using-software-to-generate-valid-inferences.html#cb7-9" tabindex="-1"></a>    RURAL_HH,</span>
+<span id="cb7-10"><a href="using-software-to-generate-valid-inferences.html#cb7-10" tabindex="-1"></a>    <span class="at">RURAL_AE =</span> RURAL_ea_id,</span>
+<span id="cb7-11"><a href="using-software-to-generate-valid-inferences.html#cb7-11" tabindex="-1"></a>    URBAN_HH,</span>
+<span id="cb7-12"><a href="using-software-to-generate-valid-inferences.html#cb7-12" tabindex="-1"></a>    <span class="at">URBAN_AE =</span> URBAN_ea_id,</span>
+<span id="cb7-13"><a href="using-software-to-generate-valid-inferences.html#cb7-13" tabindex="-1"></a>    TOTAL_HH,</span>
+<span id="cb7-14"><a href="using-software-to-generate-valid-inferences.html#cb7-14" tabindex="-1"></a>    <span class="at">TOTAL_AE =</span> ea_counts_by_region</span>
+<span id="cb7-15"><a href="using-software-to-generate-valid-inferences.html#cb7-15" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-16"><a href="using-software-to-generate-valid-inferences.html#cb7-16" tabindex="-1"></a>  <span class="fu">data.frame</span>()</span>
+<span id="cb7-17"><a href="using-software-to-generate-valid-inferences.html#cb7-17" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="using-software-to-generate-valid-inferences.html#cb7-18" tabindex="-1"></a><span class="co"># Display final result</span></span>
+<span id="cb7-19"><a href="using-software-to-generate-valid-inferences.html#cb7-19" tabindex="-1"></a><span class="fu">data.frame</span>(survey_counts)</span></code></pre></div>
+<p>The table summarizes the distribution of households and enumeration areas (EA) by region in Ethiopia, distinguishing between rural and urban areas. Nationally, the sample includes 6,770 households and 535 EAs, with a relatively balanced distribution between urban and rural areas.</p>
+<p>The regions with the highest number of rural households are Amhara (479), Oromia (453), and SNNP (422), while Addis Ababa is entirely urban (778 households and 52 EAs). In terms of EAs, Amhara and Oromia lead in rural areas, while Addis Ababa and Dire Dawa have higher urban concentrations.</p>
+<table>
+<colgroup>
+<col width="24%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">Region</th>
+<th align="center">RURAL_HH</th>
+<th align="center">RURAL_AE</th>
+<th align="center">URBAN_HH</th>
+<th align="center">URBAN_AE</th>
+<th align="center">TOTAL_HH</th>
+<th align="center">TOTAL_AE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">TIGRAY</td>
+<td align="center">393</td>
+<td align="center">35</td>
+<td align="center">283</td>
+<td align="center">19</td>
+<td align="center">676</td>
+<td align="center">54</td>
+</tr>
+<tr class="even">
+<td align="center">AFAR</td>
+<td align="center">299</td>
+<td align="center">28</td>
+<td align="center">225</td>
+<td align="center">15</td>
+<td align="center">524</td>
+<td align="center">43</td>
+</tr>
+<tr class="odd">
+<td align="center">AMHARA</td>
+<td align="center">479</td>
+<td align="center">43</td>
+<td align="center">271</td>
+<td align="center">18</td>
+<td align="center">750</td>
+<td align="center">61</td>
+</tr>
+<tr class="even">
+<td align="center">OROMIA</td>
+<td align="center">453</td>
+<td align="center">43</td>
+<td align="center">300</td>
+<td align="center">20</td>
+<td align="center">753</td>
+<td align="center">63</td>
+</tr>
+<tr class="odd">
+<td align="center">SOMALI</td>
+<td align="center">355</td>
+<td align="center">35</td>
+<td align="center">255</td>
+<td align="center">17</td>
+<td align="center">610</td>
+<td align="center">52</td>
+</tr>
+<tr class="even">
+<td align="center">BENISHANGUL GUMUZ</td>
+<td align="center">169</td>
+<td align="center">16</td>
+<td align="center">195</td>
+<td align="center">13</td>
+<td align="center">364</td>
+<td align="center">29</td>
+</tr>
+<tr class="odd">
+<td align="center">SNNP</td>
+<td align="center">422</td>
+<td align="center">40</td>
+<td align="center">269</td>
+<td align="center">18</td>
+<td align="center">691</td>
+<td align="center">58</td>
+</tr>
+<tr class="even">
+<td align="center">GAMBELA</td>
+<td align="center">195</td>
+<td align="center">19</td>
+<td align="center">300</td>
+<td align="center">20</td>
+<td align="center">495</td>
+<td align="center">39</td>
+</tr>
+<tr class="odd">
+<td align="center">HARAR</td>
+<td align="center">190</td>
+<td align="center">18</td>
+<td align="center">360</td>
+<td align="center">24</td>
+<td align="center">550</td>
+<td align="center">42</td>
+</tr>
+<tr class="even">
+<td align="center">ADDIS ABABA</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">778</td>
+<td align="center">52</td>
+<td align="center">778</td>
+<td align="center">52</td>
+</tr>
+<tr class="odd">
+<td align="center">DIRE DAWA</td>
+<td align="center">160</td>
+<td align="center">14</td>
+<td align="center">419</td>
+<td align="center">28</td>
+<td align="center">579</td>
+<td align="center">42</td>
+</tr>
+<tr class="even">
+<td align="center">ETHIOPIA</td>
+<td align="center">3115</td>
+<td align="center">291</td>
+<td align="center">3655</td>
+<td align="center">244</td>
+<td align="center">6770</td>
+<td align="center">535</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="defining-the-survey-design" class="section level3 unnumbered hasAnchor">
+<h3>Defining the survey design<a href="using-software-to-generate-valid-inferences.html#defining-the-survey-design" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This code defines the <strong>survey design</strong> for the <strong>ESS4</strong> survey using the <code>survey</code> package in <strong>R</strong>, ensuring that the analysis accurately reflects the sample structure.</p>
+<p>First, a new variable <code>strata</code> is created by combining the region (<code>saq01</code>) with the urban/rural classification (<code>saq14</code>), allowing for <strong>proper stratification</strong> of the design. Then, the dataset <code>HH_data</code> is converted into a survey design (<code>as_survey_design()</code>), specifying:<br />
+- <strong><code>ids = ea_id</code></strong>: Identifier of the primary sampling unit (enumeration area, EA).<br />
+- <strong><code>strata = strata</code></strong>: Stratification by region and urban/rural area.<br />
+- <strong><code>weights = pw_w4</code></strong>: Use of the adjusted sampling weight to obtain representative estimates.<br />
+- <strong><code>nest = TRUE</code></strong>: Indicates that sampling units are nested within strata.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="using-software-to-generate-valid-inferences.html#cb8-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb8-2"><a href="using-software-to-generate-valid-inferences.html#cb8-2" tabindex="-1"></a><span class="co"># Defining the survey design</span></span>
+<span id="cb8-3"><a href="using-software-to-generate-valid-inferences.html#cb8-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb8-4"><a href="using-software-to-generate-valid-inferences.html#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="using-software-to-generate-valid-inferences.html#cb8-5" tabindex="-1"></a>ESS4_design <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb8-6"><a href="using-software-to-generate-valid-inferences.html#cb8-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strata =</span> <span class="fu">paste0</span>(saq01, <span class="st">&quot;_&quot;</span>, saq14)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-7"><a href="using-software-to-generate-valid-inferences.html#cb8-7" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(</span>
+<span id="cb8-8"><a href="using-software-to-generate-valid-inferences.html#cb8-8" tabindex="-1"></a>    <span class="at">ids =</span> ea_id,</span>
+<span id="cb8-9"><a href="using-software-to-generate-valid-inferences.html#cb8-9" tabindex="-1"></a>    <span class="co"># Primary sampling unit identifier (EA)</span></span>
+<span id="cb8-10"><a href="using-software-to-generate-valid-inferences.html#cb8-10" tabindex="-1"></a>    <span class="at">strata =</span> strata,</span>
+<span id="cb8-11"><a href="using-software-to-generate-valid-inferences.html#cb8-11" tabindex="-1"></a>    <span class="co"># Stratification by region (saq01) and urban/rural zone (saq14)</span></span>
+<span id="cb8-12"><a href="using-software-to-generate-valid-inferences.html#cb8-12" tabindex="-1"></a>    <span class="at">weights =</span> pw_w4,</span>
+<span id="cb8-13"><a href="using-software-to-generate-valid-inferences.html#cb8-13" tabindex="-1"></a>    <span class="co"># Final adjusted weight</span></span>
+<span id="cb8-14"><a href="using-software-to-generate-valid-inferences.html#cb8-14" tabindex="-1"></a>    <span class="at">nest =</span> <span class="cn">TRUE</span></span>
+<span id="cb8-15"><a href="using-software-to-generate-valid-inferences.html#cb8-15" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Additionally, the option <code>survey.lonely.psu = "fail"</code> is set, causing the code to produce an error if a stratum has only a single, non-certainty primary sampling unit (PSU), ensuring a correctly specified survey design. Finally, <code>summary(ESS4_design)</code> is used to display a summary of the design, allowing verification of its structure before analysis.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="using-software-to-generate-valid-inferences.html#cb9-1" tabindex="-1"></a><span class="co"># Makes it an error to have a stratum with a single, non-certainty PSU</span></span>
+<span id="cb9-2"><a href="using-software-to-generate-valid-inferences.html#cb9-2" tabindex="-1"></a><span class="fu">options</span>(<span class="at">survey.lonely.psu =</span> <span class="st">&quot;fail&quot;</span>)</span>
+<span id="cb9-3"><a href="using-software-to-generate-valid-inferences.html#cb9-3" tabindex="-1"></a><span class="fu">summary</span>(ESS4_design)</span></code></pre></div>
+<pre><code>## Stratified 1 - level Cluster Sampling design (with replacement)
+## With (535) clusters.
+## Called via srvyr
+## Probabilities:
+##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## 3.932e-05 1.997e-04 7.680e-04 2.814e-03 4.164e-03 1.317e-01 
+## Stratum Sizes: 
+##            1_1 1_2 12_1 12_2 13_1 13_2 14_2 15_1 15_2 2_1 2_2 3_1 3_2 4_1 4_2
+## obs        393 283  195  300  190  360  778  160  419 299 225 479 271 453 300
+## design.PSU  35  19   19   20   18   24   52   14   28  28  15  43  18  43  20
+## actual.PSU  35  19   19   20   18   24   52   14   28  28  15  43  18  43  20
+##            5_1 5_2 6_1 6_2 7_1 7_2
+## obs        355 255 169 195 422 269
+## design.PSU  35  17  16  13  40  18
+## actual.PSU  35  17  16  13  40  18
+## Data variables:
+## [1] &quot;household_id&quot; &quot;ea_id&quot;        &quot;saq14&quot;        &quot;saq02&quot;        &quot;saq01&quot;       
+## [6] &quot;pw_w4&quot;        &quot;strata&quot;</code></pre>
+<p>The results confirm that the <strong>ESS4</strong> survey design was correctly implemented using a <strong>stratified cluster sampling approach (PSU) with replacement</strong>. The stratification combines the region and the urban/rural classification, ensuring representativeness at both levels.</p>
+<p>The sample includes <strong>535 clusters (PSU)</strong>, and the number of primary sampling units in each stratum matches the planned design, indicating a consistent execution. The selection probabilities vary by region and area type, reflecting a sampling design adjusted to the population’s characteristics.</p>
+<p>Overall, these results validate the sampling structure and ensure that the derived estimates are representative at both the national and regional levels, accounting for geographic distribution and urban-rural stratification.</p>
+
+</div>
 </div>
             </section>
 
@@ -195,7 +483,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         </div>
       </div>
 <a href="data-source.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="loading-datasets.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="descriptive-parameters.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
