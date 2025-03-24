@@ -12,6 +12,6 @@ rmd_files: [
   "3.4_Percentiles_and_inequality_measures.Rmd",
   "4.2_Cross_tabulations.rmd",
   "4.3_Testing_for_independence.Rmd", 
-  "4.4_Tests_for_group_comparisons.Rmd"
- 
+  "4.4_Tests_for_group_comparisons.Rmd",
+  "5.3_Linear_Models.Rmd"
 ]

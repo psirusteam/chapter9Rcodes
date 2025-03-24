@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="testing-for-independence.html"/>
-
+<link rel="next" href="linear-models.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -197,6 +197,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#conducting-group-comparisons-on-expenditure"><i class="fa fa-check"></i>Conducting Group Comparisons on expenditure</a></li>
 <li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#hypothesis-testing-for-group-comparisons"><i class="fa fa-check"></i>Hypothesis Testing for Group Comparisons</a></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html"><i class="fa fa-check"></i>5.3 Linear Models</a>
+<ul>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html#prepare-the-work-environment-8"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html#processing-demographic-information"><i class="fa fa-check"></i>Processing Demographic Information</a></li>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html#estimating-linear-models"><i class="fa fa-check"></i>Estimating Linear Models</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a CHAPTER 9 - EXAMPLES IN R </a></li>
 
@@ -230,8 +236,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb80-5"><a href="tests-for-group-comparisons.html#cb80-5" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
 <span id="cb80-6"><a href="tests-for-group-comparisons.html#cb80-6" tabindex="-1"></a><span class="fu">gc</span>()</span></code></pre></div>
 <pre><code>##          used (Mb) gc trigger (Mb) max used (Mb)
-## Ncells 542683 29.0    1220280 65.2   660485 35.3
-## Vcells 956139  7.3    8388608 64.0  1770410 13.6</code></pre>
+## Ncells 542703 29.0    1220337 65.2   660485 35.3
+## Vcells 957081  7.4    8388608 64.0  1770410 13.6</code></pre>
 <div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="tests-for-group-comparisons.html#cb82-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
 <span id="cb82-2"><a href="tests-for-group-comparisons.html#cb82-2" tabindex="-1"></a><span class="co">#                                Libraries                                     #</span></span>
 <span id="cb82-3"><a href="tests-for-group-comparisons.html#cb82-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
@@ -887,8 +893,8 @@ URBAN
           </div>
         </div>
       </div>
-<a href="testing-for-independence.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="testing-for-independence.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="linear-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -943,6 +949,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

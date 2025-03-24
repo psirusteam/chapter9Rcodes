@@ -1,0 +1,220 @@
+```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE,
+                      cache = TRUE, 
+                      cache.path = "cache/5.3/")
+```
+
+# 5.3 Linear Models {-}
+
+This section presents a comprehensive analysis of household expenditure determinants using Ethiopia's 2018/19 Socioeconomic Survey (ESS4) data. The workflow processes demographic variables and expenditure data, implements proper survey weighting methodology, and estimates linear regression models to examine how factors like urban/rural residence, religion, gender, and age influence per capita spending. The analysis employs log-transformed expenditure as the outcome variable and includes interaction terms to assess differential effects across population subgroups, while rigorously accounting for the complex survey design through appropriate weighting, stratification, and clustering adjustments.
+
+### Prepare the work environment {-}
+
+This initial block prepares the environment for conducting statistical analysis using data from the Ethiopia Socioeconomic Survey (ESS4). It begins by clearing the R workspace and performing garbage collection, ensuring a clean and efficient session. Then, it loads the necessary libraries for complex survey analysis, data manipulation (`dplyr`, `data.table`), data import (`haven`), visualization (`ggplot2`), and model diagnostics (`svydiags`, `broom`).  
+
+Next, two key datasets are imported from SPSS (.sav) files:  
+- **`EXP_data`** contains nonfood household expenditure records, where **total household expenditure** is computed by summing reported items, assigning zero for items not purchased.  
+- **`IND_data`** includes general household information, such as demographic and socioeconomic characteristics, which will be merged later with the expenditure data for further analysis.
+
+
+
+```{r}
+
+#------------------------------------------------------------------------------#
+#                           Cleaning R Environment                             #
+#------------------------------------------------------------------------------#
+
+rm(list = ls())
+gc()
+
+#------------------------------------------------------------------------------#
+#                                Libraries                                     #
+#------------------------------------------------------------------------------#
+
+library(dplyr)
+library(survey)
+library(srvyr)
+library(data.table)
+library(magrittr)
+library(haven)
+library(stringr)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+library(ggplot2)
+library(svydiags)
+library(broom)
+
+# Ensure the correct use of dplyr's select function
+select <- dplyr::select
+
+#------------------------------------------------------------------------------#
+#                           Loading Datasets                                   #
+#------------------------------------------------------------------------------#
+
+## Household expenditure data
+EXP_data <- read_sav("data/data_ESS4/sect7b_hh_w4_v2.sav") %>%
+  mutate(expenditure = ifelse(s7q03 == 2, 0, s7q04)) %>%
+  group_by(household_id) %>%
+  summarise(total_expenditure = sum(expenditure, na.rm = TRUE))
+
+## General household information
+IND_data <- read_sav("data/data_ESS4/sect1_hh_w4.sav")
+
+
+```
+
+###  Processing Demographic Information {-}
+
+This block processes key demographic information from Section 1 of the ESS4 household questionnaire. A new dataset called `IND_data_age` is created by selecting and transforming relevant variables for subsequent analysis. These include the household and individual identifiers, enumeration area (`ea_id`), final survey weights (`pw_w4`), region (`saq01`), and urban/rural classification (`saq14`). A stratification variable (`strata`) is also defined by combining region and zone.
+
+A new categorical variable, `age_group`, classifies **adults (18 years or older)** into four age groups: 18–30, 31–45, 46–65, and 66 or more. The dataset also includes **sex (`Sex`)** and **religion (`Religion`)**, with less frequent religious groups (such as "PEGAN", "TRADITIONAL", "WAKEFETA", and "OTHER (SPECIFY)") recoded into a unified `"OTHER"` category. Missing values are handled accordingly, ensuring a standardized and robust structure for reliable demographic analyses.
+
+
+```{r}
+#------------------------------------------------------------------------------#
+#                     Processing Demographic Information                       #
+#------------------------------------------------------------------------------#
+
+## Age grouping and demographic characteristics
+IND_data_age <- IND_data %>%
+  transmute(
+    household_id,
+    individual_id,
+    ea_id,
+    # Primary sampling unit identifier (EA)
+    pw_w4,
+    saq01,
+    # Region
+    Zone = as_factor(saq14),
+    # Urban/Rural classification
+    strata = paste0(saq01, "_", saq14),
+    # Stratification region-zone
+    s1q03a,
+    # Age in years
+    age_group = case_when(
+      s1q03a < 18 ~ NA_character_,
+      s1q03a < 31 ~ "18-30",
+      s1q03a < 46 ~ "31-45",
+      s1q03a < 66 ~ "46-65",
+      TRUE ~ "66 or more"
+    ),
+    Sex = as_factor(s1q02),
+    Religion = as_factor(s1q08) %>%
+      recode(
+        "6. PEGAN" = "OTHER",
+        "5. TRADITIONAL" = "OTHER",
+        "8. OTHER (SPECIFY)" = "OTHER",
+        "7. WAKEFETA" = "OTHER"
+      ) %>%
+      replace_na("OTHER")
+  )
+```
+
+This block prepares an integrated dataset with sociodemographic information, marital status, and per capita household expenditure for regression analysis. First, it processes the **marital status (`s1q09`)** by converting it into a readable character format and assigning `"not answered"` to missing values. Then, it calculates **per capita household expenditure** by dividing total household expenditure (`total_expenditure`) by household size (`saq09`), based on the household roster.
+
+Next, three datasets are merged:  
+1. `IND_data_age`: demographic variables (age, sex, religion, age group, zone).  
+2. `IND_data1_marital`: marital status.  
+3. `HH_data_expenditure`: per capita household spending.  
+
+The resulting dataset, `IND_data_regression`, is filtered to include only individuals **aged 18 and above**, aligning with standard practices in adult socioeconomic analysis. Lastly, the processed dataset is saved as an `.rds` file for use in upcoming regression modeling.
+
+
+
+```{r}
+#------------------------------------------------------------------------------#
+#                      Processing Marital Status                               #
+#------------------------------------------------------------------------------#
+
+IND_data1 <- read_sav("data/data_ESS4/sect1_hh_w4.sav")
+
+IND_data1_marital <- IND_data1 %>%
+  transmute(household_id,
+            individual_id,
+            s1q09 = as.character(as_factor(s1q09)) %>%
+              replace_na("not answered"))
+
+#------------------------------------------------------------------------------#
+#                     Household Expenditure Per Capita                         #
+#------------------------------------------------------------------------------#
+
+HH_data <- read_sav("data/data_ESS4/sect_cover_hh_w4.sav") %>%
+  inner_join(EXP_data, by = "household_id")
+
+HH_data_expenditure <- HH_data %>%
+  transmute(household_id,
+            percapita_expenditure = total_expenditure / saq09)
+
+#------------------------------------------------------------------------------#
+#                 Merging Datasets for Regression Analysis                     #
+#------------------------------------------------------------------------------#
+
+IND_data_regression <- IND_data_age %>%
+  inner_join(IND_data1_marital, by = c("household_id", "individual_id")) %>%
+  inner_join(HH_data_expenditure, by = "household_id") %>%
+  filter(s1q03a >= 18)
+
+# Saving processed dataset
+saveRDS(IND_data_regression,
+        "data/data_ESS4/IND_data_regression.rds")
+```
+ 
+This block reuses the previously defined complex survey design (`ESS4_design`) to fit a **linear regression model** on the logarithm of per capita expenditure (`log_expenditure`). The aim is to explore how demographic and social characteristics—such as age group, sex, religion, and marital status—are associated with individuals’ spending levels. This analysis helps uncover systematic consumption differences across population subgroups, while accounting for the ESS4’s stratified design and sample weights.
+
+
+
+```{r}
+#------------------------------------------------------------------------------#
+#                          Defining Survey Design                              #
+#------------------------------------------------------------------------------#
+
+ESS4_design <- IND_data_regression %>%
+  filter(percapita_expenditure > 0) %>%
+  as_survey_design(
+    ids = ea_id,
+    # Primary sampling unit identifier (EA)
+    strata = strata,
+    # Stratification by region (saq01) and urban/rural zone (Zone)
+    weights = pw_w4,
+    # Final adjusted weight
+    nest = TRUE
+  ) %>%
+  mutate(log_expenditure = log(percapita_expenditure + 70))
+
+options(survey.lonely.psu = "fail") # Adjust to handle singleton PSUs
+summary(ESS4_design)
+```
+
+### Estimating Linear Models {-}
+
+The model specification block implements a weighted linear regression using the `svyglm()` function, analyzing log-transformed per capita expenditure as the dependent variable. The model includes main effects for area (urban/rural), religion, gender, and age groups, along with interaction terms between area and religion to assess differential effects. The inclusion of the `ESS4_design` object ensures all estimates incorporate sampling weights, region/area stratification, and primary sampling unit clustering, meeting complex data analysis requirements.
+
+
+```{r}
+#------------------------------------------------------------------------------#
+#                         Estimating Linear Models                             #
+#------------------------------------------------------------------------------#
+
+# Survey-weighted linear model for log expenditure
+EXP_model <-
+  svyglm(log_expenditure  ~ 1 + Zone * Religion + Zone + Sex + age_group,
+         design = ESS4_design)
+```
+
+The model results reveal significant patterns: urban households show 62% higher expenditure than rural ones (*$\beta=0.622$, $p<0.001$*), while female-headed households spend on average 6.2% less. Notable religious disparities emerge, with Catholic (-84%), Protestant (-38%), and Muslim (-53%) households showing lower expenditure than the reference group. The significant area-religion interaction (e.g., +90% for urban Catholics) indicates the urban economic advantage varies substantially by religious affiliation. All coefficients are interpretable as percentage differences thanks to the logarithmic transformation of the response variable.
+
+```{r}
+# Display model coefficients
+summary(EXP_model)
+```
+
+ 
+The model summary provides robust standard errors, t-values, and significance levels for each parameter, identifying statistically relevant effects (p<0.001). The dispersion parameter (0.727) and convergence iterations offer information about model fit. Direct coefficient extraction via `coef()` facilitates their use in further analysis. Importantly, confidence intervals and p-values are properly adjusted for the complex survey design, ensuring valid population-level inferences.
+
+
+```{r}
+EXP_model %>% coef()
+
+```

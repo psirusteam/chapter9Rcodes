@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>5.3 Linear Models | CHAPTER 9 - EXAMPLES IN R</title>
+  <meta name="description" content="5.3 Linear Models | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="5.3 Linear Models | CHAPTER 9 - EXAMPLES IN R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="5.3 Linear Models | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="github-repo" content="psirusteam/chapter9Rcodes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="5.3 Linear Models | CHAPTER 9 - EXAMPLES IN R" />
+  
+  <meta name="twitter:description" content="5.3 Linear Models | CHAPTER 9 - EXAMPLES IN R" />
+  
+
+<meta name="author" content="" />
+
+
+<meta name="date" content="2025-03-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="tests-for-group-comparisons.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">CHAPTER 9 - EXAMPLES IN R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Abstract</a></li>
+<li class="chapter" data-level="" data-path="accounting-for-the-sampling-design.html"><a href="accounting-for-the-sampling-design.html"><i class="fa fa-check"></i>Accounting for the Sampling Design</a>
+<ul>
+<li class="chapter" data-level="" data-path="sample-design-of-the-ess4-20182019.html"><a href="sample-design-of-the-ess4-20182019.html"><i class="fa fa-check"></i>Sample design of the ESS4 2018/2019</a></li>
+<li class="chapter" data-level="" data-path="data-source.html"><a href="data-source.html"><i class="fa fa-check"></i>Data Source</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html"><i class="fa fa-check"></i>2.3 Using Software to Generate Valid Inferences</a>
+<ul>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#prepare-the-work-environment"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#loading-datasets"><i class="fa fa-check"></i>Loading Datasets</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#defining-the-survey-design"><i class="fa fa-check"></i>Defining the survey design</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html"><i class="fa fa-check"></i>3.1 Frequencies and Proportions</a>
+<ul>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#prepare-the-work-environment-1"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#estimating-totals-and-proportions"><i class="fa fa-check"></i>Estimating totals and proportions</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#formatting-and-presenting-results"><i class="fa fa-check"></i>Formatting and presenting results</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html"><i class="fa fa-check"></i>3.2 Totals, means and ratios</a>
+<ul>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#prepare-the-work-environment-2"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-totals-and-means"><i class="fa fa-check"></i>Estimation of totals and means</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-ratio"><i class="fa fa-check"></i>Estimation of Ratio</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimating-the-ratio-of-educational-expenditure"><i class="fa fa-check"></i>Estimating the Ratio of Educational Expenditure</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html"><i class="fa fa-check"></i>3.3 Correlations</a>
+<ul>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#prepare-the-work-environment-3"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#estimating-correlations"><i class="fa fa-check"></i>Estimating Correlations</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html"><i class="fa fa-check"></i>3.4 Percentiles and inequality measures</a>
+<ul>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#prepare-the-work-environment-4"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#estimating-the-mean-and-median-of-total-other-income"><i class="fa fa-check"></i>Estimating the Mean and Median of Total Other Income</a></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#the-gini-coefficient."><i class="fa fa-check"></i>The Gini Coefficient.</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html"><i class="fa fa-check"></i>4.2 Cross-tabulations</a>
+<ul>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#prepare-the-work-environment-5"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#processing-variables-for-analysis"><i class="fa fa-check"></i>Processing Variables for Analysis</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#estimating-proportions-and-totals-by-religion"><i class="fa fa-check"></i>Estimating Proportions and Totals by Religion</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#formatting-and-displaying-cross-tabulation-tables"><i class="fa fa-check"></i>Formatting and Displaying Cross-tabulation Tables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html"><i class="fa fa-check"></i>4.3 Testing for Independence</a>
+<ul>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#prepare-the-work-environment-6"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#processing-education-variables"><i class="fa fa-check"></i>Processing Education Variables</a></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#testing-for-independence-1"><i class="fa fa-check"></i>Testing for Independence</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html"><i class="fa fa-check"></i>4.4 Tests for Group Comparisons</a>
+<ul>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#prepare-the-work-environment-7"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#conducting-group-comparisons-on-expenditure"><i class="fa fa-check"></i>Conducting Group Comparisons on expenditure</a></li>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#hypothesis-testing-for-group-comparisons"><i class="fa fa-check"></i>Hypothesis Testing for Group Comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html"><i class="fa fa-check"></i>5.3 Linear Models</a>
+<ul>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html#prepare-the-work-environment-8"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html#processing-demographic-information"><i class="fa fa-check"></i>Processing Demographic Information</a></li>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html#estimating-linear-models"><i class="fa fa-check"></i>Estimating Linear Models</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a CHAPTER 9 - EXAMPLES IN R </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CHAPTER 9 - EXAMPLES IN R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="linear-models" class="section level1 unnumbered hasAnchor">
+<h1>5.3 Linear Models<a href="linear-models.html#linear-models" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>This section presents a comprehensive analysis of household expenditure determinants using Ethiopia’s 2018/19 Socioeconomic Survey (ESS4) data. The workflow processes demographic variables and expenditure data, implements proper survey weighting methodology, and estimates linear regression models to examine how factors like urban/rural residence, religion, gender, and age influence per capita spending. The analysis employs log-transformed expenditure as the outcome variable and includes interaction terms to assess differential effects across population subgroups, while rigorously accounting for the complex survey design through appropriate weighting, stratification, and clustering adjustments.</p>
+<div id="prepare-the-work-environment-8" class="section level3 unnumbered hasAnchor">
+<h3>Prepare the work environment<a href="linear-models.html#prepare-the-work-environment-8" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This initial block prepares the environment for conducting statistical analysis using data from the Ethiopia Socioeconomic Survey (ESS4). It begins by clearing the R workspace and performing garbage collection, ensuring a clean and efficient session. Then, it loads the necessary libraries for complex survey analysis, data manipulation (<code>dplyr</code>, <code>data.table</code>), data import (<code>haven</code>), visualization (<code>ggplot2</code>), and model diagnostics (<code>svydiags</code>, <code>broom</code>).</p>
+<p>Next, two key datasets are imported from SPSS (.sav) files:<br />
+- <strong><code>EXP_data</code></strong> contains nonfood household expenditure records, where <strong>total household expenditure</strong> is computed by summing reported items, assigning zero for items not purchased.<br />
+- <strong><code>IND_data</code></strong> includes general household information, such as demographic and socioeconomic characteristics, which will be merged later with the expenditure data for further analysis.</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="linear-models.html#cb94-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb94-2"><a href="linear-models.html#cb94-2" tabindex="-1"></a><span class="co">#                           Cleaning R Environment                             #</span></span>
+<span id="cb94-3"><a href="linear-models.html#cb94-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb94-4"><a href="linear-models.html#cb94-4" tabindex="-1"></a></span>
+<span id="cb94-5"><a href="linear-models.html#cb94-5" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb94-6"><a href="linear-models.html#cb94-6" tabindex="-1"></a><span class="fu">gc</span>()</span></code></pre></div>
+<pre><code>##          used (Mb) gc trigger (Mb) max used (Mb)
+## Ncells 542614 29.0    1220082 65.2   660485 35.3
+## Vcells 957440  7.4    8388608 64.0  1770406 13.6</code></pre>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="linear-models.html#cb96-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb96-2"><a href="linear-models.html#cb96-2" tabindex="-1"></a><span class="co">#                                Libraries                                     #</span></span>
+<span id="cb96-3"><a href="linear-models.html#cb96-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb96-4"><a href="linear-models.html#cb96-4" tabindex="-1"></a></span>
+<span id="cb96-5"><a href="linear-models.html#cb96-5" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb96-6"><a href="linear-models.html#cb96-6" tabindex="-1"></a><span class="fu">library</span>(survey)</span>
+<span id="cb96-7"><a href="linear-models.html#cb96-7" tabindex="-1"></a><span class="fu">library</span>(srvyr)</span>
+<span id="cb96-8"><a href="linear-models.html#cb96-8" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb96-9"><a href="linear-models.html#cb96-9" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb96-10"><a href="linear-models.html#cb96-10" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb96-11"><a href="linear-models.html#cb96-11" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb96-12"><a href="linear-models.html#cb96-12" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb96-13"><a href="linear-models.html#cb96-13" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb96-14"><a href="linear-models.html#cb96-14" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb96-15"><a href="linear-models.html#cb96-15" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb96-16"><a href="linear-models.html#cb96-16" tabindex="-1"></a><span class="fu">library</span>(svydiags)</span>
+<span id="cb96-17"><a href="linear-models.html#cb96-17" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb96-18"><a href="linear-models.html#cb96-18" tabindex="-1"></a></span>
+<span id="cb96-19"><a href="linear-models.html#cb96-19" tabindex="-1"></a><span class="co"># Ensure the correct use of dplyr&#39;s select function</span></span>
+<span id="cb96-20"><a href="linear-models.html#cb96-20" tabindex="-1"></a>select <span class="ot">&lt;-</span> dplyr<span class="sc">::</span>select</span>
+<span id="cb96-21"><a href="linear-models.html#cb96-21" tabindex="-1"></a></span>
+<span id="cb96-22"><a href="linear-models.html#cb96-22" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb96-23"><a href="linear-models.html#cb96-23" tabindex="-1"></a><span class="co">#                           Loading Datasets                                   #</span></span>
+<span id="cb96-24"><a href="linear-models.html#cb96-24" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb96-25"><a href="linear-models.html#cb96-25" tabindex="-1"></a></span>
+<span id="cb96-26"><a href="linear-models.html#cb96-26" tabindex="-1"></a><span class="do">## Household expenditure data</span></span>
+<span id="cb96-27"><a href="linear-models.html#cb96-27" tabindex="-1"></a>EXP_data <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/sect7b_hh_w4_v2.sav&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb96-28"><a href="linear-models.html#cb96-28" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">expenditure =</span> <span class="fu">ifelse</span>(s7q03 <span class="sc">==</span> <span class="dv">2</span>, <span class="dv">0</span>, s7q04)) <span class="sc">%&gt;%</span></span>
+<span id="cb96-29"><a href="linear-models.html#cb96-29" tabindex="-1"></a>  <span class="fu">group_by</span>(household_id) <span class="sc">%&gt;%</span></span>
+<span id="cb96-30"><a href="linear-models.html#cb96-30" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_expenditure =</span> <span class="fu">sum</span>(expenditure, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb96-31"><a href="linear-models.html#cb96-31" tabindex="-1"></a></span>
+<span id="cb96-32"><a href="linear-models.html#cb96-32" tabindex="-1"></a><span class="do">## General household information</span></span>
+<span id="cb96-33"><a href="linear-models.html#cb96-33" tabindex="-1"></a>IND_data <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/sect1_hh_w4.sav&quot;</span>)</span></code></pre></div>
+</div>
+<div id="processing-demographic-information" class="section level3 unnumbered hasAnchor">
+<h3>Processing Demographic Information<a href="linear-models.html#processing-demographic-information" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block processes key demographic information from Section 1 of the ESS4 household questionnaire. A new dataset called <code>IND_data_age</code> is created by selecting and transforming relevant variables for subsequent analysis. These include the household and individual identifiers, enumeration area (<code>ea_id</code>), final survey weights (<code>pw_w4</code>), region (<code>saq01</code>), and urban/rural classification (<code>saq14</code>). A stratification variable (<code>strata</code>) is also defined by combining region and zone.</p>
+<p>A new categorical variable, <code>age_group</code>, classifies <strong>adults (18 years or older)</strong> into four age groups: 18–30, 31–45, 46–65, and 66 or more. The dataset also includes <strong>sex (<code>Sex</code>)</strong> and <strong>religion (<code>Religion</code>)</strong>, with less frequent religious groups (such as “PEGAN”, “TRADITIONAL”, “WAKEFETA”, and “OTHER (SPECIFY)”) recoded into a unified <code>"OTHER"</code> category. Missing values are handled accordingly, ensuring a standardized and robust structure for reliable demographic analyses.</p>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="linear-models.html#cb97-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb97-2"><a href="linear-models.html#cb97-2" tabindex="-1"></a><span class="co">#                     Processing Demographic Information                       #</span></span>
+<span id="cb97-3"><a href="linear-models.html#cb97-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb97-4"><a href="linear-models.html#cb97-4" tabindex="-1"></a></span>
+<span id="cb97-5"><a href="linear-models.html#cb97-5" tabindex="-1"></a><span class="do">## Age grouping and demographic characteristics</span></span>
+<span id="cb97-6"><a href="linear-models.html#cb97-6" tabindex="-1"></a>IND_data_age <span class="ot">&lt;-</span> IND_data <span class="sc">%&gt;%</span></span>
+<span id="cb97-7"><a href="linear-models.html#cb97-7" tabindex="-1"></a>  <span class="fu">transmute</span>(</span>
+<span id="cb97-8"><a href="linear-models.html#cb97-8" tabindex="-1"></a>    household_id,</span>
+<span id="cb97-9"><a href="linear-models.html#cb97-9" tabindex="-1"></a>    individual_id,</span>
+<span id="cb97-10"><a href="linear-models.html#cb97-10" tabindex="-1"></a>    ea_id,</span>
+<span id="cb97-11"><a href="linear-models.html#cb97-11" tabindex="-1"></a>    <span class="co"># Primary sampling unit identifier (EA)</span></span>
+<span id="cb97-12"><a href="linear-models.html#cb97-12" tabindex="-1"></a>    pw_w4,</span>
+<span id="cb97-13"><a href="linear-models.html#cb97-13" tabindex="-1"></a>    saq01,</span>
+<span id="cb97-14"><a href="linear-models.html#cb97-14" tabindex="-1"></a>    <span class="co"># Region</span></span>
+<span id="cb97-15"><a href="linear-models.html#cb97-15" tabindex="-1"></a>    <span class="at">Zone =</span> <span class="fu">as_factor</span>(saq14),</span>
+<span id="cb97-16"><a href="linear-models.html#cb97-16" tabindex="-1"></a>    <span class="co"># Urban/Rural classification</span></span>
+<span id="cb97-17"><a href="linear-models.html#cb97-17" tabindex="-1"></a>    <span class="at">strata =</span> <span class="fu">paste0</span>(saq01, <span class="st">&quot;_&quot;</span>, saq14),</span>
+<span id="cb97-18"><a href="linear-models.html#cb97-18" tabindex="-1"></a>    <span class="co"># Stratification region-zone</span></span>
+<span id="cb97-19"><a href="linear-models.html#cb97-19" tabindex="-1"></a>    s1q03a,</span>
+<span id="cb97-20"><a href="linear-models.html#cb97-20" tabindex="-1"></a>    <span class="co"># Age in years</span></span>
+<span id="cb97-21"><a href="linear-models.html#cb97-21" tabindex="-1"></a>    <span class="at">age_group =</span> <span class="fu">case_when</span>(</span>
+<span id="cb97-22"><a href="linear-models.html#cb97-22" tabindex="-1"></a>      s1q03a <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">~</span> <span class="cn">NA_character_</span>,</span>
+<span id="cb97-23"><a href="linear-models.html#cb97-23" tabindex="-1"></a>      s1q03a <span class="sc">&lt;</span> <span class="dv">31</span> <span class="sc">~</span> <span class="st">&quot;18-30&quot;</span>,</span>
+<span id="cb97-24"><a href="linear-models.html#cb97-24" tabindex="-1"></a>      s1q03a <span class="sc">&lt;</span> <span class="dv">46</span> <span class="sc">~</span> <span class="st">&quot;31-45&quot;</span>,</span>
+<span id="cb97-25"><a href="linear-models.html#cb97-25" tabindex="-1"></a>      s1q03a <span class="sc">&lt;</span> <span class="dv">66</span> <span class="sc">~</span> <span class="st">&quot;46-65&quot;</span>,</span>
+<span id="cb97-26"><a href="linear-models.html#cb97-26" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;66 or more&quot;</span></span>
+<span id="cb97-27"><a href="linear-models.html#cb97-27" tabindex="-1"></a>    ),</span>
+<span id="cb97-28"><a href="linear-models.html#cb97-28" tabindex="-1"></a>    <span class="at">Sex =</span> <span class="fu">as_factor</span>(s1q02),</span>
+<span id="cb97-29"><a href="linear-models.html#cb97-29" tabindex="-1"></a>    <span class="at">Religion =</span> <span class="fu">as_factor</span>(s1q08) <span class="sc">%&gt;%</span></span>
+<span id="cb97-30"><a href="linear-models.html#cb97-30" tabindex="-1"></a>      <span class="fu">recode</span>(</span>
+<span id="cb97-31"><a href="linear-models.html#cb97-31" tabindex="-1"></a>        <span class="st">&quot;6. PEGAN&quot;</span> <span class="ot">=</span> <span class="st">&quot;OTHER&quot;</span>,</span>
+<span id="cb97-32"><a href="linear-models.html#cb97-32" tabindex="-1"></a>        <span class="st">&quot;5. TRADITIONAL&quot;</span> <span class="ot">=</span> <span class="st">&quot;OTHER&quot;</span>,</span>
+<span id="cb97-33"><a href="linear-models.html#cb97-33" tabindex="-1"></a>        <span class="st">&quot;8. OTHER (SPECIFY)&quot;</span> <span class="ot">=</span> <span class="st">&quot;OTHER&quot;</span>,</span>
+<span id="cb97-34"><a href="linear-models.html#cb97-34" tabindex="-1"></a>        <span class="st">&quot;7. WAKEFETA&quot;</span> <span class="ot">=</span> <span class="st">&quot;OTHER&quot;</span></span>
+<span id="cb97-35"><a href="linear-models.html#cb97-35" tabindex="-1"></a>      ) <span class="sc">%&gt;%</span></span>
+<span id="cb97-36"><a href="linear-models.html#cb97-36" tabindex="-1"></a>      <span class="fu">replace_na</span>(<span class="st">&quot;OTHER&quot;</span>)</span>
+<span id="cb97-37"><a href="linear-models.html#cb97-37" tabindex="-1"></a>  )</span></code></pre></div>
+<p>This block prepares an integrated dataset with sociodemographic information, marital status, and per capita household expenditure for regression analysis. First, it processes the <strong>marital status (<code>s1q09</code>)</strong> by converting it into a readable character format and assigning <code>"not answered"</code> to missing values. Then, it calculates <strong>per capita household expenditure</strong> by dividing total household expenditure (<code>total_expenditure</code>) by household size (<code>saq09</code>), based on the household roster.</p>
+<p>Next, three datasets are merged:<br />
+1. <code>IND_data_age</code>: demographic variables (age, sex, religion, age group, zone).<br />
+2. <code>IND_data1_marital</code>: marital status.<br />
+3. <code>HH_data_expenditure</code>: per capita household spending.</p>
+<p>The resulting dataset, <code>IND_data_regression</code>, is filtered to include only individuals <strong>aged 18 and above</strong>, aligning with standard practices in adult socioeconomic analysis. Lastly, the processed dataset is saved as an <code>.rds</code> file for use in upcoming regression modeling.</p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="linear-models.html#cb98-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb98-2"><a href="linear-models.html#cb98-2" tabindex="-1"></a><span class="co">#                      Processing Marital Status                               #</span></span>
+<span id="cb98-3"><a href="linear-models.html#cb98-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb98-4"><a href="linear-models.html#cb98-4" tabindex="-1"></a></span>
+<span id="cb98-5"><a href="linear-models.html#cb98-5" tabindex="-1"></a>IND_data1 <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/sect1_hh_w4.sav&quot;</span>)</span>
+<span id="cb98-6"><a href="linear-models.html#cb98-6" tabindex="-1"></a></span>
+<span id="cb98-7"><a href="linear-models.html#cb98-7" tabindex="-1"></a>IND_data1_marital <span class="ot">&lt;-</span> IND_data1 <span class="sc">%&gt;%</span></span>
+<span id="cb98-8"><a href="linear-models.html#cb98-8" tabindex="-1"></a>  <span class="fu">transmute</span>(household_id,</span>
+<span id="cb98-9"><a href="linear-models.html#cb98-9" tabindex="-1"></a>            individual_id,</span>
+<span id="cb98-10"><a href="linear-models.html#cb98-10" tabindex="-1"></a>            <span class="at">s1q09 =</span> <span class="fu">as.character</span>(<span class="fu">as_factor</span>(s1q09)) <span class="sc">%&gt;%</span></span>
+<span id="cb98-11"><a href="linear-models.html#cb98-11" tabindex="-1"></a>              <span class="fu">replace_na</span>(<span class="st">&quot;not answered&quot;</span>))</span>
+<span id="cb98-12"><a href="linear-models.html#cb98-12" tabindex="-1"></a></span>
+<span id="cb98-13"><a href="linear-models.html#cb98-13" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb98-14"><a href="linear-models.html#cb98-14" tabindex="-1"></a><span class="co">#                     Household Expenditure Per Capita                         #</span></span>
+<span id="cb98-15"><a href="linear-models.html#cb98-15" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb98-16"><a href="linear-models.html#cb98-16" tabindex="-1"></a></span>
+<span id="cb98-17"><a href="linear-models.html#cb98-17" tabindex="-1"></a>HH_data <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/sect_cover_hh_w4.sav&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb98-18"><a href="linear-models.html#cb98-18" tabindex="-1"></a>  <span class="fu">inner_join</span>(EXP_data, <span class="at">by =</span> <span class="st">&quot;household_id&quot;</span>)</span>
+<span id="cb98-19"><a href="linear-models.html#cb98-19" tabindex="-1"></a></span>
+<span id="cb98-20"><a href="linear-models.html#cb98-20" tabindex="-1"></a>HH_data_expenditure <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb98-21"><a href="linear-models.html#cb98-21" tabindex="-1"></a>  <span class="fu">transmute</span>(household_id,</span>
+<span id="cb98-22"><a href="linear-models.html#cb98-22" tabindex="-1"></a>            <span class="at">percapita_expenditure =</span> total_expenditure <span class="sc">/</span> saq09)</span>
+<span id="cb98-23"><a href="linear-models.html#cb98-23" tabindex="-1"></a></span>
+<span id="cb98-24"><a href="linear-models.html#cb98-24" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb98-25"><a href="linear-models.html#cb98-25" tabindex="-1"></a><span class="co">#                 Merging Datasets for Regression Analysis                     #</span></span>
+<span id="cb98-26"><a href="linear-models.html#cb98-26" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb98-27"><a href="linear-models.html#cb98-27" tabindex="-1"></a></span>
+<span id="cb98-28"><a href="linear-models.html#cb98-28" tabindex="-1"></a>IND_data_regression <span class="ot">&lt;-</span> IND_data_age <span class="sc">%&gt;%</span></span>
+<span id="cb98-29"><a href="linear-models.html#cb98-29" tabindex="-1"></a>  <span class="fu">inner_join</span>(IND_data1_marital, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;household_id&quot;</span>, <span class="st">&quot;individual_id&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb98-30"><a href="linear-models.html#cb98-30" tabindex="-1"></a>  <span class="fu">inner_join</span>(HH_data_expenditure, <span class="at">by =</span> <span class="st">&quot;household_id&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb98-31"><a href="linear-models.html#cb98-31" tabindex="-1"></a>  <span class="fu">filter</span>(s1q03a <span class="sc">&gt;=</span> <span class="dv">18</span>)</span>
+<span id="cb98-32"><a href="linear-models.html#cb98-32" tabindex="-1"></a></span>
+<span id="cb98-33"><a href="linear-models.html#cb98-33" tabindex="-1"></a><span class="co"># Saving processed dataset</span></span>
+<span id="cb98-34"><a href="linear-models.html#cb98-34" tabindex="-1"></a><span class="fu">saveRDS</span>(IND_data_regression,</span>
+<span id="cb98-35"><a href="linear-models.html#cb98-35" tabindex="-1"></a>        <span class="st">&quot;data/data_ESS4/IND_data_regression.rds&quot;</span>)</span></code></pre></div>
+<p>This block reuses the previously defined complex survey design (<code>ESS4_design</code>) to fit a <strong>linear regression model</strong> on the logarithm of per capita expenditure (<code>log_expenditure</code>). The aim is to explore how demographic and social characteristics—such as age group, sex, religion, and marital status—are associated with individuals’ spending levels. This analysis helps uncover systematic consumption differences across population subgroups, while accounting for the ESS4’s stratified design and sample weights.</p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="linear-models.html#cb99-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb99-2"><a href="linear-models.html#cb99-2" tabindex="-1"></a><span class="co">#                          Defining Survey Design                              #</span></span>
+<span id="cb99-3"><a href="linear-models.html#cb99-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb99-4"><a href="linear-models.html#cb99-4" tabindex="-1"></a></span>
+<span id="cb99-5"><a href="linear-models.html#cb99-5" tabindex="-1"></a>ESS4_design <span class="ot">&lt;-</span> IND_data_regression <span class="sc">%&gt;%</span></span>
+<span id="cb99-6"><a href="linear-models.html#cb99-6" tabindex="-1"></a>  <span class="fu">filter</span>(percapita_expenditure <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb99-7"><a href="linear-models.html#cb99-7" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(</span>
+<span id="cb99-8"><a href="linear-models.html#cb99-8" tabindex="-1"></a>    <span class="at">ids =</span> ea_id,</span>
+<span id="cb99-9"><a href="linear-models.html#cb99-9" tabindex="-1"></a>    <span class="co"># Primary sampling unit identifier (EA)</span></span>
+<span id="cb99-10"><a href="linear-models.html#cb99-10" tabindex="-1"></a>    <span class="at">strata =</span> strata,</span>
+<span id="cb99-11"><a href="linear-models.html#cb99-11" tabindex="-1"></a>    <span class="co"># Stratification by region (saq01) and urban/rural zone (Zone)</span></span>
+<span id="cb99-12"><a href="linear-models.html#cb99-12" tabindex="-1"></a>    <span class="at">weights =</span> pw_w4,</span>
+<span id="cb99-13"><a href="linear-models.html#cb99-13" tabindex="-1"></a>    <span class="co"># Final adjusted weight</span></span>
+<span id="cb99-14"><a href="linear-models.html#cb99-14" tabindex="-1"></a>    <span class="at">nest =</span> <span class="cn">TRUE</span></span>
+<span id="cb99-15"><a href="linear-models.html#cb99-15" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb99-16"><a href="linear-models.html#cb99-16" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">log_expenditure =</span> <span class="fu">log</span>(percapita_expenditure <span class="sc">+</span> <span class="dv">70</span>))</span>
+<span id="cb99-17"><a href="linear-models.html#cb99-17" tabindex="-1"></a></span>
+<span id="cb99-18"><a href="linear-models.html#cb99-18" tabindex="-1"></a><span class="fu">options</span>(<span class="at">survey.lonely.psu =</span> <span class="st">&quot;fail&quot;</span>) <span class="co"># Adjust to handle singleton PSUs</span></span>
+<span id="cb99-19"><a href="linear-models.html#cb99-19" tabindex="-1"></a><span class="fu">summary</span>(ESS4_design)</span></code></pre></div>
+<pre><code>## Stratified 1 - level Cluster Sampling design (with replacement)
+## With (534) clusters.
+## Called via srvyr
+## Probabilities:
+##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## 3.932e-05 1.763e-04 7.591e-04 2.577e-03 3.962e-03 1.317e-01 
+## Stratum Sizes: 
+##            1_1 1_2 12_1 12_2 13_1 13_2 14_2 15_1 15_2 2_1 2_2  3_1 3_2  4_1 4_2
+## obs        919 517  430  596  388  668 1923  316  901 662 393 1105 481 1026 591
+## design.PSU  35  19   18   20   18   24   52   14   28  28  15   43  18   43  20
+## actual.PSU  35  19   18   20   18   24   52   14   28  28  15   43  18   43  20
+##            5_1 5_2 6_1 6_2 7_1 7_2
+## obs        763 549 360 327 989 532
+## design.PSU  35  17  16  13  40  18
+## actual.PSU  35  17  16  13  40  18
+## Data variables:
+##  [1] &quot;household_id&quot;          &quot;individual_id&quot;         &quot;ea_id&quot;                
+##  [4] &quot;pw_w4&quot;                 &quot;saq01&quot;                 &quot;Zone&quot;                 
+##  [7] &quot;strata&quot;                &quot;s1q03a&quot;                &quot;age_group&quot;            
+## [10] &quot;Sex&quot;                   &quot;Religion&quot;              &quot;s1q09&quot;                
+## [13] &quot;percapita_expenditure&quot; &quot;log_expenditure&quot;</code></pre>
+</div>
+<div id="estimating-linear-models" class="section level3 unnumbered hasAnchor">
+<h3>Estimating Linear Models<a href="linear-models.html#estimating-linear-models" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The model specification block implements a weighted linear regression using the <code>svyglm()</code> function, analyzing log-transformed per capita expenditure as the dependent variable. The model includes main effects for area (urban/rural), religion, gender, and age groups, along with interaction terms between area and religion to assess differential effects. The inclusion of the <code>ESS4_design</code> object ensures all estimates incorporate sampling weights, region/area stratification, and primary sampling unit clustering, meeting complex data analysis requirements.</p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="linear-models.html#cb101-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb101-2"><a href="linear-models.html#cb101-2" tabindex="-1"></a><span class="co">#                         Estimating Linear Models                             #</span></span>
+<span id="cb101-3"><a href="linear-models.html#cb101-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb101-4"><a href="linear-models.html#cb101-4" tabindex="-1"></a></span>
+<span id="cb101-5"><a href="linear-models.html#cb101-5" tabindex="-1"></a><span class="co"># Survey-weighted linear model for log expenditure</span></span>
+<span id="cb101-6"><a href="linear-models.html#cb101-6" tabindex="-1"></a>EXP_model <span class="ot">&lt;-</span></span>
+<span id="cb101-7"><a href="linear-models.html#cb101-7" tabindex="-1"></a>  <span class="fu">svyglm</span>(log_expenditure  <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Zone <span class="sc">*</span> Religion <span class="sc">+</span> Zone <span class="sc">+</span> Sex <span class="sc">+</span> age_group,</span>
+<span id="cb101-8"><a href="linear-models.html#cb101-8" tabindex="-1"></a>         <span class="at">design =</span> ESS4_design)</span></code></pre></div>
+<p>The model results reveal significant patterns: urban households show 62% higher expenditure than rural ones (<em><span class="math inline">\(\beta=0.622\)</span>, <span class="math inline">\(p&lt;0.001\)</span></em>), while female-headed households spend on average 6.2% less. Notable religious disparities emerge, with Catholic (-84%), Protestant (-38%), and Muslim (-53%) households showing lower expenditure than the reference group. The significant area-religion interaction (e.g., +90% for urban Catholics) indicates the urban economic advantage varies substantially by religious affiliation. All coefficients are interpretable as percentage differences thanks to the logarithmic transformation of the response variable.</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="linear-models.html#cb102-1" tabindex="-1"></a><span class="co"># Display model coefficients</span></span>
+<span id="cb102-2"><a href="linear-models.html#cb102-2" tabindex="-1"></a><span class="fu">summary</span>(EXP_model)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## svyglm(formula = log_expenditure ~ 1 + Zone * Religion + Zone + 
+##     Sex + age_group, design = ESS4_design)
+## 
+## Survey design:
+## Called via srvyr
+## 
+## Coefficients:
+##                                    Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                         6.75103    0.06376 105.882  &lt; 2e-16 ***
+## Zone2. URBAN                        0.62235    0.08999   6.916 1.43e-11 ***
+## Religion2. CATHOLIC                -0.83665    0.33704  -2.482  0.01338 *  
+## Religion3. PROTESTANT              -0.37824    0.09629  -3.928 9.76e-05 ***
+## Religion4. MUSLEM                  -0.52809    0.08640  -6.112 1.98e-09 ***
+## ReligionOTHER                      -0.27937    0.10867  -2.571  0.01043 *  
+## Sex2. Female                       -0.06211    0.01450  -4.284 2.20e-05 ***
+## age_group31-45                     -0.08358    0.02644  -3.161  0.00167 ** 
+## age_group46-65                     -0.09009    0.03114  -2.893  0.00398 ** 
+## age_group66 or more                -0.17498    0.06199  -2.823  0.00495 ** 
+## Zone2. URBAN:Religion2. CATHOLIC    0.90298    0.39443   2.289  0.02248 *  
+## Zone2. URBAN:Religion3. PROTESTANT  0.25355    0.13325   1.903  0.05763 .  
+## Zone2. URBAN:Religion4. MUSLEM      0.16567    0.12553   1.320  0.18752    
+## Zone2. URBAN:ReligionOTHER         -0.65549    0.28641  -2.289  0.02252 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for gaussian family taken to be 0.7269917)
+## 
+## Number of Fisher Scoring iterations: 2</code></pre>
+<p>The model summary provides robust standard errors, t-values, and significance levels for each parameter, identifying statistically relevant effects (p&lt;0.001). The dispersion parameter (0.727) and convergence iterations offer information about model fit. Direct coefficient extraction via <code>coef()</code> facilitates their use in further analysis. Importantly, confidence intervals and p-values are properly adjusted for the complex survey design, ensuring valid population-level inferences.</p>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="linear-models.html#cb104-1" tabindex="-1"></a>EXP_model <span class="sc">%&gt;%</span> <span class="fu">coef</span>()</span></code></pre></div>
+<pre><code>##                        (Intercept)                       Zone2. URBAN 
+##                         6.75103013                         0.62235134 
+##                Religion2. CATHOLIC              Religion3. PROTESTANT 
+##                        -0.83664621                        -0.37824277 
+##                  Religion4. MUSLEM                      ReligionOTHER 
+##                        -0.52808542                        -0.27937202 
+##                       Sex2. Female                     age_group31-45 
+##                        -0.06210920                        -0.08358242 
+##                     age_group46-65                age_group66 or more 
+##                        -0.09008758                        -0.17498242 
+##   Zone2. URBAN:Religion2. CATHOLIC Zone2. URBAN:Religion3. PROTESTANT 
+##                         0.90298319                         0.25355058 
+##     Zone2. URBAN:Religion4. MUSLEM         Zone2. URBAN:ReligionOTHER 
+##                         0.16566844                        -0.65548554</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="tests-for-group-comparisons.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/psirusteam/chapter9Rcodes/5.3_Linear_Models.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["CHAPTER 9 - EXAMPLES IN R.pdf", "CHAPTER 9 - EXAMPLES IN R.epub", "CHAPTER 9 - EXAMPLES IN R.mobi"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"tconfig": null
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
