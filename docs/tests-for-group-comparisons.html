@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4.4 Tests for Group Comparisons | CHAPTER 9 - EXAMPLES IN R</title>
+  <meta name="description" content="4.4 Tests for Group Comparisons | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4.4 Tests for Group Comparisons | CHAPTER 9 - EXAMPLES IN R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="4.4 Tests for Group Comparisons | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="github-repo" content="psirusteam/chapter9Rcodes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4.4 Tests for Group Comparisons | CHAPTER 9 - EXAMPLES IN R" />
+  
+  <meta name="twitter:description" content="4.4 Tests for Group Comparisons | CHAPTER 9 - EXAMPLES IN R" />
+  
+
+<meta name="author" content="" />
+
+
+<meta name="date" content="2025-03-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="testing-for-independence.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">CHAPTER 9 - EXAMPLES IN R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Abstract</a></li>
+<li class="chapter" data-level="" data-path="accounting-for-the-sampling-design.html"><a href="accounting-for-the-sampling-design.html"><i class="fa fa-check"></i>Accounting for the Sampling Design</a>
+<ul>
+<li class="chapter" data-level="" data-path="sample-design-of-the-ess4-20182019.html"><a href="sample-design-of-the-ess4-20182019.html"><i class="fa fa-check"></i>Sample design of the ESS4 2018/2019</a></li>
+<li class="chapter" data-level="" data-path="data-source.html"><a href="data-source.html"><i class="fa fa-check"></i>Data Source</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html"><i class="fa fa-check"></i>2.3 Using Software to Generate Valid Inferences</a>
+<ul>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#prepare-the-work-environment"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#loading-datasets"><i class="fa fa-check"></i>Loading Datasets</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#defining-the-survey-design"><i class="fa fa-check"></i>Defining the survey design</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html"><i class="fa fa-check"></i>3.1 Frequencies and Proportions</a>
+<ul>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#prepare-the-work-environment-1"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#estimating-totals-and-proportions"><i class="fa fa-check"></i>Estimating totals and proportions</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#formatting-and-presenting-results"><i class="fa fa-check"></i>Formatting and presenting results</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html"><i class="fa fa-check"></i>3.2 Totals, means and ratios</a>
+<ul>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#prepare-the-work-environment-2"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-totals-and-means"><i class="fa fa-check"></i>Estimation of totals and means</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-ratio"><i class="fa fa-check"></i>Estimation of Ratio</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimating-the-ratio-of-educational-expenditure"><i class="fa fa-check"></i>Estimating the Ratio of Educational Expenditure</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html"><i class="fa fa-check"></i>3.3 Correlations</a>
+<ul>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#prepare-the-work-environment-3"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#estimating-correlations"><i class="fa fa-check"></i>Estimating Correlations</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html"><i class="fa fa-check"></i>3.4 Percentiles and inequality measures</a>
+<ul>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#prepare-the-work-environment-4"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#estimating-the-mean-and-median-of-total-other-income"><i class="fa fa-check"></i>Estimating the Mean and Median of Total Other Income</a></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#the-gini-coefficient."><i class="fa fa-check"></i>The Gini Coefficient.</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html"><i class="fa fa-check"></i>4.2 Cross-tabulations</a>
+<ul>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#prepare-the-work-environment-5"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#processing-variables-for-analysis"><i class="fa fa-check"></i>Processing Variables for Analysis</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#estimating-proportions-and-totals-by-religion"><i class="fa fa-check"></i>Estimating Proportions and Totals by Religion</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#formatting-and-displaying-cross-tabulation-tables"><i class="fa fa-check"></i>Formatting and Displaying Cross-tabulation Tables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html"><i class="fa fa-check"></i>4.3 Testing for Independence</a>
+<ul>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#prepare-the-work-environment-6"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#processing-education-variables"><i class="fa fa-check"></i>Processing Education Variables</a></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#testing-for-independence-1"><i class="fa fa-check"></i>Testing for Independence</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html"><i class="fa fa-check"></i>4.4 Tests for Group Comparisons</a>
+<ul>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#prepare-the-work-environment-7"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#conducting-group-comparisons-on-expenditure"><i class="fa fa-check"></i>Conducting Group Comparisons on expenditure</a></li>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#hypothesis-testing-for-group-comparisons"><i class="fa fa-check"></i>Hypothesis Testing for Group Comparisons</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a CHAPTER 9 - EXAMPLES IN R </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CHAPTER 9 - EXAMPLES IN R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="tests-for-group-comparisons" class="section level1 unnumbered hasAnchor">
+<h1>4.4 Tests for Group Comparisons<a href="tests-for-group-comparisons.html#tests-for-group-comparisons" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>This section presents a comprehensive analysis of expenditure disparities across urban and rural areas in Ethiopia using the ESS4 survey data. The code performs three key operations: (1) calculates weighted mean expenditures at national and regional levels, (2) compares urban-rural differences through descriptive statistics, and (3) conducts formal hypothesis testing using design-adjusted t-tests. The analysis properly accounts for the complex survey design through stratification, clustering, and sampling weights, enabling robust estimation of expenditure patterns and their statistical significance across different geographic classifications.</p>
+<div id="prepare-the-work-environment-7" class="section level3 unnumbered hasAnchor">
+<h3>Prepare the work environment<a href="tests-for-group-comparisons.html#prepare-the-work-environment-7" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block begins a new section of the analysis focused on computing per capita expenditure using data from the nonfood expenditure module of the ESS4 household questionnaire. It starts by cleaning the R environment and loading the required libraries for processing and analyzing complex survey data. Then, the nonfood expenditure dataset is imported and transformed to compute total household expenditure, considering only items that were actually purchased (based on s7q03). The household cover dataset is then loaded and merged at the household level, allowing the calculation of per capita expenditure by dividing total expenditure by household size (saq09). This variable will serve as the basis for analyzing expenditure distribution and inequality.</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="tests-for-group-comparisons.html#cb80-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb80-2"><a href="tests-for-group-comparisons.html#cb80-2" tabindex="-1"></a><span class="co">#                           Cleaning R Environment                             #</span></span>
+<span id="cb80-3"><a href="tests-for-group-comparisons.html#cb80-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb80-4"><a href="tests-for-group-comparisons.html#cb80-4" tabindex="-1"></a></span>
+<span id="cb80-5"><a href="tests-for-group-comparisons.html#cb80-5" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb80-6"><a href="tests-for-group-comparisons.html#cb80-6" tabindex="-1"></a><span class="fu">gc</span>()</span></code></pre></div>
+<pre><code>##          used (Mb) gc trigger (Mb) max used (Mb)
+## Ncells 542683 29.0    1220280 65.2   660485 35.3
+## Vcells 956139  7.3    8388608 64.0  1770410 13.6</code></pre>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="tests-for-group-comparisons.html#cb82-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb82-2"><a href="tests-for-group-comparisons.html#cb82-2" tabindex="-1"></a><span class="co">#                                Libraries                                     #</span></span>
+<span id="cb82-3"><a href="tests-for-group-comparisons.html#cb82-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb82-4"><a href="tests-for-group-comparisons.html#cb82-4" tabindex="-1"></a></span>
+<span id="cb82-5"><a href="tests-for-group-comparisons.html#cb82-5" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb82-6"><a href="tests-for-group-comparisons.html#cb82-6" tabindex="-1"></a><span class="fu">library</span>(survey)</span>
+<span id="cb82-7"><a href="tests-for-group-comparisons.html#cb82-7" tabindex="-1"></a><span class="fu">library</span>(srvyr)</span>
+<span id="cb82-8"><a href="tests-for-group-comparisons.html#cb82-8" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb82-9"><a href="tests-for-group-comparisons.html#cb82-9" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb82-10"><a href="tests-for-group-comparisons.html#cb82-10" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb82-11"><a href="tests-for-group-comparisons.html#cb82-11" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb82-12"><a href="tests-for-group-comparisons.html#cb82-12" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb82-13"><a href="tests-for-group-comparisons.html#cb82-13" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb82-14"><a href="tests-for-group-comparisons.html#cb82-14" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb82-15"><a href="tests-for-group-comparisons.html#cb82-15" tabindex="-1"></a></span>
+<span id="cb82-16"><a href="tests-for-group-comparisons.html#cb82-16" tabindex="-1"></a><span class="co"># Ensure select function from dplyr is used explicitly</span></span>
+<span id="cb82-17"><a href="tests-for-group-comparisons.html#cb82-17" tabindex="-1"></a>select <span class="ot">&lt;-</span> dplyr<span class="sc">::</span>select</span>
+<span id="cb82-18"><a href="tests-for-group-comparisons.html#cb82-18" tabindex="-1"></a></span>
+<span id="cb82-19"><a href="tests-for-group-comparisons.html#cb82-19" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb82-20"><a href="tests-for-group-comparisons.html#cb82-20" tabindex="-1"></a><span class="co">#                        Setting the RAM Memory Limit                          #</span></span>
+<span id="cb82-21"><a href="tests-for-group-comparisons.html#cb82-21" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb82-22"><a href="tests-for-group-comparisons.html#cb82-22" tabindex="-1"></a></span>
+<span id="cb82-23"><a href="tests-for-group-comparisons.html#cb82-23" tabindex="-1"></a><span class="fu">memory.limit</span>(<span class="dv">250000000</span>)</span></code></pre></div>
+<pre><code>## [1] Inf</code></pre>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="tests-for-group-comparisons.html#cb84-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb84-2"><a href="tests-for-group-comparisons.html#cb84-2" tabindex="-1"></a><span class="co">#                           Loading Datasets                                   #</span></span>
+<span id="cb84-3"><a href="tests-for-group-comparisons.html#cb84-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb84-4"><a href="tests-for-group-comparisons.html#cb84-4" tabindex="-1"></a></span>
+<span id="cb84-5"><a href="tests-for-group-comparisons.html#cb84-5" tabindex="-1"></a>EXP_data <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/sect7b_hh_w4_v2.sav&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb84-6"><a href="tests-for-group-comparisons.html#cb84-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">expenditure =</span> <span class="fu">ifelse</span>(s7q03 <span class="sc">==</span> <span class="dv">2</span>, <span class="dv">0</span>, s7q04)) <span class="sc">%&gt;%</span></span>
+<span id="cb84-7"><a href="tests-for-group-comparisons.html#cb84-7" tabindex="-1"></a>  <span class="fu">group_by</span>(household_id) <span class="sc">%&gt;%</span></span>
+<span id="cb84-8"><a href="tests-for-group-comparisons.html#cb84-8" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">total_expenditure =</span> <span class="fu">sum</span>(expenditure, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb84-9"><a href="tests-for-group-comparisons.html#cb84-9" tabindex="-1"></a></span>
+<span id="cb84-10"><a href="tests-for-group-comparisons.html#cb84-10" tabindex="-1"></a>HH_data <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/sect_cover_hh_w4.sav&quot;</span>)</span>
+<span id="cb84-11"><a href="tests-for-group-comparisons.html#cb84-11" tabindex="-1"></a></span>
+<span id="cb84-12"><a href="tests-for-group-comparisons.html#cb84-12" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb84-13"><a href="tests-for-group-comparisons.html#cb84-13" tabindex="-1"></a><span class="co">#                      Processing Per Capita Expenditure                       #</span></span>
+<span id="cb84-14"><a href="tests-for-group-comparisons.html#cb84-14" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb84-15"><a href="tests-for-group-comparisons.html#cb84-15" tabindex="-1"></a></span>
+<span id="cb84-16"><a href="tests-for-group-comparisons.html#cb84-16" tabindex="-1"></a><span class="co"># Merging household data with expenditure data</span></span>
+<span id="cb84-17"><a href="tests-for-group-comparisons.html#cb84-17" tabindex="-1"></a>HH_data <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span> </span>
+<span id="cb84-18"><a href="tests-for-group-comparisons.html#cb84-18" tabindex="-1"></a>  <span class="fu">inner_join</span>(EXP_data) <span class="sc">%&gt;%</span> </span>
+<span id="cb84-19"><a href="tests-for-group-comparisons.html#cb84-19" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percapita_expenditure =</span> total_expenditure <span class="sc">/</span> saq09)</span></code></pre></div>
+<p>This block reuses the complex survey design structure previously documented. It is based on stratification by region and area of residence, with primary sampling (ea_id) and adjusted sampling weights (pw_w4). This setup ensures that subsequent estimates properly reflect the ESS4 survey’s sampling design.</p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="tests-for-group-comparisons.html#cb85-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb85-2"><a href="tests-for-group-comparisons.html#cb85-2" tabindex="-1"></a><span class="co">#                          Defining Survey Design                              #</span></span>
+<span id="cb85-3"><a href="tests-for-group-comparisons.html#cb85-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb85-4"><a href="tests-for-group-comparisons.html#cb85-4" tabindex="-1"></a></span>
+<span id="cb85-5"><a href="tests-for-group-comparisons.html#cb85-5" tabindex="-1"></a>ESS4_design <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb85-6"><a href="tests-for-group-comparisons.html#cb85-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strata =</span> <span class="fu">paste0</span>(saq01, <span class="st">&quot;_&quot;</span>, saq14)) <span class="sc">%&gt;%</span></span>
+<span id="cb85-7"><a href="tests-for-group-comparisons.html#cb85-7" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(</span>
+<span id="cb85-8"><a href="tests-for-group-comparisons.html#cb85-8" tabindex="-1"></a>    <span class="at">ids =</span> ea_id,</span>
+<span id="cb85-9"><a href="tests-for-group-comparisons.html#cb85-9" tabindex="-1"></a>    <span class="co"># Primary sampling unit identifier (EA)</span></span>
+<span id="cb85-10"><a href="tests-for-group-comparisons.html#cb85-10" tabindex="-1"></a>    <span class="at">strata =</span> strata,</span>
+<span id="cb85-11"><a href="tests-for-group-comparisons.html#cb85-11" tabindex="-1"></a>    <span class="co"># Stratification by region (saq01) and urban/rural zone (saq14)</span></span>
+<span id="cb85-12"><a href="tests-for-group-comparisons.html#cb85-12" tabindex="-1"></a>    <span class="at">weights =</span> pw_w4,</span>
+<span id="cb85-13"><a href="tests-for-group-comparisons.html#cb85-13" tabindex="-1"></a>    <span class="co"># Final adjusted weight</span></span>
+<span id="cb85-14"><a href="tests-for-group-comparisons.html#cb85-14" tabindex="-1"></a>    <span class="at">nest =</span> <span class="cn">TRUE</span></span>
+<span id="cb85-15"><a href="tests-for-group-comparisons.html#cb85-15" tabindex="-1"></a>  )</span></code></pre></div>
+</div>
+<div id="conducting-group-comparisons-on-expenditure" class="section level3 unnumbered hasAnchor">
+<h3>Conducting Group Comparisons on expenditure<a href="tests-for-group-comparisons.html#conducting-group-comparisons-on-expenditure" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block compares average per capita expenditure between urban and rural areas. Using the complex survey design, it estimates the mean (<code>M_hat</code>) per person, along with its standard error (<code>M_hat_se</code>) and 95% confidence interval (<code>M_hat_low</code>, <code>M_hat_upp</code>) for each group (saq14). The results reveal a clear disparity: average expenditure in urban areas (1,924 ) is more than double that of rural areas (762 ), highlighting differences in living standards between the two settings.</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="tests-for-group-comparisons.html#cb86-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb86-2"><a href="tests-for-group-comparisons.html#cb86-2" tabindex="-1"></a><span class="co">#                   Conducting Group Comparisons on expenditure                #</span></span>
+<span id="cb86-3"><a href="tests-for-group-comparisons.html#cb86-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb86-4"><a href="tests-for-group-comparisons.html#cb86-4" tabindex="-1"></a></span>
+<span id="cb86-5"><a href="tests-for-group-comparisons.html#cb86-5" tabindex="-1"></a><span class="co"># Mean estimates by urban/rural classification</span></span>
+<span id="cb86-6"><a href="tests-for-group-comparisons.html#cb86-6" tabindex="-1"></a>ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb86-7"><a href="tests-for-group-comparisons.html#cb86-7" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">saq14 =</span> <span class="fu">as_factor</span>(saq14)) <span class="sc">%&gt;%</span></span>
+<span id="cb86-8"><a href="tests-for-group-comparisons.html#cb86-8" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">M_hat =</span> <span class="fu">survey_mean</span>(percapita_expenditure, <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb86-9"><a href="tests-for-group-comparisons.html#cb86-9" tabindex="-1"></a>  <span class="fu">data.frame</span>()</span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+saq14
+</th>
+<th style="text-align:right;">
+M_hat
+</th>
+<th style="text-align:right;">
+M_hat_se
+</th>
+<th style="text-align:right;">
+M_hat_low
+</th>
+<th style="text-align:right;">
+M_hat_upp
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+RURAL
+</td>
+<td style="text-align:right;">
+762.2367
+</td>
+<td style="text-align:right;">
+46.77375
+</td>
+<td style="text-align:right;">
+670.3454
+</td>
+<td style="text-align:right;">
+854.1279
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+URBAN
+</td>
+<td style="text-align:right;">
+1923.6611
+</td>
+<td style="text-align:right;">
+122.61229
+</td>
+<td style="text-align:right;">
+1682.7782
+</td>
+<td style="text-align:right;">
+2164.5439
+</td>
+</tr>
+</tbody>
+</table>
+<p>This code calculates mean per capita expenditure estimates across Ethiopian regions, disaggregated by urban/rural classification. Using the complex survey design, it computes weighted means along with their standard errors and 95% confidence intervals. The results reveal substantial expenditure disparities between urban and rural areas within each region, with urban expenditures consistently higher. The output provides a comprehensive regional comparison of living standards measured through household consumption.</p>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="tests-for-group-comparisons.html#cb87-1" tabindex="-1"></a><span class="co"># Mean estimates by region and urban/rural classification</span></span>
+<span id="cb87-2"><a href="tests-for-group-comparisons.html#cb87-2" tabindex="-1"></a>ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb87-3"><a href="tests-for-group-comparisons.html#cb87-3" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">saq01 =</span> <span class="fu">as_factor</span>(saq01), <span class="at">saq14 =</span> <span class="fu">as_factor</span>(saq14)) <span class="sc">%&gt;%</span></span>
+<span id="cb87-4"><a href="tests-for-group-comparisons.html#cb87-4" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">M_hat =</span> <span class="fu">survey_mean</span>(percapita_expenditure, <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb87-5"><a href="tests-for-group-comparisons.html#cb87-5" tabindex="-1"></a>  <span class="fu">data.frame</span>()</span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+saq01
+</th>
+<th style="text-align:left;">
+saq14
+</th>
+<th style="text-align:right;">
+M_hat
+</th>
+<th style="text-align:right;">
+M_hat_se
+</th>
+<th style="text-align:right;">
+M_hat_low
+</th>
+<th style="text-align:right;">
+M_hat_upp
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+TIGRAY
+</td>
+<td style="text-align:left;">
+RURAL
+</td>
+<td style="text-align:right;">
+852.5512
+</td>
+<td style="text-align:right;">
+79.93799
+</td>
+<td style="text-align:right;">
+695.5058
+</td>
+<td style="text-align:right;">
+1009.5966
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+TIGRAY
+</td>
+<td style="text-align:left;">
+URBAN
+</td>
+<td style="text-align:right;">
+2565.2175
+</td>
+<td style="text-align:right;">
+383.01676
+</td>
+<td style="text-align:right;">
+1812.7466
+</td>
+<td style="text-align:right;">
+3317.6884
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AFAR
+</td>
+<td style="text-align:left;">
+RURAL
+</td>
+<td style="text-align:right;">
+766.4125
+</td>
+<td style="text-align:right;">
+58.10544
+</td>
+<td style="text-align:right;">
+652.2591
+</td>
+<td style="text-align:right;">
+880.5659
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AFAR
+</td>
+<td style="text-align:left;">
+URBAN
+</td>
+<td style="text-align:right;">
+1784.2278
+</td>
+<td style="text-align:right;">
+342.18364
+</td>
+<td style="text-align:right;">
+1111.9773
+</td>
+<td style="text-align:right;">
+2456.4784
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AMHARA
+</td>
+<td style="text-align:left;">
+RURAL
+</td>
+<td style="text-align:right;">
+877.3044
+</td>
+<td style="text-align:right;">
+83.74863
+</td>
+<td style="text-align:right;">
+712.7727
+</td>
+<td style="text-align:right;">
+1041.8361
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+AMHARA
+</td>
+<td style="text-align:left;">
+URBAN
+</td>
+<td style="text-align:right;">
+1922.8472
+</td>
+<td style="text-align:right;">
+292.45077
+</td>
+<td style="text-align:right;">
+1348.3014
+</td>
+<td style="text-align:right;">
+2497.3931
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+OROMIA
+</td>
+<td style="text-align:left;">
+RURAL
+</td>
+<td style="text-align:right;">
+717.1906
+</td>
+<td style="text-align:right;">
+93.29886
+</td>
+<td style="text-align:right;">
+533.8966
+</td>
+<td style="text-align:right;">
+900.4846
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+OROMIA
+</td>
+<td style="text-align:left;">
+URBAN
+</td>
+<td style="text-align:right;">
+1552.5761
+</td>
+<td style="text-align:right;">
+245.51239
+</td>
+<td style="text-align:right;">
+1070.2449
+</td>
+<td style="text-align:right;">
+2034.9073
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SOMALI
+</td>
+<td style="text-align:left;">
+RURAL
+</td>
+<td style="text-align:right;">
+719.7615
+</td>
+<td style="text-align:right;">
+65.11979
+</td>
+<td style="text-align:right;">
+591.8278
+</td>
+<td style="text-align:right;">
+847.6952
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SOMALI
+</td>
+<td style="text-align:left;">
+URBAN
+</td>
+<td style="text-align:right;">
+1213.0200
+</td>
+<td style="text-align:right;">
+257.61110
+</td>
+<td style="text-align:right;">
+706.9198
+</td>
+<td style="text-align:right;">
+1719.1202
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BENISHANGUL GUMUZ
+</td>
+<td style="text-align:left;">
+RURAL
+</td>
+<td style="text-align:right;">
+573.0041
+</td>
+<td style="text-align:right;">
+138.79989
+</td>
+<td style="text-align:right;">
+300.3192
+</td>
+<td style="text-align:right;">
+845.6890
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+BENISHANGUL GUMUZ
+</td>
+<td style="text-align:left;">
+URBAN
+</td>
+<td style="text-align:right;">
+2055.9192
+</td>
+<td style="text-align:right;">
+418.47403
+</td>
+<td style="text-align:right;">
+1233.7893
+</td>
+<td style="text-align:right;">
+2878.0491
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SNNP
+</td>
+<td style="text-align:left;">
+RURAL
+</td>
+<td style="text-align:right;">
+685.0844
+</td>
+<td style="text-align:right;">
+91.82519
+</td>
+<td style="text-align:right;">
+504.6855
+</td>
+<td style="text-align:right;">
+865.4833
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+SNNP
+</td>
+<td style="text-align:left;">
+URBAN
+</td>
+<td style="text-align:right;">
+2028.3977
+</td>
+<td style="text-align:right;">
+322.23242
+</td>
+<td style="text-align:right;">
+1395.3431
+</td>
+<td style="text-align:right;">
+2661.4523
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GAMBELA
+</td>
+<td style="text-align:left;">
+RURAL
+</td>
+<td style="text-align:right;">
+719.4405
+</td>
+<td style="text-align:right;">
+132.98837
+</td>
+<td style="text-align:right;">
+458.1729
+</td>
+<td style="text-align:right;">
+980.7081
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+GAMBELA
+</td>
+<td style="text-align:left;">
+URBAN
+</td>
+<td style="text-align:right;">
+1409.8242
+</td>
+<td style="text-align:right;">
+230.24420
+</td>
+<td style="text-align:right;">
+957.4888
+</td>
+<td style="text-align:right;">
+1862.1597
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HARAR
+</td>
+<td style="text-align:left;">
+RURAL
+</td>
+<td style="text-align:right;">
+1021.3977
+</td>
+<td style="text-align:right;">
+203.74204
+</td>
+<td style="text-align:right;">
+621.1282
+</td>
+<td style="text-align:right;">
+1421.6673
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+HARAR
+</td>
+<td style="text-align:left;">
+URBAN
+</td>
+<td style="text-align:right;">
+2189.4942
+</td>
+<td style="text-align:right;">
+344.36234
+</td>
+<td style="text-align:right;">
+1512.9634
+</td>
+<td style="text-align:right;">
+2866.0250
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ADDIS ABABA
+</td>
+<td style="text-align:left;">
+URBAN
+</td>
+<td style="text-align:right;">
+2477.1572
+</td>
+<td style="text-align:right;">
+238.02029
+</td>
+<td style="text-align:right;">
+2009.5449
+</td>
+<td style="text-align:right;">
+2944.7694
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DIRE DAWA
+</td>
+<td style="text-align:left;">
+RURAL
+</td>
+<td style="text-align:right;">
+989.0894
+</td>
+<td style="text-align:right;">
+284.64509
+</td>
+<td style="text-align:right;">
+429.8785
+</td>
+<td style="text-align:right;">
+1548.3003
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+DIRE DAWA
+</td>
+<td style="text-align:left;">
+URBAN
+</td>
+<td style="text-align:right;">
+1886.9075
+</td>
+<td style="text-align:right;">
+184.02205
+</td>
+<td style="text-align:right;">
+1525.3796
+</td>
+<td style="text-align:right;">
+2248.4354
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="hypothesis-testing-for-group-comparisons" class="section level3 unnumbered hasAnchor">
+<h3>Hypothesis Testing for Group Comparisons<a href="tests-for-group-comparisons.html#hypothesis-testing-for-group-comparisons" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block performs a hypothesis test to compare per capita expenditure between urban and rural areas using the complex survey design. The <code>svyttest()</code> function applies a design-adjusted t-test to assess whether the mean expenditures differ significantly between groups.</p>
+<p>The result yields a t-statistic of 8.85 with a <em>p-value &lt; 0.001</em>, indicating a highly significant difference between areas. The 95% confidence interval for the mean difference ranges from 904 to 1,419 , with an estimated average difference of 1,161 in favor of urban areas. These results confirm a substantial inequality in per capita spending by residential location.</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="tests-for-group-comparisons.html#cb88-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb88-2"><a href="tests-for-group-comparisons.html#cb88-2" tabindex="-1"></a><span class="co">#                 Hypothesis Testing for Group Comparisons                     #</span></span>
+<span id="cb88-3"><a href="tests-for-group-comparisons.html#cb88-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb88-4"><a href="tests-for-group-comparisons.html#cb88-4" tabindex="-1"></a></span>
+<span id="cb88-5"><a href="tests-for-group-comparisons.html#cb88-5" tabindex="-1"></a><span class="co"># Overall comparison between urban and rural areas</span></span>
+<span id="cb88-6"><a href="tests-for-group-comparisons.html#cb88-6" tabindex="-1"></a><span class="fu">svyttest</span>(percapita_expenditure <span class="sc">~</span> saq14,</span>
+<span id="cb88-7"><a href="tests-for-group-comparisons.html#cb88-7" tabindex="-1"></a>         <span class="at">design =</span> ESS4_design,</span>
+<span id="cb88-8"><a href="tests-for-group-comparisons.html#cb88-8" tabindex="-1"></a>         <span class="at">level =</span> <span class="fl">0.95</span>)</span></code></pre></div>
+<pre><code>## 
+##  Design-based t-test
+## 
+## data:  percapita_expenditure ~ saq14
+## t = 8.8502, df = 513, p-value &lt; 2.2e-16
+## alternative hypothesis: true difference in mean is not equal to 0
+## 95 percent confidence interval:
+##   903.6082 1419.2406
+## sample estimates:
+## difference in mean 
+##           1161.424</code></pre>
+<div id="regional-comparison-for-region-1-tigray" class="section level4 unnumbered hasAnchor">
+<h4>Regional Comparison for Region 1 (Tigray)<a href="tests-for-group-comparisons.html#regional-comparison-for-region-1-tigray" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>This analysis compares mean per capita expenditure between urban and rural areas in Region 1 (Tigray) using a survey-weighted t-test. The highly significant result (t = 4.3772, p &lt; 0.0001) indicates urban households spend on average 1,712.67 more than rural households, with 95% confidence that the true difference lies between 927.16 and 2,498.17.</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="tests-for-group-comparisons.html#cb90-1" tabindex="-1"></a><span class="co"># Comparison within region 1</span></span>
+<span id="cb90-2"><a href="tests-for-group-comparisons.html#cb90-2" tabindex="-1"></a><span class="fu">svyttest</span>(</span>
+<span id="cb90-3"><a href="tests-for-group-comparisons.html#cb90-3" tabindex="-1"></a>  percapita_expenditure <span class="sc">~</span> saq14,</span>
+<span id="cb90-4"><a href="tests-for-group-comparisons.html#cb90-4" tabindex="-1"></a>  <span class="at">design =</span> ESS4_design <span class="sc">%&gt;%</span> <span class="fu">filter</span>(saq01 <span class="sc">==</span> <span class="dv">1</span>),</span>
+<span id="cb90-5"><a href="tests-for-group-comparisons.html#cb90-5" tabindex="-1"></a>  <span class="at">level =</span> <span class="fl">0.95</span></span>
+<span id="cb90-6"><a href="tests-for-group-comparisons.html#cb90-6" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## 
+##  Design-based t-test
+## 
+## data:  percapita_expenditure ~ saq14
+## t = 4.3772, df = 51, p-value = 5.97e-05
+## alternative hypothesis: true difference in mean is not equal to 0
+## 95 percent confidence interval:
+##   927.1597 2498.1729
+## sample estimates:
+## difference in mean 
+##           1712.666</code></pre>
+</div>
+<div id="regional-comparison-for-region-2-afar" class="section level4 unnumbered hasAnchor">
+<h4>Regional Comparison for Region 2 (Afar)<a href="tests-for-group-comparisons.html#regional-comparison-for-region-2-afar" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>This test examines expenditure differences between urban and rural areas in Region 2 (Afar). The statistically significant result (t = 2.9325, p = 0.00554) shows urban households spend 1,017.82 more on average than rural households. The 95% confidence interval (316.34 to 1,719.29) suggests slightly more variability in this region compared to Tigray.</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="tests-for-group-comparisons.html#cb92-1" tabindex="-1"></a><span class="co"># Comparison within region 2</span></span>
+<span id="cb92-2"><a href="tests-for-group-comparisons.html#cb92-2" tabindex="-1"></a><span class="fu">svyttest</span>(</span>
+<span id="cb92-3"><a href="tests-for-group-comparisons.html#cb92-3" tabindex="-1"></a>  percapita_expenditure <span class="sc">~</span> saq14,</span>
+<span id="cb92-4"><a href="tests-for-group-comparisons.html#cb92-4" tabindex="-1"></a>  <span class="at">design =</span> ESS4_design <span class="sc">%&gt;%</span> <span class="fu">filter</span>(saq01 <span class="sc">==</span> <span class="dv">2</span>),</span>
+<span id="cb92-5"><a href="tests-for-group-comparisons.html#cb92-5" tabindex="-1"></a>  <span class="at">level =</span> <span class="fl">0.95</span></span>
+<span id="cb92-6"><a href="tests-for-group-comparisons.html#cb92-6" tabindex="-1"></a>)</span></code></pre></div>
+<pre><code>## 
+##  Design-based t-test
+## 
+## data:  percapita_expenditure ~ saq14
+## t = 2.9325, df = 40, p-value = 0.00554
+## alternative hypothesis: true difference in mean is not equal to 0
+## 95 percent confidence interval:
+##   316.3365 1719.2941
+## sample estimates:
+## difference in mean 
+##           1017.815</code></pre>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="testing-for-independence.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/psirusteam/chapter9Rcodes/4.4_Tests_for_group_comparisons.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["CHAPTER 9 - EXAMPLES IN R.pdf", "CHAPTER 9 - EXAMPLES IN R.epub", "CHAPTER 9 - EXAMPLES IN R.mobi"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"tconfig": null
+});
+});
+</script>
+
+</body>
+
+</html>

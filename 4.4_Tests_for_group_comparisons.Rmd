@@ -7,7 +7,12 @@ knitr::opts_chunk$set(warning = FALSE,
 
 # 4.4 Tests for Group Comparisons {-}
 
+This section presents a comprehensive analysis of expenditure disparities across urban and rural areas in Ethiopia using the ESS4 survey data. The code performs three key operations: (1) calculates weighted mean expenditures at national and regional levels, (2) compares urban-rural differences through descriptive statistics, and (3) conducts formal hypothesis testing using design-adjusted t-tests. The analysis properly accounts for the complex survey design through stratification, clustering, and sampling weights, enabling robust estimation of expenditure patterns and their statistical significance across different geographic classifications.
+
 ### Prepare the work environment {-}
+
+This block begins a new section of the analysis focused on computing per capita expenditure using data from the nonfood expenditure module of the ESS4 household questionnaire. It starts by cleaning the R environment and loading the required libraries for processing and analyzing complex survey data. Then, the nonfood expenditure dataset is imported and transformed to compute total household expenditure, considering only items that were actually purchased (based on s7q03). The household cover dataset is then loaded and merged at the household level, allowing the calculation of per capita expenditure by dividing total expenditure by household size (saq09). This variable will serve as the basis for analyzing expenditure distribution and inequality.
+
 
 ```{r}
 #------------------------------------------------------------------------------#
@@ -60,5 +65,120 @@ HH_data <- read_sav("data/data_ESS4/sect_cover_hh_w4.sav")
 HH_data <- HH_data %>% 
   inner_join(EXP_data) %>% 
   mutate(percapita_expenditure = total_expenditure / saq09)
+```
+
+This block reuses the complex survey design structure previously documented. It is based on stratification by region and area of residence, with primary sampling (ea_id) and adjusted sampling weights (pw_w4). This setup ensures that subsequent estimates properly reflect the ESS4 survey's sampling design.
+
+```{r}
+#------------------------------------------------------------------------------#
+#                          Defining Survey Design                              #
+#------------------------------------------------------------------------------#
+
+ESS4_design <- HH_data %>%
+  mutate(strata = paste0(saq01, "_", saq14)) %>%
+  as_survey_design(
+    ids = ea_id,
+    # Primary sampling unit identifier (EA)
+    strata = strata,
+    # Stratification by region (saq01) and urban/rural zone (saq14)
+    weights = pw_w4,
+    # Final adjusted weight
+    nest = TRUE
+  )
+
+```
+
+###  Conducting Group Comparisons on expenditure {-}
+
+This block compares average per capita expenditure between urban and rural areas. Using the complex survey design, it estimates the mean (`M_hat`) per person, along with its standard error (`M_hat_se`) and 95% confidence interval (`M_hat_low`, `M_hat_upp`) for each group (saq14). The results reveal a clear disparity: average expenditure in urban areas (1,924 ) is more than double that of rural areas (762 ), highlighting differences in living standards between the two settings.
+
+
+```{r, echo=TRUE, eval=FALSE}
+#------------------------------------------------------------------------------#
+#                   Conducting Group Comparisons on expenditure                #
+#------------------------------------------------------------------------------#
+
+# Mean estimates by urban/rural classification
+ESS4_design %>%
+  group_by(saq14 = as_factor(saq14)) %>%
+  summarise(M_hat = survey_mean(percapita_expenditure, vartype = c("se", "ci"))) %>%
+  data.frame()
+```
+
+```{r, echo=FALSE, eval=TRUE}
+#------------------------------------------------------------------------------#
+#                   Conducting Group Comparisons on expenditure                #
+#------------------------------------------------------------------------------#
+
+# Mean estimates by urban/rural classification
+ESS4_design %>%
+  group_by(saq14 = as_factor(saq14)) %>%
+  summarise(M_hat = survey_mean(percapita_expenditure, vartype = c("se", "ci"))) %>%
+  data.frame() %>%  kable(format = "html") %>%
+  kable_styling(full_width = FALSE)
+```
+
+This code calculates mean per capita expenditure estimates across Ethiopian regions, disaggregated by urban/rural classification. Using the complex survey design, it computes weighted means along with their standard errors and 95% confidence intervals. The results reveal substantial expenditure disparities between urban and rural areas within each region, with urban expenditures consistently higher. The output provides a comprehensive regional comparison of living standards measured through household consumption.
+
+```{r, echo=TRUE, eval=FALSE}
+# Mean estimates by region and urban/rural classification
+ESS4_design %>%
+  group_by(saq01 = as_factor(saq01), saq14 = as_factor(saq14)) %>%
+  summarise(M_hat = survey_mean(percapita_expenditure, vartype = c("se", "ci"))) %>%
+  data.frame()
+```
+
+
+```{r, echo=FALSE, eval=TRUE}
+# Mean estimates by region and urban/rural classification
+ESS4_design %>%
+  group_by(saq01 = as_factor(saq01), saq14 = as_factor(saq14)) %>%
+  summarise(M_hat = survey_mean(percapita_expenditure, vartype = c("se", "ci"))) %>%
+  data.frame() %>%  kable(format = "html") %>%
+  kable_styling( full_width = FALSE)
+```
+
+###  Hypothesis Testing for Group Comparisons  {-}
+
+This block performs a hypothesis test to compare per capita expenditure between urban and rural areas using the complex survey design. The `svyttest()` function applies a design-adjusted t-test to assess whether the mean expenditures differ significantly between groups.
+
+The result yields a t-statistic of 8.85 with a *p-value < 0.001*, indicating a highly significant difference between areas. The 95% confidence interval for the mean difference ranges from 904  to 1,419 , with an estimated average difference of 1,161  in favor of urban areas. These results confirm a substantial inequality in per capita spending by residential location.
+
+```{r}
+#------------------------------------------------------------------------------#
+#                 Hypothesis Testing for Group Comparisons                     #
+#------------------------------------------------------------------------------#
+
+# Overall comparison between urban and rural areas
+svyttest(percapita_expenditure ~ saq14,
+         design = ESS4_design,
+         level = 0.95)
+```
+
+#### Regional Comparison for Region 1 (Tigray){-} 
+
+This analysis compares mean per capita expenditure between urban and rural areas in Region 1 (Tigray) using a survey-weighted t-test. The highly significant result (t = 4.3772, p < 0.0001) indicates urban households spend on average 1,712.67 more than rural households, with 95% confidence that the true difference lies between 927.16 and 2,498.17.
+
+```{r}
+# Comparison within region 1
+svyttest(
+  percapita_expenditure ~ saq14,
+  design = ESS4_design %>% filter(saq01 == 1),
+  level = 0.95
+)
+```
+
+#### Regional Comparison for Region 2 (Afar) {-}
+
+This test examines expenditure differences between urban and rural areas in Region 2 (Afar). The statistically significant result (t = 2.9325, p = 0.00554) shows urban households spend 1,017.82 more on average than rural households. The 95% confidence interval (316.34 to 1,719.29) suggests slightly more variability in this region compared to Tigray.
+
+```{r}
+# Comparison within region 2
+svyttest(
+  percapita_expenditure ~ saq14,
+  design = ESS4_design %>% filter(saq01 == 2),
+  level = 0.95
+)
+
 ```
 
