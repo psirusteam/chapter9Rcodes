@@ -185,7 +185,7 @@ ggplot(data = data.frame(stdresids), aes(sample = stdresids)) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-![](images/5.5/02_qqplot.png){}
+![](images/5.5/02_qqplot.png)
 
 
 

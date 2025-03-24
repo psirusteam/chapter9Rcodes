@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="working-with-weights.html"/>
-
+<link rel="next" href="inference-on-model-parameters.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -218,6 +218,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="model-diagnostics.html"><a href="model-diagnostics.html#standardized-residuals-analysis"><i class="fa fa-check"></i>Standardized Residuals Analysis</a></li>
 <li class="chapter" data-level="" data-path="model-diagnostics.html"><a href="model-diagnostics.html#influential-observations"><i class="fa fa-check"></i>Influential Observations</a></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="inference-on-model-parameters.html"><a href="inference-on-model-parameters.html"><i class="fa fa-check"></i>5.6 Inference on Model Parameters</a>
+<ul>
+<li class="chapter" data-level="" data-path="inference-on-model-parameters.html"><a href="inference-on-model-parameters.html#prepare-the-work-environment-11"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="inference-on-model-parameters.html"><a href="inference-on-model-parameters.html#estimating-linear-models-2"><i class="fa fa-check"></i>Estimating Linear Models</a></li>
+<li class="chapter" data-level="" data-path="inference-on-model-parameters.html"><a href="inference-on-model-parameters.html#inference-on-model-parameters-1"><i class="fa fa-check"></i>Inference on Model Parameters</a></li>
+<li class="chapter" data-level="" data-path="inference-on-model-parameters.html"><a href="inference-on-model-parameters.html#comparison-predicted-vs-observed-values"><i class="fa fa-check"></i>Comparison: Predicted vs Observed Values</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a CHAPTER 9 - EXAMPLES IN R </a></li>
 
@@ -240,7 +247,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="model-diagnostics" class="section level1 unnumbered hasAnchor">
 <h1>5.5 Model Diagnostics<a href="model-diagnostics.html#model-diagnostics" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This code performs diagnostic analysis for survey-weighted regression models. It configures the survey design, fits a model for household expenditure, and evaluates it through: 1) R² calculation, 2) residual analysis (histogram/QQ plots), and 3) influence diagnostics (Cook’s Distance, DFBETAS, DFFITS). The implementation handles complex survey features like stratification and sampling weights.</p>
+<p>This code performs diagnostic analysis for survey-weighted regression models. It configures the survey design, fits a model for household expenditure, and evaluates it through: 1) <span class="math inline">\(R^2\)</span> calculation, 2) residual analysis (histogram/QQ plots), and 3) influence diagnostics (Cook’s Distance, DFBETAS, DFFITS). The implementation handles complex survey features like stratification and sampling weights.</p>
 <div id="prepare-the-work-environment-10" class="section level3 unnumbered hasAnchor">
 <h3>Prepare the work environment<a href="model-diagnostics.html#prepare-the-work-environment-10" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>This block sets up the working environment to perform <strong>diagnostics for linear models using complex survey data</strong>. It begins by clearing memory, loading essential libraries, and ensuring correct usage of <code>dplyr::select</code>. Then, it loads the preprocessed dataset (<code>IND_data_regression</code>) and defines the <strong>survey design object (<code>ESS4_design</code>)</strong>, incorporating stratification, primary sampling units (PSU), and calibrated survey weights. Lastly, a log transformation is applied to per capita expenditure to prepare the response variable for subsequent modeling.</p>
@@ -765,7 +772,6 @@ Zone2. URBAN:ReligionOTHER
 <span id="cb138-7"><a href="model-diagnostics.html#cb138-7" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">20</span>)</span></code></pre></div>
 <p><img src="images/5.5/05_DFFITS.png" /></p>
 
-
 </div>
 </div>
 </div>
@@ -774,8 +780,8 @@ Zone2. URBAN:ReligionOTHER
           </div>
         </div>
       </div>
-<a href="working-with-weights.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="working-with-weights.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="inference-on-model-parameters.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
