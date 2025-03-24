@@ -15,5 +15,6 @@ rmd_files: [
   "4.4_Tests_for_group_comparisons.Rmd",
   "5.3_Linear_Models.Rmd",
   "5.4_Working_with_Weights.Rmd",
-  "5.5_Model_Diagnostics.rmd"
+  "5.5_Model_Diagnostics.rmd",
+  "5.6_Inference_on_Model_Parameters.Rmd"
 ]
