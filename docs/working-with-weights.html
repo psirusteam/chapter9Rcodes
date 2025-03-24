@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>5.4 Working with Weights | CHAPTER 9 - EXAMPLES IN R</title>
+  <meta name="description" content="5.4 Working with Weights | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="5.4 Working with Weights | CHAPTER 9 - EXAMPLES IN R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="5.4 Working with Weights | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="github-repo" content="psirusteam/chapter9Rcodes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="5.4 Working with Weights | CHAPTER 9 - EXAMPLES IN R" />
+  
+  <meta name="twitter:description" content="5.4 Working with Weights | CHAPTER 9 - EXAMPLES IN R" />
+  
+
+<meta name="author" content="" />
+
+
+<meta name="date" content="2025-03-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="linear-models.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">CHAPTER 9 - EXAMPLES IN R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Abstract</a></li>
+<li class="chapter" data-level="" data-path="accounting-for-the-sampling-design.html"><a href="accounting-for-the-sampling-design.html"><i class="fa fa-check"></i>Accounting for the Sampling Design</a>
+<ul>
+<li class="chapter" data-level="" data-path="sample-design-of-the-ess4-20182019.html"><a href="sample-design-of-the-ess4-20182019.html"><i class="fa fa-check"></i>Sample design of the ESS4 2018/2019</a></li>
+<li class="chapter" data-level="" data-path="data-source.html"><a href="data-source.html"><i class="fa fa-check"></i>Data Source</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html"><i class="fa fa-check"></i>2.3 Using Software to Generate Valid Inferences</a>
+<ul>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#prepare-the-work-environment"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#loading-datasets"><i class="fa fa-check"></i>Loading Datasets</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#defining-the-survey-design"><i class="fa fa-check"></i>Defining the survey design</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html"><i class="fa fa-check"></i>3.1 Frequencies and Proportions</a>
+<ul>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#prepare-the-work-environment-1"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#estimating-totals-and-proportions"><i class="fa fa-check"></i>Estimating totals and proportions</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#formatting-and-presenting-results"><i class="fa fa-check"></i>Formatting and presenting results</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html"><i class="fa fa-check"></i>3.2 Totals, means and ratios</a>
+<ul>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#prepare-the-work-environment-2"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-totals-and-means"><i class="fa fa-check"></i>Estimation of totals and means</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-ratio"><i class="fa fa-check"></i>Estimation of Ratio</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimating-the-ratio-of-educational-expenditure"><i class="fa fa-check"></i>Estimating the Ratio of Educational Expenditure</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html"><i class="fa fa-check"></i>3.3 Correlations</a>
+<ul>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#prepare-the-work-environment-3"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#estimating-correlations"><i class="fa fa-check"></i>Estimating Correlations</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html"><i class="fa fa-check"></i>3.4 Percentiles and inequality measures</a>
+<ul>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#prepare-the-work-environment-4"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#estimating-the-mean-and-median-of-total-other-income"><i class="fa fa-check"></i>Estimating the Mean and Median of Total Other Income</a></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#the-gini-coefficient."><i class="fa fa-check"></i>The Gini Coefficient.</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html"><i class="fa fa-check"></i>4.2 Cross-tabulations</a>
+<ul>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#prepare-the-work-environment-5"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#processing-variables-for-analysis"><i class="fa fa-check"></i>Processing Variables for Analysis</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#estimating-proportions-and-totals-by-religion"><i class="fa fa-check"></i>Estimating Proportions and Totals by Religion</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#formatting-and-displaying-cross-tabulation-tables"><i class="fa fa-check"></i>Formatting and Displaying Cross-tabulation Tables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html"><i class="fa fa-check"></i>4.3 Testing for Independence</a>
+<ul>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#prepare-the-work-environment-6"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#processing-education-variables"><i class="fa fa-check"></i>Processing Education Variables</a></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#testing-for-independence-1"><i class="fa fa-check"></i>Testing for Independence</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html"><i class="fa fa-check"></i>4.4 Tests for Group Comparisons</a>
+<ul>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#prepare-the-work-environment-7"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#conducting-group-comparisons-on-expenditure"><i class="fa fa-check"></i>Conducting Group Comparisons on expenditure</a></li>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#hypothesis-testing-for-group-comparisons"><i class="fa fa-check"></i>Hypothesis Testing for Group Comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html"><i class="fa fa-check"></i>5.3 Linear Models</a>
+<ul>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html#prepare-the-work-environment-8"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html#processing-demographic-information"><i class="fa fa-check"></i>Processing Demographic Information</a></li>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html#estimating-linear-models"><i class="fa fa-check"></i>Estimating Linear Models</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html"><i class="fa fa-check"></i>5.4 Working with Weights</a>
+<ul>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html#prepare-the-work-environment-9"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html#descriptive-analysis"><i class="fa fa-check"></i>Descriptive Analysis</a></li>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html#defining-survey-designs"><i class="fa fa-check"></i>Defining Survey Designs</a></li>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html#estimating-linear-models-1"><i class="fa fa-check"></i>Estimating Linear Models</a></li>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html#display-regression-results"><i class="fa fa-check"></i>Display regression results</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a CHAPTER 9 - EXAMPLES IN R </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CHAPTER 9 - EXAMPLES IN R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="working-with-weights" class="section level1 unnumbered hasAnchor">
+<h1>5.4 Working with Weights<a href="working-with-weights.html#working-with-weights" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>This chapter examines the impact of different <strong>weight adjustments</strong> on linear models fitted to complex survey data. Using a processed version of Ethiopia’s ESS4 survey, three calibrated versions of the original survey weights are constructed: <em>Senate-style weights</em>, <em>normalized weights</em>, and weights adjusted using <em>Pfeffermann’s method</em>. Alternative survey designs are then defined, and weighted regression models are estimated to assess how results vary depending on the weighting scheme. This analysis allows for the evaluation of the <strong>robustness of conclusions</strong> and the influence of weights on patterns of per capita expenditure.</p>
+<div id="prepare-the-work-environment-9" class="section level3 unnumbered hasAnchor">
+<h3>Prepare the work environment<a href="working-with-weights.html#prepare-the-work-environment-9" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This initial block sets up the working environment to continue with the regression analysis using previously processed ESS4 data. It begins by clearing the memory and loading the necessary libraries for data manipulation, complex survey design, and statistical modeling. Then, it imports the IND_data_regression dataset, which contains individual-level demographic characteristics and per capita expenditure, ready to be used in linear models or other inferential techniques.</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="working-with-weights.html#cb106-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb106-2"><a href="working-with-weights.html#cb106-2" tabindex="-1"></a><span class="co">#                           Cleaning R Environment                             #</span></span>
+<span id="cb106-3"><a href="working-with-weights.html#cb106-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb106-4"><a href="working-with-weights.html#cb106-4" tabindex="-1"></a></span>
+<span id="cb106-5"><a href="working-with-weights.html#cb106-5" tabindex="-1"></a><span class="co"># Remove all objects from the environment to avoid conflicts</span></span>
+<span id="cb106-6"><a href="working-with-weights.html#cb106-6" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb106-7"><a href="working-with-weights.html#cb106-7" tabindex="-1"></a></span>
+<span id="cb106-8"><a href="working-with-weights.html#cb106-8" tabindex="-1"></a><span class="co"># Perform garbage collection to free memory</span></span>
+<span id="cb106-9"><a href="working-with-weights.html#cb106-9" tabindex="-1"></a><span class="fu">gc</span>()</span></code></pre></div>
+<pre><code>##          used (Mb) gc trigger (Mb) max used (Mb)
+## Ncells 542645 29.0    1220171 65.2   660485 35.3
+## Vcells 957251  7.4    8388608 64.0  1770406 13.6</code></pre>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="working-with-weights.html#cb108-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb108-2"><a href="working-with-weights.html#cb108-2" tabindex="-1"></a><span class="co">#                                Libraries                                     #</span></span>
+<span id="cb108-3"><a href="working-with-weights.html#cb108-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb108-4"><a href="working-with-weights.html#cb108-4" tabindex="-1"></a></span>
+<span id="cb108-5"><a href="working-with-weights.html#cb108-5" tabindex="-1"></a><span class="co"># Load necessary libraries for data manipulation, survey design, and visualization</span></span>
+<span id="cb108-6"><a href="working-with-weights.html#cb108-6" tabindex="-1"></a><span class="fu">library</span>(dplyr)       </span>
+<span id="cb108-7"><a href="working-with-weights.html#cb108-7" tabindex="-1"></a><span class="fu">library</span>(survey)       </span>
+<span id="cb108-8"><a href="working-with-weights.html#cb108-8" tabindex="-1"></a><span class="fu">library</span>(srvyr)        </span>
+<span id="cb108-9"><a href="working-with-weights.html#cb108-9" tabindex="-1"></a><span class="fu">library</span>(data.table)   </span>
+<span id="cb108-10"><a href="working-with-weights.html#cb108-10" tabindex="-1"></a><span class="fu">library</span>(magrittr)     </span>
+<span id="cb108-11"><a href="working-with-weights.html#cb108-11" tabindex="-1"></a><span class="fu">library</span>(haven)        </span>
+<span id="cb108-12"><a href="working-with-weights.html#cb108-12" tabindex="-1"></a><span class="fu">library</span>(tidyr)      </span>
+<span id="cb108-13"><a href="working-with-weights.html#cb108-13" tabindex="-1"></a><span class="fu">library</span>(ggplot2)  </span>
+<span id="cb108-14"><a href="working-with-weights.html#cb108-14" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb108-15"><a href="working-with-weights.html#cb108-15" tabindex="-1"></a></span>
+<span id="cb108-16"><a href="working-with-weights.html#cb108-16" tabindex="-1"></a><span class="co"># Ensure dplyr&#39;s select function is explicitly used to avoid conflicts</span></span>
+<span id="cb108-17"><a href="working-with-weights.html#cb108-17" tabindex="-1"></a>select <span class="ot">&lt;-</span> dplyr<span class="sc">::</span>select</span>
+<span id="cb108-18"><a href="working-with-weights.html#cb108-18" tabindex="-1"></a></span>
+<span id="cb108-19"><a href="working-with-weights.html#cb108-19" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb108-20"><a href="working-with-weights.html#cb108-20" tabindex="-1"></a><span class="co">#                           Loading Dataset                                    #</span></span>
+<span id="cb108-21"><a href="working-with-weights.html#cb108-21" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb108-22"><a href="working-with-weights.html#cb108-22" tabindex="-1"></a></span>
+<span id="cb108-23"><a href="working-with-weights.html#cb108-23" tabindex="-1"></a><span class="co"># Load the survey dataset</span></span>
+<span id="cb108-24"><a href="working-with-weights.html#cb108-24" tabindex="-1"></a>IND_data_regression <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;data/data_ESS4/IND_data_regression.rds&quot;</span>)</span></code></pre></div>
+<p>This block performs <strong>survey weight calibration</strong>, generating two adjusted versions of the original weights (<code>pw_w4</code>):<br />
+- <strong>Senate weights (<code>pw_Senate</code>)</strong>: scale the original weights so that their total equals the sample size. These are often used in variance estimation or for comparison across subsamples.<br />
+- <strong>Normalized weights (<code>pw_Normalized</code>)</strong>: rescale the weights to sum to exactly 1, which is useful for statistical or machine learning models that require relative weights rather than population expansion factors.</p>
+<p>These transformations increase analytical flexibility while preserving the representativeness of the survey design.</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="working-with-weights.html#cb109-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb109-2"><a href="working-with-weights.html#cb109-2" tabindex="-1"></a><span class="co">#                      Weight Calibration and Adjustments                      #</span></span>
+<span id="cb109-3"><a href="working-with-weights.html#cb109-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb109-4"><a href="working-with-weights.html#cb109-4" tabindex="-1"></a></span>
+<span id="cb109-5"><a href="working-with-weights.html#cb109-5" tabindex="-1"></a><span class="co"># Create different weight adjustments:</span></span>
+<span id="cb109-6"><a href="working-with-weights.html#cb109-6" tabindex="-1"></a>IND_data_regression <span class="ot">&lt;-</span> IND_data_regression <span class="sc">%&gt;%</span></span>
+<span id="cb109-7"><a href="working-with-weights.html#cb109-7" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb109-8"><a href="working-with-weights.html#cb109-8" tabindex="-1"></a>    <span class="co"># Senate Weights: Adjust original survey weights to sum up to the sample size</span></span>
+<span id="cb109-9"><a href="working-with-weights.html#cb109-9" tabindex="-1"></a>    <span class="at">pw_Senate =</span> pw_w4 <span class="sc">*</span> (<span class="fu">n</span>() <span class="sc">/</span> <span class="fu">sum</span>(pw_w4)),  </span>
+<span id="cb109-10"><a href="working-with-weights.html#cb109-10" tabindex="-1"></a>    </span>
+<span id="cb109-11"><a href="working-with-weights.html#cb109-11" tabindex="-1"></a>    <span class="co"># Normalized Weights: Scale original weights so they sum up to 1</span></span>
+<span id="cb109-12"><a href="working-with-weights.html#cb109-12" tabindex="-1"></a>    <span class="at">pw_Normalized =</span> pw_w4 <span class="sc">/</span> <span class="fu">sum</span>(pw_w4)</span>
+<span id="cb109-13"><a href="working-with-weights.html#cb109-13" tabindex="-1"></a>  )</span></code></pre></div>
+<p>This block implements Pfeffermann’s regression-based weight calibration method, which uses a linear model to adjust the original survey weights (<code>pw_w4</code>). A regression is fitted using demographic and social variables—such as area (urban/rural), religion, sex, and age group—as predictors. The fitted values from the model represent expected weights under the model structure. The calibrated weight (<code>pw_Pfeffermann</code>) is then computed as the ratio of the original weight to the predicted value. This method improves efficiency and reduces design bias while preserving the survey design structure.</p>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="working-with-weights.html#cb110-1" tabindex="-1"></a><span class="co"># Calibrate weights using Pfeffermann’s regression-based method</span></span>
+<span id="cb110-2"><a href="working-with-weights.html#cb110-2" tabindex="-1"></a>EXP_model_pw_w4 <span class="ot">&lt;-</span> <span class="fu">lm</span>(pw_w4 <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> Zone <span class="sc">*</span> Religion <span class="sc">+</span> Zone <span class="sc">+</span> Sex <span class="sc">+</span> age_group,</span>
+<span id="cb110-3"><a href="working-with-weights.html#cb110-3" tabindex="-1"></a>                      <span class="at">data =</span> IND_data_regression)</span>
+<span id="cb110-4"><a href="working-with-weights.html#cb110-4" tabindex="-1"></a></span>
+<span id="cb110-5"><a href="working-with-weights.html#cb110-5" tabindex="-1"></a><span class="co"># Predicted values for weight calibration</span></span>
+<span id="cb110-6"><a href="working-with-weights.html#cb110-6" tabindex="-1"></a>pw_w4_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(EXP_model_pw_w4)</span>
+<span id="cb110-7"><a href="working-with-weights.html#cb110-7" tabindex="-1"></a></span>
+<span id="cb110-8"><a href="working-with-weights.html#cb110-8" tabindex="-1"></a><span class="co"># Apply Pfeffermann’s weight calibration</span></span>
+<span id="cb110-9"><a href="working-with-weights.html#cb110-9" tabindex="-1"></a>IND_data_regression <span class="ot">&lt;-</span> IND_data_regression <span class="sc">%&gt;%</span></span>
+<span id="cb110-10"><a href="working-with-weights.html#cb110-10" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pw_Pfeffermann =</span> pw_w4 <span class="sc">/</span> pw_w4_pred)</span></code></pre></div>
+</div>
+<div id="descriptive-analysis" class="section level3 unnumbered hasAnchor">
+<h3>Descriptive Analysis<a href="working-with-weights.html#descriptive-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This code block performs a comparative analysis of different sampling weights used in Ethiopia’s ESS4 survey. First, it generates descriptive statistics (minimum, maximum, mean, and quartiles) for four weight variants: the original weights (pw_w4) and three calibrated versions (Senate, Normalized, and Pfeffermann). Then, through scatter plots, it visualizes the relationships between the original weights and each set of calibrated weights, enabling identification of recalibration patterns and comparison of their distributions.</p>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="working-with-weights.html#cb111-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb111-2"><a href="working-with-weights.html#cb111-2" tabindex="-1"></a><span class="co">#                        Descriptive Analysis                                  #</span></span>
+<span id="cb111-3"><a href="working-with-weights.html#cb111-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb111-4"><a href="working-with-weights.html#cb111-4" tabindex="-1"></a></span>
+<span id="cb111-5"><a href="working-with-weights.html#cb111-5" tabindex="-1"></a><span class="co"># Display summary statistics for each weight type</span></span>
+<span id="cb111-6"><a href="working-with-weights.html#cb111-6" tabindex="-1"></a><span class="fu">summary</span>(IND_data_regression<span class="sc">$</span>pw_Senate)</span></code></pre></div>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## 0.002501 0.081805 0.432992 1.000000 1.734752 8.376216</code></pre>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="working-with-weights.html#cb113-1" tabindex="-1"></a><span class="fu">summary</span>(IND_data_regression<span class="sc">$</span>pw_Normalized)</span></code></pre></div>
+<pre><code>##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## 1.630e-07 5.331e-06 2.822e-05 6.517e-05 1.131e-04 5.459e-04</code></pre>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="working-with-weights.html#cb115-1" tabindex="-1"></a><span class="fu">summary</span>(IND_data_regression<span class="sc">$</span>pw_Pfeffermann)</span></code></pre></div>
+<pre><code>##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+## 0.002143 0.126731 0.628265 1.000132 1.427941 8.158340</code></pre>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="working-with-weights.html#cb117-1" tabindex="-1"></a><span class="fu">summary</span>(IND_data_regression<span class="sc">$</span>pw_w4)</span></code></pre></div>
+<pre><code>##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+##     7.594   248.383  1314.681  3036.271  5267.178 25432.466</code></pre>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="working-with-weights.html#cb119-1" tabindex="-1"></a><span class="co"># Compare original and calibrated weights using scatter plots</span></span>
+<span id="cb119-2"><a href="working-with-weights.html#cb119-2" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>)) <span class="co"># Set layout for multiple plots</span></span>
+<span id="cb119-3"><a href="working-with-weights.html#cb119-3" tabindex="-1"></a></span>
+<span id="cb119-4"><a href="working-with-weights.html#cb119-4" tabindex="-1"></a><span class="co"># Plot: Original vs. Senate Weights</span></span>
+<span id="cb119-5"><a href="working-with-weights.html#cb119-5" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb119-6"><a href="working-with-weights.html#cb119-6" tabindex="-1"></a>  IND_data_regression<span class="sc">$</span>pw_w4,</span>
+<span id="cb119-7"><a href="working-with-weights.html#cb119-7" tabindex="-1"></a>  IND_data_regression<span class="sc">$</span>pw_Senate,</span>
+<span id="cb119-8"><a href="working-with-weights.html#cb119-8" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Original vs. Senate Weights&quot;</span>,</span>
+<span id="cb119-9"><a href="working-with-weights.html#cb119-9" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Original Weights&quot;</span>,</span>
+<span id="cb119-10"><a href="working-with-weights.html#cb119-10" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Senate Weights&quot;</span></span>
+<span id="cb119-11"><a href="working-with-weights.html#cb119-11" tabindex="-1"></a>)</span>
+<span id="cb119-12"><a href="working-with-weights.html#cb119-12" tabindex="-1"></a></span>
+<span id="cb119-13"><a href="working-with-weights.html#cb119-13" tabindex="-1"></a><span class="co"># Plot: Original vs. Normalized Weights</span></span>
+<span id="cb119-14"><a href="working-with-weights.html#cb119-14" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb119-15"><a href="working-with-weights.html#cb119-15" tabindex="-1"></a>  IND_data_regression<span class="sc">$</span>pw_w4,</span>
+<span id="cb119-16"><a href="working-with-weights.html#cb119-16" tabindex="-1"></a>  IND_data_regression<span class="sc">$</span>pw_Normalized,</span>
+<span id="cb119-17"><a href="working-with-weights.html#cb119-17" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Original vs. Normalized Weights&quot;</span>,</span>
+<span id="cb119-18"><a href="working-with-weights.html#cb119-18" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Original Weights&quot;</span>,</span>
+<span id="cb119-19"><a href="working-with-weights.html#cb119-19" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Normalized Weights&quot;</span></span>
+<span id="cb119-20"><a href="working-with-weights.html#cb119-20" tabindex="-1"></a>)</span>
+<span id="cb119-21"><a href="working-with-weights.html#cb119-21" tabindex="-1"></a></span>
+<span id="cb119-22"><a href="working-with-weights.html#cb119-22" tabindex="-1"></a><span class="co"># Plot: Original vs. Pfeffermann Weights</span></span>
+<span id="cb119-23"><a href="working-with-weights.html#cb119-23" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb119-24"><a href="working-with-weights.html#cb119-24" tabindex="-1"></a>  IND_data_regression<span class="sc">$</span>pw_w4,</span>
+<span id="cb119-25"><a href="working-with-weights.html#cb119-25" tabindex="-1"></a>  IND_data_regression<span class="sc">$</span>pw_Pfeffermann,</span>
+<span id="cb119-26"><a href="working-with-weights.html#cb119-26" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Original vs. Pfeffermann Weights&quot;</span>,</span>
+<span id="cb119-27"><a href="working-with-weights.html#cb119-27" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Original Weights&quot;</span>,</span>
+<span id="cb119-28"><a href="working-with-weights.html#cb119-28" tabindex="-1"></a>  <span class="at">ylab =</span> <span class="st">&quot;Pfeffermann Weights&quot;</span></span>
+<span id="cb119-29"><a href="working-with-weights.html#cb119-29" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="5.4_Working_with_Weights_files/figure-html/unnamed-chunk-5-1.svg" width="672" /></p>
+</div>
+<div id="defining-survey-designs" class="section level3 unnumbered hasAnchor">
+<h3>Defining Survey Designs<a href="working-with-weights.html#defining-survey-designs" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This code block sets up four alternative survey designs for analyzing Ethiopia’s ESS4 data, each using a different weighting approach:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Original Design (ESS4_design)</strong>: Uses the original survey weights (pw_w4)</li>
+<li><strong>Senate Weights Design (design_Senate)</strong>: Applies Senate-calibrated weights</li>
+<li><strong>Normalized Weights Design (design_Normalized)</strong>: Uses normalized weights</li>
+<li><strong>Pfeffermann Weights Design (design_Pfeffermann)</strong>: Implements Pfeffermann’s method weights</li>
+</ol>
+<p>Each design:
+- Filters observations with positive per capita expenditure</p>
+<ul>
+<li><p>Specifies primary sampling units (ea_id)</p></li>
+<li><p>Defines stratification (strata)</p></li>
+<li><p>Includes logarithmic transformation of expenditure (with +70 adjustment for zeros)</p></li>
+<li><p>Configures handling of single PSUs through <code>survey.lonely.psu = "fail"</code></p></li>
+</ul>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="working-with-weights.html#cb120-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb120-2"><a href="working-with-weights.html#cb120-2" tabindex="-1"></a><span class="co">#                          Defining Survey Designs                             #</span></span>
+<span id="cb120-3"><a href="working-with-weights.html#cb120-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb120-4"><a href="working-with-weights.html#cb120-4" tabindex="-1"></a></span>
+<span id="cb120-5"><a href="working-with-weights.html#cb120-5" tabindex="-1"></a><span class="co"># Set options to handle single PSU issues</span></span>
+<span id="cb120-6"><a href="working-with-weights.html#cb120-6" tabindex="-1"></a><span class="fu">options</span>(<span class="at">survey.lonely.psu =</span> <span class="st">&quot;fail&quot;</span>) </span>
+<span id="cb120-7"><a href="working-with-weights.html#cb120-7" tabindex="-1"></a></span>
+<span id="cb120-8"><a href="working-with-weights.html#cb120-8" tabindex="-1"></a><span class="co"># Define survey designs using different weights</span></span>
+<span id="cb120-9"><a href="working-with-weights.html#cb120-9" tabindex="-1"></a></span>
+<span id="cb120-10"><a href="working-with-weights.html#cb120-10" tabindex="-1"></a><span class="co"># Design with original weights</span></span>
+<span id="cb120-11"><a href="working-with-weights.html#cb120-11" tabindex="-1"></a>ESS4_design <span class="ot">&lt;-</span> IND_data_regression <span class="sc">%&gt;%</span></span>
+<span id="cb120-12"><a href="working-with-weights.html#cb120-12" tabindex="-1"></a>  <span class="fu">filter</span>(percapita_expenditure <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb120-13"><a href="working-with-weights.html#cb120-13" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(</span>
+<span id="cb120-14"><a href="working-with-weights.html#cb120-14" tabindex="-1"></a>    <span class="at">ids =</span> ea_id,         <span class="co"># Primary sampling unit (PSU)</span></span>
+<span id="cb120-15"><a href="working-with-weights.html#cb120-15" tabindex="-1"></a>    <span class="at">strata =</span> strata,     <span class="co"># Stratification variable</span></span>
+<span id="cb120-16"><a href="working-with-weights.html#cb120-16" tabindex="-1"></a>    <span class="at">weights =</span> pw_w4,     <span class="co"># Use original weights</span></span>
+<span id="cb120-17"><a href="working-with-weights.html#cb120-17" tabindex="-1"></a>    <span class="at">nest =</span> <span class="cn">TRUE</span></span>
+<span id="cb120-18"><a href="working-with-weights.html#cb120-18" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb120-19"><a href="working-with-weights.html#cb120-19" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">log_expenditure =</span> <span class="fu">log</span>(percapita_expenditure <span class="sc">+</span> <span class="dv">70</span>))</span>
+<span id="cb120-20"><a href="working-with-weights.html#cb120-20" tabindex="-1"></a></span>
+<span id="cb120-21"><a href="working-with-weights.html#cb120-21" tabindex="-1"></a><span class="co"># Design with Senate Weights</span></span>
+<span id="cb120-22"><a href="working-with-weights.html#cb120-22" tabindex="-1"></a>design_Senate <span class="ot">&lt;-</span> IND_data_regression <span class="sc">%&gt;%</span></span>
+<span id="cb120-23"><a href="working-with-weights.html#cb120-23" tabindex="-1"></a>  <span class="fu">filter</span>(percapita_expenditure <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb120-24"><a href="working-with-weights.html#cb120-24" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(</span>
+<span id="cb120-25"><a href="working-with-weights.html#cb120-25" tabindex="-1"></a>    <span class="at">ids =</span> ea_id,</span>
+<span id="cb120-26"><a href="working-with-weights.html#cb120-26" tabindex="-1"></a>    <span class="at">strata =</span> strata,</span>
+<span id="cb120-27"><a href="working-with-weights.html#cb120-27" tabindex="-1"></a>    <span class="at">weights =</span> pw_Senate, <span class="co"># Use Senate Weights</span></span>
+<span id="cb120-28"><a href="working-with-weights.html#cb120-28" tabindex="-1"></a>    <span class="at">nest =</span> <span class="cn">TRUE</span></span>
+<span id="cb120-29"><a href="working-with-weights.html#cb120-29" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb120-30"><a href="working-with-weights.html#cb120-30" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">log_expenditure =</span> <span class="fu">log</span>(percapita_expenditure <span class="sc">+</span> <span class="dv">70</span>))</span>
+<span id="cb120-31"><a href="working-with-weights.html#cb120-31" tabindex="-1"></a></span>
+<span id="cb120-32"><a href="working-with-weights.html#cb120-32" tabindex="-1"></a><span class="co"># Design with Normalized Weights</span></span>
+<span id="cb120-33"><a href="working-with-weights.html#cb120-33" tabindex="-1"></a>design_Normalized <span class="ot">&lt;-</span> IND_data_regression <span class="sc">%&gt;%</span></span>
+<span id="cb120-34"><a href="working-with-weights.html#cb120-34" tabindex="-1"></a>  <span class="fu">filter</span>(percapita_expenditure <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb120-35"><a href="working-with-weights.html#cb120-35" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(</span>
+<span id="cb120-36"><a href="working-with-weights.html#cb120-36" tabindex="-1"></a>    <span class="at">ids =</span> ea_id,</span>
+<span id="cb120-37"><a href="working-with-weights.html#cb120-37" tabindex="-1"></a>    <span class="at">strata =</span> strata,</span>
+<span id="cb120-38"><a href="working-with-weights.html#cb120-38" tabindex="-1"></a>    <span class="at">weights =</span> pw_Normalized, <span class="co"># Use Normalized Weights</span></span>
+<span id="cb120-39"><a href="working-with-weights.html#cb120-39" tabindex="-1"></a>    <span class="at">nest =</span> <span class="cn">TRUE</span></span>
+<span id="cb120-40"><a href="working-with-weights.html#cb120-40" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb120-41"><a href="working-with-weights.html#cb120-41" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">log_expenditure =</span> <span class="fu">log</span>(percapita_expenditure <span class="sc">+</span> <span class="dv">70</span>))</span>
+<span id="cb120-42"><a href="working-with-weights.html#cb120-42" tabindex="-1"></a></span>
+<span id="cb120-43"><a href="working-with-weights.html#cb120-43" tabindex="-1"></a><span class="co"># Design with Pfeffermann’s Weights</span></span>
+<span id="cb120-44"><a href="working-with-weights.html#cb120-44" tabindex="-1"></a>design_Pfeffermann <span class="ot">&lt;-</span> IND_data_regression <span class="sc">%&gt;%</span></span>
+<span id="cb120-45"><a href="working-with-weights.html#cb120-45" tabindex="-1"></a>  <span class="fu">filter</span>(percapita_expenditure <span class="sc">&gt;</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb120-46"><a href="working-with-weights.html#cb120-46" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(</span>
+<span id="cb120-47"><a href="working-with-weights.html#cb120-47" tabindex="-1"></a>    <span class="at">ids =</span> ea_id,</span>
+<span id="cb120-48"><a href="working-with-weights.html#cb120-48" tabindex="-1"></a>    <span class="at">strata =</span> strata,</span>
+<span id="cb120-49"><a href="working-with-weights.html#cb120-49" tabindex="-1"></a>    <span class="at">weights =</span> pw_Pfeffermann, <span class="co"># Use Pfeffermann Weights</span></span>
+<span id="cb120-50"><a href="working-with-weights.html#cb120-50" tabindex="-1"></a>    <span class="at">nest =</span> <span class="cn">TRUE</span></span>
+<span id="cb120-51"><a href="working-with-weights.html#cb120-51" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb120-52"><a href="working-with-weights.html#cb120-52" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">log_expenditure =</span> <span class="fu">log</span>(percapita_expenditure <span class="sc">+</span> <span class="dv">70</span>))</span></code></pre></div>
+</div>
+<div id="estimating-linear-models-1" class="section level3 unnumbered hasAnchor">
+<h3>Estimating Linear Models<a href="working-with-weights.html#estimating-linear-models-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block fits <strong>survey-weighted linear models</strong> using different weighting schemes. A common model formula (<code>formula_model</code>) is defined, modeling the <strong>log of per capita expenditure</strong> as a function of demographic and social characteristics—area (urban/rural), religion, sex, and age group—with an interaction term between area and religion. Then, four versions of the model are estimated using <code>svyglm()</code>:</p>
+<ul>
+<li><strong>EXP_model_Classic</strong>: using the original design weights (<code>ESS4_design</code>),</li>
+<li><strong>EXP_model_Senate</strong>: using weights scaled to the sample size,</li>
+<li><strong>EXP_model_Normalized</strong>: using weights normalized to sum to one,</li>
+<li><strong>EXP_model_Pfeffermann</strong>: using weights calibrated with Pfeffermann’s method.</li>
+</ul>
+<p>This strategy enables a <strong>sensitivity analysis</strong> of regression results to different weighting methods, ensuring robustness and validity in survey-based inference.</p>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="working-with-weights.html#cb121-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb121-2"><a href="working-with-weights.html#cb121-2" tabindex="-1"></a><span class="co">#                         Estimating Linear Models                             #</span></span>
+<span id="cb121-3"><a href="working-with-weights.html#cb121-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb121-4"><a href="working-with-weights.html#cb121-4" tabindex="-1"></a></span>
+<span id="cb121-5"><a href="working-with-weights.html#cb121-5" tabindex="-1"></a><span class="co"># Define the regression model formula</span></span>
+<span id="cb121-6"><a href="working-with-weights.html#cb121-6" tabindex="-1"></a>formula_model <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(</span>
+<span id="cb121-7"><a href="working-with-weights.html#cb121-7" tabindex="-1"></a>  log_expenditure  <span class="sc">~</span>  <span class="dv">1</span> <span class="sc">+</span> Zone <span class="sc">*</span> Religion <span class="sc">+</span> Zone <span class="sc">+</span> Sex <span class="sc">+</span> age_group</span>
+<span id="cb121-8"><a href="working-with-weights.html#cb121-8" tabindex="-1"></a>)</span>
+<span id="cb121-9"><a href="working-with-weights.html#cb121-9" tabindex="-1"></a></span>
+<span id="cb121-10"><a href="working-with-weights.html#cb121-10" tabindex="-1"></a><span class="co"># Estimate models using different survey designs</span></span>
+<span id="cb121-11"><a href="working-with-weights.html#cb121-11" tabindex="-1"></a>EXP_model_Classic  <span class="ot">&lt;-</span> <span class="fu">svyglm</span>(formula_model, <span class="at">design =</span> ESS4_design)</span>
+<span id="cb121-12"><a href="working-with-weights.html#cb121-12" tabindex="-1"></a>EXP_model_Senate  <span class="ot">&lt;-</span> <span class="fu">svyglm</span>(formula_model, <span class="at">design =</span> design_Senate)</span>
+<span id="cb121-13"><a href="working-with-weights.html#cb121-13" tabindex="-1"></a>EXP_model_Normalized  <span class="ot">&lt;-</span> <span class="fu">svyglm</span>(formula_model, <span class="at">design =</span> design_Normalized)</span>
+<span id="cb121-14"><a href="working-with-weights.html#cb121-14" tabindex="-1"></a>EXP_model_Pfeffermann  <span class="ot">&lt;-</span> <span class="fu">svyglm</span>(formula_model, <span class="at">design =</span> design_Pfeffermann)</span></code></pre></div>
+</div>
+<div id="display-regression-results" class="section level3 unnumbered hasAnchor">
+<h3>Display regression results<a href="working-with-weights.html#display-regression-results" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block displays the <strong>survey-weighted linear regression results</strong> for log-transformed per capita expenditure, estimated using four different weighting schemes: classic, Senate-style, normalized, and Pfeffermann-calibrated. Despite varying weighting methods, the coefficient estimates are <strong>remarkably consistent</strong> in direction, magnitude, and statistical significance.</p>
+<p>Key findings include:
+- Living in an urban area significantly increases per capita spending (≈ +62%).</p>
+<ul>
+<li><p>Female individuals spend on average 6%–7% less than males.</p></li>
+<li><p>Older age groups are associated with lower expenditure levels.</p></li>
+<li><p>Clear religious differences emerge, with Catholics and Muslims showing the lowest relative spending.</p></li>
+<li><p>The interaction terms reveal that the urban effect may amplify or mitigate religious gaps.</p></li>
+</ul>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="working-with-weights.html#cb122-1" tabindex="-1"></a><span class="co"># Display regression results</span></span>
+<span id="cb122-2"><a href="working-with-weights.html#cb122-2" tabindex="-1"></a><span class="fu">tidy</span>(EXP_model_Classic)</span>
+<span id="cb122-3"><a href="working-with-weights.html#cb122-3" tabindex="-1"></a><span class="fu">tidy</span>(EXP_model_Senate)</span>
+<span id="cb122-4"><a href="working-with-weights.html#cb122-4" tabindex="-1"></a><span class="fu">tidy</span>(EXP_model_Normalized)</span>
+<span id="cb122-5"><a href="working-with-weights.html#cb122-5" tabindex="-1"></a><span class="fu">tidy</span>(EXP_model_Pfeffermann)</span></code></pre></div>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+6.7510301
+</td>
+<td style="text-align:right;">
+0.0637599
+</td>
+<td style="text-align:right;">
+105.882094
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN
+</td>
+<td style="text-align:right;">
+0.6223513
+</td>
+<td style="text-align:right;">
+0.0899920
+</td>
+<td style="text-align:right;">
+6.915629
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Religion2. CATHOLIC
+</td>
+<td style="text-align:right;">
+-0.8366462
+</td>
+<td style="text-align:right;">
+0.3370375
+</td>
+<td style="text-align:right;">
+-2.482353
+</td>
+<td style="text-align:right;">
+0.0133789
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Religion3. PROTESTANT
+</td>
+<td style="text-align:right;">
+-0.3782428
+</td>
+<td style="text-align:right;">
+0.0962860
+</td>
+<td style="text-align:right;">
+-3.928327
+</td>
+<td style="text-align:right;">
+0.0000976
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Religion4. MUSLEM
+</td>
+<td style="text-align:right;">
+-0.5280854
+</td>
+<td style="text-align:right;">
+0.0864032
+</td>
+<td style="text-align:right;">
+-6.111875
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ReligionOTHER
+</td>
+<td style="text-align:right;">
+-0.2793720
+</td>
+<td style="text-align:right;">
+0.1086689
+</td>
+<td style="text-align:right;">
+-2.570856
+</td>
+<td style="text-align:right;">
+0.0104329
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sex2. Female
+</td>
+<td style="text-align:right;">
+-0.0621092
+</td>
+<td style="text-align:right;">
+0.0144976
+</td>
+<td style="text-align:right;">
+-4.284105
+</td>
+<td style="text-align:right;">
+0.0000220
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_group31-45
+</td>
+<td style="text-align:right;">
+-0.0835824
+</td>
+<td style="text-align:right;">
+0.0264417
+</td>
+<td style="text-align:right;">
+-3.161011
+</td>
+<td style="text-align:right;">
+0.0016676
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_group46-65
+</td>
+<td style="text-align:right;">
+-0.0900876
+</td>
+<td style="text-align:right;">
+0.0311394
+</td>
+<td style="text-align:right;">
+-2.893044
+</td>
+<td style="text-align:right;">
+0.0039817
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_group66 or more
+</td>
+<td style="text-align:right;">
+-0.1749824
+</td>
+<td style="text-align:right;">
+0.0619859
+</td>
+<td style="text-align:right;">
+-2.822941
+</td>
+<td style="text-align:right;">
+0.0049482
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN:Religion2. CATHOLIC
+</td>
+<td style="text-align:right;">
+0.9029832
+</td>
+<td style="text-align:right;">
+0.3944289
+</td>
+<td style="text-align:right;">
+2.289343
+</td>
+<td style="text-align:right;">
+0.0224753
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN:Religion3. PROTESTANT
+</td>
+<td style="text-align:right;">
+0.2535506
+</td>
+<td style="text-align:right;">
+0.1332460
+</td>
+<td style="text-align:right;">
+1.902876
+</td>
+<td style="text-align:right;">
+0.0576309
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN:Religion4. MUSLEM
+</td>
+<td style="text-align:right;">
+0.1656684
+</td>
+<td style="text-align:right;">
+0.1255290
+</td>
+<td style="text-align:right;">
+1.319762
+</td>
+<td style="text-align:right;">
+0.1875183
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN:ReligionOTHER
+</td>
+<td style="text-align:right;">
+-0.6554855
+</td>
+<td style="text-align:right;">
+0.2864145
+</td>
+<td style="text-align:right;">
+-2.288591
+</td>
+<td style="text-align:right;">
+0.0225194
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+6.7510301
+</td>
+<td style="text-align:right;">
+0.0637599
+</td>
+<td style="text-align:right;">
+105.882094
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN
+</td>
+<td style="text-align:right;">
+0.6223513
+</td>
+<td style="text-align:right;">
+0.0899920
+</td>
+<td style="text-align:right;">
+6.915629
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Religion2. CATHOLIC
+</td>
+<td style="text-align:right;">
+-0.8366462
+</td>
+<td style="text-align:right;">
+0.3370375
+</td>
+<td style="text-align:right;">
+-2.482353
+</td>
+<td style="text-align:right;">
+0.0133789
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Religion3. PROTESTANT
+</td>
+<td style="text-align:right;">
+-0.3782428
+</td>
+<td style="text-align:right;">
+0.0962860
+</td>
+<td style="text-align:right;">
+-3.928327
+</td>
+<td style="text-align:right;">
+0.0000976
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Religion4. MUSLEM
+</td>
+<td style="text-align:right;">
+-0.5280854
+</td>
+<td style="text-align:right;">
+0.0864032
+</td>
+<td style="text-align:right;">
+-6.111875
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ReligionOTHER
+</td>
+<td style="text-align:right;">
+-0.2793720
+</td>
+<td style="text-align:right;">
+0.1086689
+</td>
+<td style="text-align:right;">
+-2.570856
+</td>
+<td style="text-align:right;">
+0.0104329
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sex2. Female
+</td>
+<td style="text-align:right;">
+-0.0621092
+</td>
+<td style="text-align:right;">
+0.0144976
+</td>
+<td style="text-align:right;">
+-4.284105
+</td>
+<td style="text-align:right;">
+0.0000220
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_group31-45
+</td>
+<td style="text-align:right;">
+-0.0835824
+</td>
+<td style="text-align:right;">
+0.0264417
+</td>
+<td style="text-align:right;">
+-3.161011
+</td>
+<td style="text-align:right;">
+0.0016676
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_group46-65
+</td>
+<td style="text-align:right;">
+-0.0900876
+</td>
+<td style="text-align:right;">
+0.0311394
+</td>
+<td style="text-align:right;">
+-2.893044
+</td>
+<td style="text-align:right;">
+0.0039817
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_group66 or more
+</td>
+<td style="text-align:right;">
+-0.1749824
+</td>
+<td style="text-align:right;">
+0.0619859
+</td>
+<td style="text-align:right;">
+-2.822941
+</td>
+<td style="text-align:right;">
+0.0049482
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN:Religion2. CATHOLIC
+</td>
+<td style="text-align:right;">
+0.9029832
+</td>
+<td style="text-align:right;">
+0.3944289
+</td>
+<td style="text-align:right;">
+2.289343
+</td>
+<td style="text-align:right;">
+0.0224753
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN:Religion3. PROTESTANT
+</td>
+<td style="text-align:right;">
+0.2535506
+</td>
+<td style="text-align:right;">
+0.1332460
+</td>
+<td style="text-align:right;">
+1.902876
+</td>
+<td style="text-align:right;">
+0.0576309
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN:Religion4. MUSLEM
+</td>
+<td style="text-align:right;">
+0.1656684
+</td>
+<td style="text-align:right;">
+0.1255290
+</td>
+<td style="text-align:right;">
+1.319762
+</td>
+<td style="text-align:right;">
+0.1875183
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN:ReligionOTHER
+</td>
+<td style="text-align:right;">
+-0.6554855
+</td>
+<td style="text-align:right;">
+0.2864145
+</td>
+<td style="text-align:right;">
+-2.288591
+</td>
+<td style="text-align:right;">
+0.0225194
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+6.7510301
+</td>
+<td style="text-align:right;">
+0.0637599
+</td>
+<td style="text-align:right;">
+105.882094
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN
+</td>
+<td style="text-align:right;">
+0.6223513
+</td>
+<td style="text-align:right;">
+0.0899920
+</td>
+<td style="text-align:right;">
+6.915629
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Religion2. CATHOLIC
+</td>
+<td style="text-align:right;">
+-0.8366462
+</td>
+<td style="text-align:right;">
+0.3370375
+</td>
+<td style="text-align:right;">
+-2.482353
+</td>
+<td style="text-align:right;">
+0.0133789
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Religion3. PROTESTANT
+</td>
+<td style="text-align:right;">
+-0.3782428
+</td>
+<td style="text-align:right;">
+0.0962860
+</td>
+<td style="text-align:right;">
+-3.928327
+</td>
+<td style="text-align:right;">
+0.0000976
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Religion4. MUSLEM
+</td>
+<td style="text-align:right;">
+-0.5280854
+</td>
+<td style="text-align:right;">
+0.0864032
+</td>
+<td style="text-align:right;">
+-6.111875
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ReligionOTHER
+</td>
+<td style="text-align:right;">
+-0.2793720
+</td>
+<td style="text-align:right;">
+0.1086689
+</td>
+<td style="text-align:right;">
+-2.570856
+</td>
+<td style="text-align:right;">
+0.0104329
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sex2. Female
+</td>
+<td style="text-align:right;">
+-0.0621092
+</td>
+<td style="text-align:right;">
+0.0144976
+</td>
+<td style="text-align:right;">
+-4.284105
+</td>
+<td style="text-align:right;">
+0.0000220
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_group31-45
+</td>
+<td style="text-align:right;">
+-0.0835824
+</td>
+<td style="text-align:right;">
+0.0264417
+</td>
+<td style="text-align:right;">
+-3.161011
+</td>
+<td style="text-align:right;">
+0.0016676
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_group46-65
+</td>
+<td style="text-align:right;">
+-0.0900876
+</td>
+<td style="text-align:right;">
+0.0311394
+</td>
+<td style="text-align:right;">
+-2.893044
+</td>
+<td style="text-align:right;">
+0.0039817
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_group66 or more
+</td>
+<td style="text-align:right;">
+-0.1749824
+</td>
+<td style="text-align:right;">
+0.0619859
+</td>
+<td style="text-align:right;">
+-2.822941
+</td>
+<td style="text-align:right;">
+0.0049482
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN:Religion2. CATHOLIC
+</td>
+<td style="text-align:right;">
+0.9029832
+</td>
+<td style="text-align:right;">
+0.3944289
+</td>
+<td style="text-align:right;">
+2.289343
+</td>
+<td style="text-align:right;">
+0.0224753
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN:Religion3. PROTESTANT
+</td>
+<td style="text-align:right;">
+0.2535506
+</td>
+<td style="text-align:right;">
+0.1332460
+</td>
+<td style="text-align:right;">
+1.902876
+</td>
+<td style="text-align:right;">
+0.0576309
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN:Religion4. MUSLEM
+</td>
+<td style="text-align:right;">
+0.1656684
+</td>
+<td style="text-align:right;">
+0.1255290
+</td>
+<td style="text-align:right;">
+1.319762
+</td>
+<td style="text-align:right;">
+0.1875183
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN:ReligionOTHER
+</td>
+<td style="text-align:right;">
+-0.6554855
+</td>
+<td style="text-align:right;">
+0.2864145
+</td>
+<td style="text-align:right;">
+-2.288591
+</td>
+<td style="text-align:right;">
+0.0225194
+</td>
+</tr>
+</tbody>
+</table>
+<table class="table" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+term
+</th>
+<th style="text-align:right;">
+estimate
+</th>
+<th style="text-align:right;">
+std.error
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+6.7508198
+</td>
+<td style="text-align:right;">
+0.0636273
+</td>
+<td style="text-align:right;">
+106.099478
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN
+</td>
+<td style="text-align:right;">
+0.6228957
+</td>
+<td style="text-align:right;">
+0.0897108
+</td>
+<td style="text-align:right;">
+6.943376
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Religion2. CATHOLIC
+</td>
+<td style="text-align:right;">
+-0.8356678
+</td>
+<td style="text-align:right;">
+0.3368433
+</td>
+<td style="text-align:right;">
+-2.480880
+</td>
+<td style="text-align:right;">
+0.0134337
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Religion3. PROTESTANT
+</td>
+<td style="text-align:right;">
+-0.3779453
+</td>
+<td style="text-align:right;">
+0.0963726
+</td>
+<td style="text-align:right;">
+-3.921711
+</td>
+<td style="text-align:right;">
+0.0001002
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Religion4. MUSLEM
+</td>
+<td style="text-align:right;">
+-0.5278803
+</td>
+<td style="text-align:right;">
+0.0864502
+</td>
+<td style="text-align:right;">
+-6.106179
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ReligionOTHER
+</td>
+<td style="text-align:right;">
+-0.2769243
+</td>
+<td style="text-align:right;">
+0.1083221
+</td>
+<td style="text-align:right;">
+-2.556488
+</td>
+<td style="text-align:right;">
+0.0108678
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Sex2. Female
+</td>
+<td style="text-align:right;">
+-0.0687148
+</td>
+<td style="text-align:right;">
+0.0160731
+</td>
+<td style="text-align:right;">
+-4.275137
+</td>
+<td style="text-align:right;">
+0.0000229
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_group31-45
+</td>
+<td style="text-align:right;">
+-0.0757091
+</td>
+<td style="text-align:right;">
+0.0260592
+</td>
+<td style="text-align:right;">
+-2.905269
+</td>
+<td style="text-align:right;">
+0.0038319
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_group46-65
+</td>
+<td style="text-align:right;">
+-0.0837546
+</td>
+<td style="text-align:right;">
+0.0317003
+</td>
+<td style="text-align:right;">
+-2.642075
+</td>
+<td style="text-align:right;">
+0.0084982
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_group66 or more
+</td>
+<td style="text-align:right;">
+-0.1815008
+</td>
+<td style="text-align:right;">
+0.0604719
+</td>
+<td style="text-align:right;">
+-3.001407
+</td>
+<td style="text-align:right;">
+0.0028217
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN:Religion2. CATHOLIC
+</td>
+<td style="text-align:right;">
+0.9038369
+</td>
+<td style="text-align:right;">
+0.3955404
+</td>
+<td style="text-align:right;">
+2.285069
+</td>
+<td style="text-align:right;">
+0.0227267
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN:Religion3. PROTESTANT
+</td>
+<td style="text-align:right;">
+0.2540022
+</td>
+<td style="text-align:right;">
+0.1331251
+</td>
+<td style="text-align:right;">
+1.907996
+</td>
+<td style="text-align:right;">
+0.0569642
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN:Religion4. MUSLEM
+</td>
+<td style="text-align:right;">
+0.1654956
+</td>
+<td style="text-align:right;">
+0.1256163
+</td>
+<td style="text-align:right;">
+1.317469
+</td>
+<td style="text-align:right;">
+0.1882848
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Zone2. URBAN:ReligionOTHER
+</td>
+<td style="text-align:right;">
+-0.6587713
+</td>
+<td style="text-align:right;">
+0.2856293
+</td>
+<td style="text-align:right;">
+-2.306385
+</td>
+<td style="text-align:right;">
+0.0214972
+</td>
+</tr>
+</tbody>
+</table>
+<p>Claro, aquí tienes la <strong>traducción al inglés</strong> del texto:</p>
+<hr />
+<div id="comparison-and-final-conclusions" class="section level4 unnumbered hasAnchor">
+<h4>Comparison and Final Conclusions<a href="working-with-weights.html#comparison-and-final-conclusions" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The systematic comparison of the four models reveals a remarkable consistency in the key results:</p>
+<ol style="list-style-type: decimal">
+<li>All models agree on the strong spending advantage of urban households (coefficients between 0.62–0.63)<br />
+</li>
+<li>Religious differences show nearly identical magnitudes and statistical significance<br />
+</li>
+<li>The age effect follows the same decreasing pattern in all cases<br />
+</li>
+<li>The zone–religion interaction terms display very similar coefficients</li>
+</ol>
+<p>The main variations are observed in:<br />
+- The effect of being female (ranging from -6.2% to -6.9%)<br />
+- The impact on individuals aged 66 and older (ranging from -17.5% to -18.2%)<br />
+- Minor differences in standard errors (&lt;5% variation)</p>
+<p>These small differences do not affect the substantive conclusions, but they suggest that the <strong>Pfeffermann and Senate methods</strong> may better capture certain demographic inequalities. The outstanding consistency across models (especially between the original, Senate, and normalized weights) validates the robustness of the findings and indicates that the results are not artifacts of the weighting method. For this particular study, the choice among these weighting schemes would <strong>not significantly alter</strong> the main conclusions about the determinants of household expenditure in Ethiopia.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="linear-models.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/psirusteam/chapter9Rcodes/5.4_Working_with_Weights.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["CHAPTER 9 - EXAMPLES IN R.pdf", "CHAPTER 9 - EXAMPLES IN R.epub", "CHAPTER 9 - EXAMPLES IN R.mobi"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"tconfig": null
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

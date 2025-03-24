@@ -1,0 +1,71 @@
+```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE,
+                      cache = TRUE, 
+                      cache.path = "cache/5.5/")
+```
+
+
+# 5.5 Model Diagnostics {-}
+
+### Prepare the work environment {-}
+
+```{r}
+
+#------------------------------------------------------------------------------#
+#                           Cleaning R Environment                             #
+#------------------------------------------------------------------------------#
+
+# Remove all objects from the environment to avoid conflicts
+rm(list = ls())
+
+# Perform garbage collection to free memory
+gc()
+
+#------------------------------------------------------------------------------#
+#                                Libraries                                     #
+#------------------------------------------------------------------------------#
+
+# Load required packages for data handling, survey analysis, and diagnostics
+
+library(dplyr)        
+library(survey)       
+library(srvyr)       
+library(data.table)  
+library(magrittr)     
+library(haven)        
+library(tidyr)        
+library(svydiags)     # Survey diagnostics
+library(ggplot2)      
+library(broom)       
+
+# Ensure dplyr's select function is correctly used to avoid conflicts
+select <- dplyr::select
+
+#------------------------------------------------------------------------------#
+#                           Loading Dataset                                    #
+#------------------------------------------------------------------------------#
+
+# Load the dataset containing survey information
+IND_data_regression <- readRDS("data/data_ESS4/IND_data_regression.rds")
+
+#------------------------------------------------------------------------------#
+#                        Defining Survey Design                                #
+#------------------------------------------------------------------------------#
+
+# Set survey options to avoid errors in single PSU strata
+options(survey.lonely.psu = "fail")
+
+# Define the survey design object using weighted data
+ESS4_design <- IND_data_regression %>%
+  filter(percapita_expenditure > 0) %>%
+  as_survey_design(
+    ids = ea_id,         # Primary Sampling Units (PSU)
+    strata = strata,     # Stratification variable
+    weights = pw_w4,     # Sampling weights
+    nest = TRUE
+  ) %>%
+  mutate(log_expenditure = log(percapita_expenditure + 70)) # Log transformation
+
+```
+

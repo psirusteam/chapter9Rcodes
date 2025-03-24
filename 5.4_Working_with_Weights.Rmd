@@ -7,5 +7,314 @@ knitr::opts_chunk$set(warning = FALSE,
 
 # 5.4 Working with Weights {-}
 
+This chapter examines the impact of different **weight adjustments** on linear models fitted to complex survey data. Using a processed version of Ethiopia’s ESS4 survey, three calibrated versions of the original survey weights are constructed: *Senate-style weights*, *normalized weights*, and weights adjusted using *Pfeffermann’s method*. Alternative survey designs are then defined, and weighted regression models are estimated to assess how results vary depending on the weighting scheme. This analysis allows for the evaluation of the **robustness of conclusions** and the influence of weights on patterns of per capita expenditure.
+
+
 ### Prepare the work environment {-}
 
+This initial block sets up the working environment to continue with the regression analysis using previously processed ESS4 data. It begins by clearing the memory and loading the necessary libraries for data manipulation, complex survey design, and statistical modeling. Then, it imports the IND_data_regression dataset, which contains individual-level demographic characteristics and per capita expenditure, ready to be used in linear models or other inferential techniques.
+
+```{r}
+
+#------------------------------------------------------------------------------#
+#                           Cleaning R Environment                             #
+#------------------------------------------------------------------------------#
+
+# Remove all objects from the environment to avoid conflicts
+rm(list = ls())
+
+# Perform garbage collection to free memory
+gc()
+
+#------------------------------------------------------------------------------#
+#                                Libraries                                     #
+#------------------------------------------------------------------------------#
+
+# Load necessary libraries for data manipulation, survey design, and visualization
+library(dplyr)       
+library(survey)       
+library(srvyr)        
+library(data.table)   
+library(magrittr)     
+library(haven)        
+library(tidyr)      
+library(ggplot2)  
+library(broom)
+
+# Ensure dplyr's select function is explicitly used to avoid conflicts
+select <- dplyr::select
+
+#------------------------------------------------------------------------------#
+#                           Loading Dataset                                    #
+#------------------------------------------------------------------------------#
+
+# Load the survey dataset
+IND_data_regression <- readRDS("data/data_ESS4/IND_data_regression.rds")
+
+```
+
+This block performs **survey weight calibration**, generating two adjusted versions of the original weights (`pw_w4`):  
+- **Senate weights (`pw_Senate`)**: scale the original weights so that their total equals the sample size. These are often used in variance estimation or for comparison across subsamples.  
+- **Normalized weights (`pw_Normalized`)**: rescale the weights to sum to exactly 1, which is useful for statistical or machine learning models that require relative weights rather than population expansion factors.
+
+These transformations increase analytical flexibility while preserving the representativeness of the survey design.
+
+
+
+```{r}
+#------------------------------------------------------------------------------#
+#                      Weight Calibration and Adjustments                      #
+#------------------------------------------------------------------------------#
+
+# Create different weight adjustments:
+IND_data_regression <- IND_data_regression %>%
+  mutate(
+    # Senate Weights: Adjust original survey weights to sum up to the sample size
+    pw_Senate = pw_w4 * (n() / sum(pw_w4)),  
+    
+    # Normalized Weights: Scale original weights so they sum up to 1
+    pw_Normalized = pw_w4 / sum(pw_w4)
+  )
+```
+
+This block implements Pfeffermann’s regression-based weight calibration method, which uses a linear model to adjust the original survey weights (`pw_w4`). A regression is fitted using demographic and social variables—such as area (urban/rural), religion, sex, and age group—as predictors. The fitted values from the model represent expected weights under the model structure. The calibrated weight (`pw_Pfeffermann`) is then computed as the ratio of the original weight to the predicted value. This method improves efficiency and reduces design bias while preserving the survey design structure.
+
+```{r}
+# Calibrate weights using Pfeffermann’s regression-based method
+EXP_model_pw_w4 <- lm(pw_w4 ~ 1 + Zone * Religion + Zone + Sex + age_group,
+                      data = IND_data_regression)
+
+# Predicted values for weight calibration
+pw_w4_pred <- predict(EXP_model_pw_w4)
+
+# Apply Pfeffermann’s weight calibration
+IND_data_regression <- IND_data_regression %>%
+  mutate(pw_Pfeffermann = pw_w4 / pw_w4_pred)
+
+```
+
+### Descriptive Analysis {-}
+
+This code block performs a comparative analysis of different sampling weights used in Ethiopia's ESS4 survey. First, it generates descriptive statistics (minimum, maximum, mean, and quartiles) for four weight variants: the original weights (pw_w4) and three calibrated versions (Senate, Normalized, and Pfeffermann). Then, through scatter plots, it visualizes the relationships between the original weights and each set of calibrated weights, enabling identification of recalibration patterns and comparison of their distributions.
+
+```{r}
+
+#------------------------------------------------------------------------------#
+#                        Descriptive Analysis                                  #
+#------------------------------------------------------------------------------#
+
+# Display summary statistics for each weight type
+summary(IND_data_regression$pw_Senate)
+summary(IND_data_regression$pw_Normalized)
+summary(IND_data_regression$pw_Pfeffermann)
+summary(IND_data_regression$pw_w4)
+
+# Compare original and calibrated weights using scatter plots
+par(mfrow = c(1, 3)) # Set layout for multiple plots
+
+# Plot: Original vs. Senate Weights
+plot(
+  IND_data_regression$pw_w4,
+  IND_data_regression$pw_Senate,
+  main = "Original vs. Senate Weights",
+  xlab = "Original Weights",
+  ylab = "Senate Weights"
+)
+
+# Plot: Original vs. Normalized Weights
+plot(
+  IND_data_regression$pw_w4,
+  IND_data_regression$pw_Normalized,
+  main = "Original vs. Normalized Weights",
+  xlab = "Original Weights",
+  ylab = "Normalized Weights"
+)
+
+# Plot: Original vs. Pfeffermann Weights
+plot(
+  IND_data_regression$pw_w4,
+  IND_data_regression$pw_Pfeffermann,
+  main = "Original vs. Pfeffermann Weights",
+  xlab = "Original Weights",
+  ylab = "Pfeffermann Weights"
+)
+
+```
+
+###  Defining Survey Designs  {-}
+
+This code block sets up four alternative survey designs for analyzing Ethiopia's ESS4 data, each using a different weighting approach:
+
+1. **Original Design (ESS4_design)**: Uses the original survey weights (pw_w4)
+2. **Senate Weights Design (design_Senate)**: Applies Senate-calibrated weights
+3. **Normalized Weights Design (design_Normalized)**: Uses normalized weights
+4. **Pfeffermann Weights Design (design_Pfeffermann)**: Implements Pfeffermann's method weights
+
+Each design:
+- Filters observations with positive per capita expenditure
+
+- Specifies primary sampling units (ea_id)
+
+- Defines stratification (strata)
+
+- Includes logarithmic transformation of expenditure (with +70 adjustment for zeros)
+
+- Configures handling of single PSUs through `survey.lonely.psu = "fail"`
+
+
+
+```{r}
+#------------------------------------------------------------------------------#
+#                          Defining Survey Designs                             #
+#------------------------------------------------------------------------------#
+
+# Set options to handle single PSU issues
+options(survey.lonely.psu = "fail") 
+
+# Define survey designs using different weights
+
+# Design with original weights
+ESS4_design <- IND_data_regression %>%
+  filter(percapita_expenditure > 0) %>%
+  as_survey_design(
+    ids = ea_id,         # Primary sampling unit (PSU)
+    strata = strata,     # Stratification variable
+    weights = pw_w4,     # Use original weights
+    nest = TRUE
+  ) %>%
+  mutate(log_expenditure = log(percapita_expenditure + 70))
+
+# Design with Senate Weights
+design_Senate <- IND_data_regression %>%
+  filter(percapita_expenditure > 0) %>%
+  as_survey_design(
+    ids = ea_id,
+    strata = strata,
+    weights = pw_Senate, # Use Senate Weights
+    nest = TRUE
+  ) %>%
+  mutate(log_expenditure = log(percapita_expenditure + 70))
+
+# Design with Normalized Weights
+design_Normalized <- IND_data_regression %>%
+  filter(percapita_expenditure > 0) %>%
+  as_survey_design(
+    ids = ea_id,
+    strata = strata,
+    weights = pw_Normalized, # Use Normalized Weights
+    nest = TRUE
+  ) %>%
+  mutate(log_expenditure = log(percapita_expenditure + 70))
+
+# Design with Pfeffermann’s Weights
+design_Pfeffermann <- IND_data_regression %>%
+  filter(percapita_expenditure > 0) %>%
+  as_survey_design(
+    ids = ea_id,
+    strata = strata,
+    weights = pw_Pfeffermann, # Use Pfeffermann Weights
+    nest = TRUE
+  ) %>%
+  mutate(log_expenditure = log(percapita_expenditure + 70))
+
+```
+
+### Estimating Linear Models {-}
+
+This block fits **survey-weighted linear models** using different weighting schemes. A common model formula (`formula_model`) is defined, modeling the **log of per capita expenditure** as a function of demographic and social characteristics—area (urban/rural), religion, sex, and age group—with an interaction term between area and religion. Then, four versions of the model are estimated using `svyglm()`:
+
+- **EXP_model_Classic**: using the original design weights (`ESS4_design`),
+- **EXP_model_Senate**: using weights scaled to the sample size,
+- **EXP_model_Normalized**: using weights normalized to sum to one,
+- **EXP_model_Pfeffermann**: using weights calibrated with Pfeffermann’s method.
+
+This strategy enables a **sensitivity analysis** of regression results to different weighting methods, ensuring robustness and validity in survey-based inference.
+
+
+
+```{r}
+#------------------------------------------------------------------------------#
+#                         Estimating Linear Models                             #
+#------------------------------------------------------------------------------#
+
+# Define the regression model formula
+formula_model <- as.formula(
+  log_expenditure  ~  1 + Zone * Religion + Zone + Sex + age_group
+)
+
+# Estimate models using different survey designs
+EXP_model_Classic  <- svyglm(formula_model, design = ESS4_design)
+EXP_model_Senate  <- svyglm(formula_model, design = design_Senate)
+EXP_model_Normalized  <- svyglm(formula_model, design = design_Normalized)
+EXP_model_Pfeffermann  <- svyglm(formula_model, design = design_Pfeffermann)
+```
+
+### Display regression results {-}
+
+This block displays the **survey-weighted linear regression results** for log-transformed per capita expenditure, estimated using four different weighting schemes: classic, Senate-style, normalized, and Pfeffermann-calibrated. Despite varying weighting methods, the coefficient estimates are **remarkably consistent** in direction, magnitude, and statistical significance.
+
+Key findings include:
+- Living in an urban area significantly increases per capita spending (≈ +62%).
+
+- Female individuals spend on average 6%–7% less than males.
+
+- Older age groups are associated with lower expenditure levels.
+
+- Clear religious differences emerge, with Catholics and Muslims showing the lowest relative spending.
+
+- The interaction terms reveal that the urban effect may amplify or mitigate religious gaps.
+
+
+```{r, echo=TRUE, eval=FALSE}
+# Display regression results
+tidy(EXP_model_Classic)
+tidy(EXP_model_Senate)
+tidy(EXP_model_Normalized)
+tidy(EXP_model_Pfeffermann)
+
+```
+
+
+```{r, echo=FALSE, eval= TRUE}
+library(kableExtra)
+tidy(EXP_model_Classic) %>%  kable(format = "html") %>%
+  kable_styling(full_width = FALSE)
+```
+
+
+```{r, echo=FALSE, eval= TRUE}
+tidy(EXP_model_Senate) %>%  kable(format = "html") %>%
+  kable_styling(full_width = FALSE)
+```
+
+
+```{r, echo=FALSE, eval= TRUE}
+tidy(EXP_model_Normalized) %>%  kable(format = "html") %>%
+  kable_styling(full_width = FALSE)
+```
+
+
+```{r, echo=FALSE, eval= TRUE}
+tidy(EXP_model_Pfeffermann) %>%  kable(format = "html") %>%
+  kable_styling(full_width = FALSE)
+```
+
+Claro, aquí tienes la **traducción al inglés** del texto:
+
+---
+
+#### Comparison and Final Conclusions {-}
+
+The systematic comparison of the four models reveals a remarkable consistency in the key results:
+
+1. All models agree on the strong spending advantage of urban households (coefficients between 0.62–0.63)  
+2. Religious differences show nearly identical magnitudes and statistical significance  
+3. The age effect follows the same decreasing pattern in all cases  
+4. The zone–religion interaction terms display very similar coefficients  
+
+The main variations are observed in:  
+- The effect of being female (ranging from -6.2% to -6.9%)  
+- The impact on individuals aged 66 and older (ranging from -17.5% to -18.2%)  
+- Minor differences in standard errors (<5% variation)  
+
+These small differences do not affect the substantive conclusions, but they suggest that the **Pfeffermann and Senate methods** may better capture certain demographic inequalities. The outstanding consistency across models (especially between the original, Senate, and normalized weights) validates the robustness of the findings and indicates that the results are not artifacts of the weighting method. For this particular study, the choice among these weighting schemes would **not significantly alter** the main conclusions about the determinants of household expenditure in Ethiopia.
