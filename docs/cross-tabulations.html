@@ -23,7 +23,7 @@
 <meta name="author" content="" />
 
 
-<meta name="date" content="2025-03-21" />
+<meta name="date" content="2025-03-24" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="percentiles-and-inequality-measures.html"/>
-
+<link rel="next" href="testing-for-independence.html"/>
 <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -185,6 +185,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#estimating-proportions-and-totals-by-religion"><i class="fa fa-check"></i>Estimating Proportions and Totals by Religion</a></li>
 <li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#formatting-and-displaying-cross-tabulation-tables"><i class="fa fa-check"></i>Formatting and Displaying Cross-tabulation Tables</a></li>
 </ul></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html"><i class="fa fa-check"></i>4.3 Testing for Independence</a>
+<ul>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#prepare-the-work-environment-6"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#processing-education-variables"><i class="fa fa-check"></i>Processing Education Variables</a></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#testing-for-independence-1"><i class="fa fa-check"></i>Testing for Independence</a></li>
+</ul></li>
 <li class="divider"></li>
 <li><a CHAPTER 9 - EXAMPLES IN R </a></li>
 
@@ -207,6 +213,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="cross-tabulations" class="section level1 unnumbered hasAnchor">
 <h1>4.2 Cross-tabulations<a href="cross-tabulations.html#cross-tabulations" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Together, this module provides a comprehensive and well-structured estimation of the religious distribution among the Ethiopian population aged 10 and above, using ESS4 microdata and accounting for the complex survey design. Through proportions and totals, it reveals patterns of religious affiliation at the national level, by region, and by area type (urban/rural). The resulting tables allow for accurate interpretation and clear comparisons across geographic and social groups.</p>
 <div id="prepare-the-work-environment-5" class="section level3 unnumbered hasAnchor">
 <h3>Prepare the work environment<a href="cross-tabulations.html#prepare-the-work-environment-5" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>This block sets up the working environment to analyze data from Section 1 of the <strong>ESS4</strong> household questionnaire. After clearing the memory and loading the required libraries, the corresponding dataset is imported, and the <strong>survey design</strong> is defined. It includes stratification by region and area type (urban/rural), identification of primary sampling units (<code>ea_id</code>), and use of adjusted sampling weights (<code>pw_w4</code>). This design ensures that subsequent analyses correctly reflect the complex survey structure and produce representative estimates. A summary of the design is printed at the end to verify its proper specification.</p>
@@ -217,8 +224,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb52-5"><a href="cross-tabulations.html#cb52-5" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
 <span id="cb52-6"><a href="cross-tabulations.html#cb52-6" tabindex="-1"></a><span class="fu">gc</span>()</span></code></pre></div>
 <pre><code>##          used (Mb) gc trigger (Mb) max used (Mb)
-## Ncells 542656 29.0    1220202 65.2   660485 35.3
-## Vcells 956925  7.4    8388608 64.0  1770406 13.6</code></pre>
+## Ncells 542659 29.0    1220211 65.2   660485 35.3
+## Vcells 957073  7.4    8388608 64.0  1770406 13.6</code></pre>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="cross-tabulations.html#cb54-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
 <span id="cb54-2"><a href="cross-tabulations.html#cb54-2" tabindex="-1"></a><span class="co">#                                Libraries                                     #</span></span>
 <span id="cb54-3"><a href="cross-tabulations.html#cb54-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
@@ -1061,8 +1068,8 @@ ETHIOPIA
           </div>
         </div>
       </div>
-<a href="percentiles-and-inequality-measures.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="percentiles-and-inequality-measures.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="testing-for-independence.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

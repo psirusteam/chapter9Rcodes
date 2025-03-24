@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4.3 Testing for Independence | CHAPTER 9 - EXAMPLES IN R</title>
+  <meta name="description" content="4.3 Testing for Independence | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4.3 Testing for Independence | CHAPTER 9 - EXAMPLES IN R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="4.3 Testing for Independence | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="github-repo" content="psirusteam/chapter9Rcodes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4.3 Testing for Independence | CHAPTER 9 - EXAMPLES IN R" />
+  
+  <meta name="twitter:description" content="4.3 Testing for Independence | CHAPTER 9 - EXAMPLES IN R" />
+  
+
+<meta name="author" content="" />
+
+
+<meta name="date" content="2025-03-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="cross-tabulations.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">CHAPTER 9 - EXAMPLES IN R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Abstract</a></li>
+<li class="chapter" data-level="" data-path="accounting-for-the-sampling-design.html"><a href="accounting-for-the-sampling-design.html"><i class="fa fa-check"></i>Accounting for the Sampling Design</a>
+<ul>
+<li class="chapter" data-level="" data-path="sample-design-of-the-ess4-20182019.html"><a href="sample-design-of-the-ess4-20182019.html"><i class="fa fa-check"></i>Sample design of the ESS4 2018/2019</a></li>
+<li class="chapter" data-level="" data-path="data-source.html"><a href="data-source.html"><i class="fa fa-check"></i>Data Source</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html"><i class="fa fa-check"></i>2.3 Using Software to Generate Valid Inferences</a>
+<ul>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#prepare-the-work-environment"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#loading-datasets"><i class="fa fa-check"></i>Loading Datasets</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#defining-the-survey-design"><i class="fa fa-check"></i>Defining the survey design</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html"><i class="fa fa-check"></i>3.1 Frequencies and Proportions</a>
+<ul>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#prepare-the-work-environment-1"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#estimating-totals-and-proportions"><i class="fa fa-check"></i>Estimating totals and proportions</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#formatting-and-presenting-results"><i class="fa fa-check"></i>Formatting and presenting results</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html"><i class="fa fa-check"></i>3.2 Totals, means and ratios</a>
+<ul>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#prepare-the-work-environment-2"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-totals-and-means"><i class="fa fa-check"></i>Estimation of totals and means</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-ratio"><i class="fa fa-check"></i>Estimation of Ratio</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimating-the-ratio-of-educational-expenditure"><i class="fa fa-check"></i>Estimating the Ratio of Educational Expenditure</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html"><i class="fa fa-check"></i>3.3 Correlations</a>
+<ul>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#prepare-the-work-environment-3"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#estimating-correlations"><i class="fa fa-check"></i>Estimating Correlations</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html"><i class="fa fa-check"></i>3.4 Percentiles and inequality measures</a>
+<ul>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#prepare-the-work-environment-4"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#estimating-the-mean-and-median-of-total-other-income"><i class="fa fa-check"></i>Estimating the Mean and Median of Total Other Income</a></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#the-gini-coefficient."><i class="fa fa-check"></i>The Gini Coefficient.</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html"><i class="fa fa-check"></i>4.2 Cross-tabulations</a>
+<ul>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#prepare-the-work-environment-5"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#processing-variables-for-analysis"><i class="fa fa-check"></i>Processing Variables for Analysis</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#estimating-proportions-and-totals-by-religion"><i class="fa fa-check"></i>Estimating Proportions and Totals by Religion</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#formatting-and-displaying-cross-tabulation-tables"><i class="fa fa-check"></i>Formatting and Displaying Cross-tabulation Tables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html"><i class="fa fa-check"></i>4.3 Testing for Independence</a>
+<ul>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#prepare-the-work-environment-6"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#processing-education-variables"><i class="fa fa-check"></i>Processing Education Variables</a></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#testing-for-independence-1"><i class="fa fa-check"></i>Testing for Independence</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a CHAPTER 9 - EXAMPLES IN R </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CHAPTER 9 - EXAMPLES IN R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="testing-for-independence" class="section level1 unnumbered hasAnchor">
+<h1>4.3 Testing for Independence<a href="testing-for-independence.html#testing-for-independence" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>This code section performs a comprehensive analysis of educational attainment patterns using survey data. It begins by setting up the R environment and loading necessary packages, then processes parental education variables and geographic classifications. The analysis implements proper survey weighting methodology and generates both descriptive statistics (through cross-tabulations) and inferential tests (chi-square tests of independence) to examine relationships between education levels and residential zones. The workflow includes data cleaning, variable recoding, survey design specification, and statistical testing components.</p>
+<div id="prepare-the-work-environment-6" class="section level3 unnumbered hasAnchor">
+<h3>Prepare the work environment<a href="testing-for-independence.html#prepare-the-work-environment-6" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This initial code block in chapter 4.3 prepares the working environment to apply <strong>independence tests</strong> on categorical data from the ESS4 household questionnaire (Section 1). It begins by clearing the R environment to avoid conflicts with previous sessions and loads the required libraries for analyzing complex survey data (<code>survey</code>, <code>srvyr</code>, among others). The <code>select</code> function from <code>dplyr</code> is explicitly set to avoid masking issues, and a high RAM limit is configured to enhance performance for large-scale computations. Finally, the corresponding dataset is imported using <code>read_sav()</code>, enabling efficient and structured handling of SPSS (.sav) files for subsequent analysis.</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="testing-for-independence.html#cb62-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb62-2"><a href="testing-for-independence.html#cb62-2" tabindex="-1"></a><span class="co">#                           Cleaning R Environment                             #</span></span>
+<span id="cb62-3"><a href="testing-for-independence.html#cb62-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb62-4"><a href="testing-for-independence.html#cb62-4" tabindex="-1"></a></span>
+<span id="cb62-5"><a href="testing-for-independence.html#cb62-5" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb62-6"><a href="testing-for-independence.html#cb62-6" tabindex="-1"></a><span class="fu">gc</span>()</span></code></pre></div>
+<pre><code>##          used (Mb) gc trigger (Mb) max used (Mb)
+## Ncells 542531 29.0    1219845 65.2   660485 35.3
+## Vcells 956464  7.3    8388608 64.0  1770410 13.6</code></pre>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="testing-for-independence.html#cb64-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb64-2"><a href="testing-for-independence.html#cb64-2" tabindex="-1"></a><span class="co">#                                Libraries                                     #</span></span>
+<span id="cb64-3"><a href="testing-for-independence.html#cb64-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb64-4"><a href="testing-for-independence.html#cb64-4" tabindex="-1"></a></span>
+<span id="cb64-5"><a href="testing-for-independence.html#cb64-5" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb64-6"><a href="testing-for-independence.html#cb64-6" tabindex="-1"></a><span class="fu">library</span>(survey)</span>
+<span id="cb64-7"><a href="testing-for-independence.html#cb64-7" tabindex="-1"></a><span class="fu">library</span>(srvyr)</span>
+<span id="cb64-8"><a href="testing-for-independence.html#cb64-8" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb64-9"><a href="testing-for-independence.html#cb64-9" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb64-10"><a href="testing-for-independence.html#cb64-10" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb64-11"><a href="testing-for-independence.html#cb64-11" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb64-12"><a href="testing-for-independence.html#cb64-12" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb64-13"><a href="testing-for-independence.html#cb64-13" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb64-14"><a href="testing-for-independence.html#cb64-14" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb64-15"><a href="testing-for-independence.html#cb64-15" tabindex="-1"></a><span class="fu">library</span>(convey)</span>
+<span id="cb64-16"><a href="testing-for-independence.html#cb64-16" tabindex="-1"></a></span>
+<span id="cb64-17"><a href="testing-for-independence.html#cb64-17" tabindex="-1"></a><span class="co"># Ensure select function from dplyr is used explicitly</span></span>
+<span id="cb64-18"><a href="testing-for-independence.html#cb64-18" tabindex="-1"></a>select <span class="ot">&lt;-</span> dplyr<span class="sc">::</span>select</span>
+<span id="cb64-19"><a href="testing-for-independence.html#cb64-19" tabindex="-1"></a></span>
+<span id="cb64-20"><a href="testing-for-independence.html#cb64-20" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb64-21"><a href="testing-for-independence.html#cb64-21" tabindex="-1"></a><span class="co">#                        Setting the RAM Memory Limit                          #</span></span>
+<span id="cb64-22"><a href="testing-for-independence.html#cb64-22" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb64-23"><a href="testing-for-independence.html#cb64-23" tabindex="-1"></a></span>
+<span id="cb64-24"><a href="testing-for-independence.html#cb64-24" tabindex="-1"></a><span class="fu">memory.limit</span>(<span class="dv">250000000</span>)</span></code></pre></div>
+<pre><code>## [1] Inf</code></pre>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="testing-for-independence.html#cb66-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb66-2"><a href="testing-for-independence.html#cb66-2" tabindex="-1"></a><span class="co">#                           Loading Datasets                                   #</span></span>
+<span id="cb66-3"><a href="testing-for-independence.html#cb66-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb66-4"><a href="testing-for-independence.html#cb66-4" tabindex="-1"></a></span>
+<span id="cb66-5"><a href="testing-for-independence.html#cb66-5" tabindex="-1"></a>HH_data <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/sect1_hh_w4.sav&quot;</span>)</span></code></pre></div>
+</div>
+<div id="processing-education-variables" class="section level3 unnumbered hasAnchor">
+<h3>Processing Education Variables<a href="testing-for-independence.html#processing-education-variables" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block processes and recodes the parental education variables into analytical categories. It creates a new variable for the <strong>mother’s education level (<code>education_mother</code>)</strong> and another for the <strong>father’s education level (<code>education_father</code>)</strong>, grouping the original codes into four levels: “No education”, “Primary”, “Secondary”, and “Above secondary”. The <code>case_when()</code> function is used to classify multiple values into defined ranges or categories of interest, while also handling special codes (e.g., 98 = unknown) and missing values. Additionally, a <code>zone</code> variable is created as a factor, representing the <strong>urban/rural classification</strong> (<code>saq14</code>), which will be useful for later cross-tabulations by area of residence.</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="testing-for-independence.html#cb67-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb67-2"><a href="testing-for-independence.html#cb67-2" tabindex="-1"></a><span class="co">#                    Processing Education Variables                            #</span></span>
+<span id="cb67-3"><a href="testing-for-independence.html#cb67-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb67-4"><a href="testing-for-independence.html#cb67-4" tabindex="-1"></a></span>
+<span id="cb67-5"><a href="testing-for-independence.html#cb67-5" tabindex="-1"></a>HH_data <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb67-6"><a href="testing-for-independence.html#cb67-6" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb67-7"><a href="testing-for-independence.html#cb67-7" tabindex="-1"></a>    <span class="at">education_mother =</span> <span class="fu">case_when</span>(</span>
+<span id="cb67-8"><a href="testing-for-independence.html#cb67-8" tabindex="-1"></a>      s1q20 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">98</span>, <span class="dv">99</span>, <span class="dv">93</span>) <span class="sc">~</span> <span class="st">&quot;01 No education&quot;</span>,</span>
+<span id="cb67-9"><a href="testing-for-independence.html#cb67-9" tabindex="-1"></a>      s1q20 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">96</span>, <span class="dv">94</span>) <span class="sc">~</span> <span class="st">&quot;02 Primary&quot;</span>,</span>
+<span id="cb67-10"><a href="testing-for-independence.html#cb67-10" tabindex="-1"></a>      s1q20 <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> s1q20 <span class="sc">&lt;=</span> <span class="dv">8</span> <span class="sc">~</span> <span class="st">&quot;02 Primary&quot;</span>,</span>
+<span id="cb67-11"><a href="testing-for-independence.html#cb67-11" tabindex="-1"></a>      s1q20 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">9</span><span class="sc">:</span><span class="dv">13</span>, <span class="dv">21</span><span class="sc">:</span><span class="dv">26</span>, <span class="dv">95</span>) <span class="sc">~</span> <span class="st">&quot;03 Secondary&quot;</span>,</span>
+<span id="cb67-12"><a href="testing-for-independence.html#cb67-12" tabindex="-1"></a>      <span class="fu">is.na</span>(s1q20) <span class="sc">~</span> <span class="cn">NA_character_</span>,</span>
+<span id="cb67-13"><a href="testing-for-independence.html#cb67-13" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;04 Above secondary&quot;</span></span>
+<span id="cb67-14"><a href="testing-for-independence.html#cb67-14" tabindex="-1"></a>    ),</span>
+<span id="cb67-15"><a href="testing-for-independence.html#cb67-15" tabindex="-1"></a>    <span class="at">education_father =</span> <span class="fu">case_when</span>(</span>
+<span id="cb67-16"><a href="testing-for-independence.html#cb67-16" tabindex="-1"></a>      s1q16 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">98</span>, <span class="dv">99</span>, <span class="dv">93</span>) <span class="sc">~</span> <span class="st">&quot;01 No education&quot;</span>,</span>
+<span id="cb67-17"><a href="testing-for-independence.html#cb67-17" tabindex="-1"></a>      s1q16 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">96</span>, <span class="dv">94</span>) <span class="sc">~</span> <span class="st">&quot;02 Primary&quot;</span>,</span>
+<span id="cb67-18"><a href="testing-for-independence.html#cb67-18" tabindex="-1"></a>      s1q16 <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> s1q16 <span class="sc">&lt;=</span> <span class="dv">8</span> <span class="sc">~</span> <span class="st">&quot;02 Primary&quot;</span>,</span>
+<span id="cb67-19"><a href="testing-for-independence.html#cb67-19" tabindex="-1"></a>      s1q16 <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">9</span><span class="sc">:</span><span class="dv">13</span>, <span class="dv">21</span><span class="sc">:</span><span class="dv">26</span>, <span class="dv">95</span>) <span class="sc">~</span> <span class="st">&quot;03 Secondary&quot;</span>,</span>
+<span id="cb67-20"><a href="testing-for-independence.html#cb67-20" tabindex="-1"></a>      <span class="fu">is.na</span>(s1q16) <span class="sc">~</span> <span class="cn">NA_character_</span>,</span>
+<span id="cb67-21"><a href="testing-for-independence.html#cb67-21" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;04 Above secondary&quot;</span></span>
+<span id="cb67-22"><a href="testing-for-independence.html#cb67-22" tabindex="-1"></a>    ),</span>
+<span id="cb67-23"><a href="testing-for-independence.html#cb67-23" tabindex="-1"></a>    <span class="at">zone =</span> <span class="fu">as_factor</span>(saq14)</span>
+<span id="cb67-24"><a href="testing-for-independence.html#cb67-24" tabindex="-1"></a>  )</span></code></pre></div>
+<p>As in previous sections, this block redefines the <strong>complex survey design</strong> using the dataset with processed education variables. The same stratification structure by region and urban/rural area is retained, and adjusted weights (<code>pw_w4</code>) are applied. This setup is essential to ensure that subsequent analyses, including independence tests, correctly account for the survey design.</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="testing-for-independence.html#cb68-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb68-2"><a href="testing-for-independence.html#cb68-2" tabindex="-1"></a><span class="co">#                          Defining the Survey Design                          #</span></span>
+<span id="cb68-3"><a href="testing-for-independence.html#cb68-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb68-4"><a href="testing-for-independence.html#cb68-4" tabindex="-1"></a></span>
+<span id="cb68-5"><a href="testing-for-independence.html#cb68-5" tabindex="-1"></a>ESS4_design <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb68-6"><a href="testing-for-independence.html#cb68-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strata =</span> <span class="fu">paste0</span>(saq01, <span class="st">&quot;_&quot;</span>, saq14)) <span class="sc">%&gt;%</span></span>
+<span id="cb68-7"><a href="testing-for-independence.html#cb68-7" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(</span>
+<span id="cb68-8"><a href="testing-for-independence.html#cb68-8" tabindex="-1"></a>    <span class="at">ids =</span> ea_id,</span>
+<span id="cb68-9"><a href="testing-for-independence.html#cb68-9" tabindex="-1"></a>    <span class="co"># Primary sampling unit identifier (EA)</span></span>
+<span id="cb68-10"><a href="testing-for-independence.html#cb68-10" tabindex="-1"></a>    <span class="at">strata =</span> strata,</span>
+<span id="cb68-11"><a href="testing-for-independence.html#cb68-11" tabindex="-1"></a>    <span class="co"># Stratification by region (saq01) and urban/rural zone (saq14)</span></span>
+<span id="cb68-12"><a href="testing-for-independence.html#cb68-12" tabindex="-1"></a>    <span class="at">weights =</span> pw_w4,</span>
+<span id="cb68-13"><a href="testing-for-independence.html#cb68-13" tabindex="-1"></a>    <span class="co"># Final adjusted weight</span></span>
+<span id="cb68-14"><a href="testing-for-independence.html#cb68-14" tabindex="-1"></a>    <span class="at">nest =</span> <span class="cn">TRUE</span></span>
+<span id="cb68-15"><a href="testing-for-independence.html#cb68-15" tabindex="-1"></a>  )</span>
+<span id="cb68-16"><a href="testing-for-independence.html#cb68-16" tabindex="-1"></a></span>
+<span id="cb68-17"><a href="testing-for-independence.html#cb68-17" tabindex="-1"></a><span class="fu">options</span>(<span class="at">survey.lonely.psu =</span> <span class="st">&quot;fail&quot;</span>)</span>
+<span id="cb68-18"><a href="testing-for-independence.html#cb68-18" tabindex="-1"></a><span class="fu">summary</span>(ESS4_design)</span></code></pre></div>
+<pre><code>## Stratified 1 - level Cluster Sampling design (with replacement)
+## With (535) clusters.
+## Called via srvyr
+## Probabilities:
+##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## 3.932e-05 1.647e-04 7.503e-04 2.545e-03 3.839e-03 1.317e-01 
+## Stratum Sizes: 
+##             1_1 1_2 12_1 12_2 13_1 13_2 14_2 15_1 15_2  2_1 2_2  3_1 3_2  4_1
+## obs        1822 944  956 1304  896 1207 2956  797 1524 1552 750 2173 835 2384
+## design.PSU   35  19   19   20   18   24   52   14   28   28  15   43  18   43
+## actual.PSU   35  19   19   20   18   24   52   14   28   28  15   43  18   43
+##             4_2  5_1  5_2 6_1 6_2  7_1  7_2
+## obs        1099 2089 1406 807 704 2226 1072
+## design.PSU   20   35   17  16  13   40   18
+## actual.PSU   20   35   17  16  13   40   18
+## Data variables:
+##  [1] &quot;household_id&quot;     &quot;individual_id&quot;    &quot;ea_id&quot;            &quot;saq14&quot;           
+##  [5] &quot;pw_w4&quot;            &quot;saq01&quot;            &quot;saq02&quot;            &quot;saq03&quot;           
+##  [9] &quot;saq04&quot;            &quot;saq05&quot;            &quot;saq06&quot;            &quot;saq07&quot;           
+## [13] &quot;saq08&quot;            &quot;s1q00&quot;            &quot;s1q01&quot;            &quot;s1q02&quot;           
+## [17] &quot;s1q03a&quot;           &quot;s1q03b&quot;           &quot;s1q04&quot;            &quot;s1q05&quot;           
+## [21] &quot;s1q06&quot;            &quot;s1q23&quot;            &quot;s1q23_os&quot;         &quot;s1q07&quot;           
+## [25] &quot;s1q08&quot;            &quot;s1q08_os&quot;         &quot;s1q09&quot;            &quot;s1q10&quot;           
+## [29] &quot;s1q11&quot;            &quot;s1q12&quot;            &quot;s1q13&quot;            &quot;s1q14&quot;           
+## [33] &quot;s1q15&quot;            &quot;s1q16&quot;            &quot;s1q17&quot;            &quot;s1q18&quot;           
+## [37] &quot;s1q19&quot;            &quot;s1q20&quot;            &quot;s1q21&quot;            &quot;s1q21_os&quot;        
+## [41] &quot;s1q22&quot;            &quot;s1q22_os&quot;         &quot;education_mother&quot; &quot;education_father&quot;
+## [45] &quot;zone&quot;             &quot;strata&quot;</code></pre>
+<p>This block estimates the <strong>educational distribution of biological parents</strong> of children and adolescents under 18 years old, based on the complex survey design. It first computes <strong>national-level estimates</strong> for fathers (<code>education_father</code>) and mothers (<code>education_mother</code>) using proportions (<code>survey_mean</code>). Then, it generates <strong>zone-level estimates</strong> (urban or rural, <code>saq14</code>) for both parents, grouped by their respective education levels. The results are reshaped into <strong>wide-format tables</strong> using <code>pivot_wider()</code> to facilitate comparison across zones.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="testing-for-independence.html#cb70-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb70-2"><a href="testing-for-independence.html#cb70-2" tabindex="-1"></a><span class="co"># TABLE 2.4 - Education and Occupation of Biological Parents                   #</span></span>
+<span id="cb70-3"><a href="testing-for-independence.html#cb70-3" tabindex="-1"></a><span class="co"># Source: Central Statistics Agency of Ethiopia &amp; World Bank (2018/19)         #</span></span>
+<span id="cb70-4"><a href="testing-for-independence.html#cb70-4" tabindex="-1"></a><span class="co"># Ethiopia Socioeconomic Survey (ESS) Survey Report                            #</span></span>
+<span id="cb70-5"><a href="testing-for-independence.html#cb70-5" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb70-6"><a href="testing-for-independence.html#cb70-6" tabindex="-1"></a></span>
+<span id="cb70-7"><a href="testing-for-independence.html#cb70-7" tabindex="-1"></a><span class="do">## National estimates for father`s education</span></span>
+<span id="cb70-8"><a href="testing-for-independence.html#cb70-8" tabindex="-1"></a>tab_02_tot_father <span class="ot">&lt;-</span> ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb70-9"><a href="testing-for-independence.html#cb70-9" tabindex="-1"></a>  <span class="fu">filter</span>(s1q03a <span class="sc">&lt;</span> <span class="dv">18</span>,<span class="sc">!</span><span class="fu">is.na</span>(education_father)) <span class="sc">%&gt;%</span></span>
+<span id="cb70-10"><a href="testing-for-independence.html#cb70-10" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">Education =</span> education_father) <span class="sc">%&gt;%</span></span>
+<span id="cb70-11"><a href="testing-for-independence.html#cb70-11" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">P_father_National =</span> <span class="fu">survey_mean</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)))</span>
+<span id="cb70-12"><a href="testing-for-independence.html#cb70-12" tabindex="-1"></a></span>
+<span id="cb70-13"><a href="testing-for-independence.html#cb70-13" tabindex="-1"></a><span class="do">## National estimates for mother&#39;s education</span></span>
+<span id="cb70-14"><a href="testing-for-independence.html#cb70-14" tabindex="-1"></a>tab_02_tot_mother <span class="ot">&lt;-</span> ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb70-15"><a href="testing-for-independence.html#cb70-15" tabindex="-1"></a>  <span class="fu">filter</span>(s1q03a <span class="sc">&lt;</span> <span class="dv">18</span>,<span class="sc">!</span><span class="fu">is.na</span>(education_mother)) <span class="sc">%&gt;%</span></span>
+<span id="cb70-16"><a href="testing-for-independence.html#cb70-16" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">Education =</span> education_mother) <span class="sc">%&gt;%</span></span>
+<span id="cb70-17"><a href="testing-for-independence.html#cb70-17" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">P_mother_National =</span> <span class="fu">survey_mean</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)))</span>
+<span id="cb70-18"><a href="testing-for-independence.html#cb70-18" tabindex="-1"></a></span>
+<span id="cb70-19"><a href="testing-for-independence.html#cb70-19" tabindex="-1"></a><span class="do">## Estimates by zone for father</span></span>
+<span id="cb70-20"><a href="testing-for-independence.html#cb70-20" tabindex="-1"></a>tab_02_zone_father <span class="ot">&lt;-</span> ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb70-21"><a href="testing-for-independence.html#cb70-21" tabindex="-1"></a>  <span class="fu">filter</span>(s1q03a <span class="sc">&lt;</span> <span class="dv">18</span>,<span class="sc">!</span><span class="fu">is.na</span>(education_father)) <span class="sc">%&gt;%</span></span>
+<span id="cb70-22"><a href="testing-for-independence.html#cb70-22" tabindex="-1"></a>  <span class="fu">group_by</span>(zone, <span class="at">Education =</span> education_father) <span class="sc">%&gt;%</span></span>
+<span id="cb70-23"><a href="testing-for-independence.html#cb70-23" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">P_father =</span> <span class="fu">survey_mean</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)))</span>
+<span id="cb70-24"><a href="testing-for-independence.html#cb70-24" tabindex="-1"></a></span>
+<span id="cb70-25"><a href="testing-for-independence.html#cb70-25" tabindex="-1"></a>tab_02_zone_father_P <span class="ot">&lt;-</span> tab_02_zone_father <span class="sc">%&gt;%</span></span>
+<span id="cb70-26"><a href="testing-for-independence.html#cb70-26" tabindex="-1"></a>  <span class="fu">transmute</span>(zone, Education      ,</span>
+<span id="cb70-27"><a href="testing-for-independence.html#cb70-27" tabindex="-1"></a>            P_father) <span class="sc">%&gt;%</span></span>
+<span id="cb70-28"><a href="testing-for-independence.html#cb70-28" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb70-29"><a href="testing-for-independence.html#cb70-29" tabindex="-1"></a>    <span class="at">names_from =</span> zone ,</span>
+<span id="cb70-30"><a href="testing-for-independence.html#cb70-30" tabindex="-1"></a>    <span class="at">values_from =</span> P_father,</span>
+<span id="cb70-31"><a href="testing-for-independence.html#cb70-31" tabindex="-1"></a>    <span class="at">values_fill =</span> <span class="fu">list</span>(<span class="at">P_father =</span> <span class="dv">0</span>),</span>
+<span id="cb70-32"><a href="testing-for-independence.html#cb70-32" tabindex="-1"></a>    <span class="at">names_prefix =</span> <span class="st">&quot;P_father&quot;</span></span>
+<span id="cb70-33"><a href="testing-for-independence.html#cb70-33" tabindex="-1"></a>  )</span>
+<span id="cb70-34"><a href="testing-for-independence.html#cb70-34" tabindex="-1"></a></span>
+<span id="cb70-35"><a href="testing-for-independence.html#cb70-35" tabindex="-1"></a><span class="do">## Estimates by zone for mother</span></span>
+<span id="cb70-36"><a href="testing-for-independence.html#cb70-36" tabindex="-1"></a>tab_02_zone_mother <span class="ot">&lt;-</span> ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb70-37"><a href="testing-for-independence.html#cb70-37" tabindex="-1"></a>  <span class="fu">filter</span>(s1q03a <span class="sc">&lt;</span> <span class="dv">18</span>,<span class="sc">!</span><span class="fu">is.na</span>(education_mother)) <span class="sc">%&gt;%</span></span>
+<span id="cb70-38"><a href="testing-for-independence.html#cb70-38" tabindex="-1"></a>  <span class="fu">group_by</span>(zone, <span class="at">Education =</span> education_mother) <span class="sc">%&gt;%</span></span>
+<span id="cb70-39"><a href="testing-for-independence.html#cb70-39" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">P_mother =</span> <span class="fu">survey_mean</span>(<span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;cv&quot;</span>)))</span>
+<span id="cb70-40"><a href="testing-for-independence.html#cb70-40" tabindex="-1"></a></span>
+<span id="cb70-41"><a href="testing-for-independence.html#cb70-41" tabindex="-1"></a>tab_02_zone_mother_P <span class="ot">&lt;-</span> tab_02_zone_mother <span class="sc">%&gt;%</span></span>
+<span id="cb70-42"><a href="testing-for-independence.html#cb70-42" tabindex="-1"></a>  <span class="fu">transmute</span>(zone, Education ,</span>
+<span id="cb70-43"><a href="testing-for-independence.html#cb70-43" tabindex="-1"></a>            P_mother)  <span class="sc">%&gt;%</span></span>
+<span id="cb70-44"><a href="testing-for-independence.html#cb70-44" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb70-45"><a href="testing-for-independence.html#cb70-45" tabindex="-1"></a>    <span class="at">names_from =</span> zone ,</span>
+<span id="cb70-46"><a href="testing-for-independence.html#cb70-46" tabindex="-1"></a>    <span class="at">values_from =</span> P_mother,</span>
+<span id="cb70-47"><a href="testing-for-independence.html#cb70-47" tabindex="-1"></a>    <span class="at">values_fill =</span> <span class="fu">list</span>(<span class="at">P_mother =</span> <span class="dv">0</span>),</span>
+<span id="cb70-48"><a href="testing-for-independence.html#cb70-48" tabindex="-1"></a>    <span class="at">names_prefix =</span> <span class="st">&quot;P_mother&quot;</span></span>
+<span id="cb70-49"><a href="testing-for-independence.html#cb70-49" tabindex="-1"></a>  )</span></code></pre></div>
+<p>This block merges the education estimates for biological mothers and fathers into a single consolidated summary table. Using <code>inner_join()</code>, it combines the estimated national proportions and zone-level proportions (urban and rural) for each education category. The final table displays the proportion of fathers and mothers attaining each education level, both nationally and by area type. This layout enables direct comparisons between parents and across geographic settings, supporting analyses of intergenerational educational gaps and territorial disparities.</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="testing-for-independence.html#cb71-1" tabindex="-1"></a><span class="do">## Merging tables</span></span>
+<span id="cb71-2"><a href="testing-for-independence.html#cb71-2" tabindex="-1"></a>tab_02 <span class="ot">&lt;-</span> <span class="fu">inner_join</span>(tab_02_tot_mother, tab_02_tot_father) <span class="sc">%&gt;%</span></span>
+<span id="cb71-3"><a href="testing-for-independence.html#cb71-3" tabindex="-1"></a>  <span class="fu">inner_join</span>(<span class="fu">inner_join</span>(tab_02_zone_father_P, tab_02_zone_mother_P)) <span class="sc">%&gt;%</span></span>
+<span id="cb71-4"><a href="testing-for-independence.html#cb71-4" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb71-5"><a href="testing-for-independence.html#cb71-5" tabindex="-1"></a>    Education,</span>
+<span id="cb71-6"><a href="testing-for-independence.html#cb71-6" tabindex="-1"></a>    P_father_National,</span>
+<span id="cb71-7"><a href="testing-for-independence.html#cb71-7" tabindex="-1"></a>    P_mother_National,</span>
+<span id="cb71-8"><a href="testing-for-independence.html#cb71-8" tabindex="-1"></a>    <span class="fu">matches</span>(<span class="st">&quot;RURAL&quot;</span>),</span>
+<span id="cb71-9"><a href="testing-for-independence.html#cb71-9" tabindex="-1"></a>    <span class="fu">matches</span>(<span class="st">&quot;URBAN&quot;</span>)</span>
+<span id="cb71-10"><a href="testing-for-independence.html#cb71-10" tabindex="-1"></a>  )</span>
+<span id="cb71-11"><a href="testing-for-independence.html#cb71-11" tabindex="-1"></a></span>
+<span id="cb71-12"><a href="testing-for-independence.html#cb71-12" tabindex="-1"></a>tab_02</span></code></pre></div>
+<p>The table summarizes the educational attainment of biological mothers and fathers of individuals under 18, disaggregated by urban and rural areas and presented with national-level estimates</p>
+<table class="table" style="font-size: 12px; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Education
+</th>
+<th style="text-align:right;">
+P_father_National
+</th>
+<th style="text-align:right;">
+P_mother_National
+</th>
+<th style="text-align:right;">
+P_father1. RURAL
+</th>
+<th style="text-align:right;">
+P_mother1. RURAL
+</th>
+<th style="text-align:right;">
+P_father2. URBAN
+</th>
+<th style="text-align:right;">
+P_mother2. URBAN
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+01 No education
+</td>
+<td style="text-align:right;">
+0.4742726
+</td>
+<td style="text-align:right;">
+0.6970287
+</td>
+<td style="text-align:right;">
+0.5237719
+</td>
+<td style="text-align:right;">
+0.7726926
+</td>
+<td style="text-align:right;">
+0.2968080
+</td>
+<td style="text-align:right;">
+0.4257586
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+02 Primary
+</td>
+<td style="text-align:right;">
+0.4032306
+</td>
+<td style="text-align:right;">
+0.2367733
+</td>
+<td style="text-align:right;">
+0.4164563
+</td>
+<td style="text-align:right;">
+0.2111184
+</td>
+<td style="text-align:right;">
+0.3558137
+</td>
+<td style="text-align:right;">
+0.3287513
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+03 Secondary
+</td>
+<td style="text-align:right;">
+0.0750082
+</td>
+<td style="text-align:right;">
+0.0437780
+</td>
+<td style="text-align:right;">
+0.0415414
+</td>
+<td style="text-align:right;">
+0.0130762
+</td>
+<td style="text-align:right;">
+0.1949932
+</td>
+<td style="text-align:right;">
+0.1538501
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+04 Above secondary
+</td>
+<td style="text-align:right;">
+0.0474887
+</td>
+<td style="text-align:right;">
+0.0224200
+</td>
+<td style="text-align:right;">
+0.0182305
+</td>
+<td style="text-align:right;">
+0.0031128
+</td>
+<td style="text-align:right;">
+0.1523851
+</td>
+<td style="text-align:right;">
+0.0916400
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="testing-for-independence-1" class="section level3 unnumbered hasAnchor">
+<h3>Testing for Independence<a href="testing-for-independence.html#testing-for-independence-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block creates a weighted contingency table between the mother’s education level and the type of residence area, based on the complex survey design. The <code>Ntotal = 1</code> option scales the table to proportions. The <code>addmargins()</code> function adds marginal totals for easier interpretation. The output provides insight into the distribution of maternal education across geographic settings.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="testing-for-independence.html#cb72-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb72-2"><a href="testing-for-independence.html#cb72-2" tabindex="-1"></a><span class="co">#                   Testing for Independence                                   #</span></span>
+<span id="cb72-3"><a href="testing-for-independence.html#cb72-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb72-4"><a href="testing-for-independence.html#cb72-4" tabindex="-1"></a></span>
+<span id="cb72-5"><a href="testing-for-independence.html#cb72-5" tabindex="-1"></a></span>
+<span id="cb72-6"><a href="testing-for-independence.html#cb72-6" tabindex="-1"></a><span class="do">## Cross-tabulations</span></span>
+<span id="cb72-7"><a href="testing-for-independence.html#cb72-7" tabindex="-1"></a><span class="fu">svytable</span>(<span class="sc">~</span> education_mother <span class="sc">+</span> zone, ESS4_design, <span class="at">Ntotal =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb72-8"><a href="testing-for-independence.html#cb72-8" tabindex="-1"></a>  <span class="fu">addmargins</span>()</span></code></pre></div>
+<pre><code>##                     zone
+## education_mother        1. RURAL    2. URBAN         Sum
+##   01 No education    0.625877321 0.170044114 0.795921435
+##   02 Primary         0.101217942 0.060196764 0.161414705
+##   03 Secondary       0.006368653 0.022516532 0.028885185
+##   04 Above secondary 0.001366510 0.012412165 0.013778674
+##   Sum                0.734830425 0.265169575 1.000000000</code></pre>
+<p>This block replicates the above logic, focusing on the father’s education level. It generates a weighted proportion table by urban/rural area, helping identify patterns or differences in paternal education across zones.</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="testing-for-independence.html#cb74-1" tabindex="-1"></a><span class="fu">svytable</span>(<span class="sc">~</span> education_father <span class="sc">+</span> zone, ESS4_design, <span class="at">Ntotal =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb74-2"><a href="testing-for-independence.html#cb74-2" tabindex="-1"></a>  <span class="fu">addmargins</span>()</span></code></pre></div>
+<pre><code>##                     zone
+## education_father        1. RURAL    2. URBAN         Sum
+##   01 No education    0.493907929 0.134858962 0.628766892
+##   02 Primary         0.211495391 0.073860235 0.285355626
+##   03 Secondary       0.020643258 0.032062777 0.052706034
+##   04 Above secondary 0.008783846 0.024387602 0.033171448
+##   Sum                0.734830425 0.265169575 1.000000000</code></pre>
+<p>This block applies a design-adjusted chi-square test to evaluate the statistical independence between mother’s education and area of residence. A p-value less than 0.05 indicates a significant association, meaning education levels vary meaningfully by zone.</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="testing-for-independence.html#cb76-1" tabindex="-1"></a><span class="do">## Chi-square tests</span></span>
+<span id="cb76-2"><a href="testing-for-independence.html#cb76-2" tabindex="-1"></a><span class="fu">svychisq</span>(<span class="sc">~</span> education_mother <span class="sc">+</span> zone, ESS4_design)</span></code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s X^2: Rao &amp; Scott adjustment
+## 
+## data:  NextMethod()
+## F = 100.29, ndf = 2.0376, ddf = 1047.3152, p-value &lt; 2.2e-16</code></pre>
+<p>The adjusted chi-square test (Rao &amp; Scott) for the association between maternal education and residential zone yields a highly significant result (F = 100.29, p &lt; 0.001). This confirms a statistically significant relationship between both variables, rejecting the null hypothesis of independence. The strength of this association suggests that a mother’s educational level is strongly linked to whether she lives in a rural or urban zone.</p>
+<p>This block repeats the previous test but for father’s education. It checks whether paternal education is statistically dependent on whether the household resides in a rural or urban area.</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="testing-for-independence.html#cb78-1" tabindex="-1"></a><span class="fu">svychisq</span>(<span class="sc">~</span> education_father <span class="sc">+</span> zone, ESS4_design)</span></code></pre></div>
+<pre><code>## 
+##  Pearson&#39;s X^2: Rao &amp; Scott adjustment
+## 
+## data:  NextMethod()
+## F = 76.817, ndf = 2.8926, ddf = 1486.7710, p-value &lt; 2.2e-16</code></pre>
+<p>Similarly, the chi-square test for paternal education also shows a significant association (F = 76.82, p &lt; 0.001). Although the F statistic is slightly lower than for mothers, the relationship remains very strong. This reinforces the conclusion that fathers’ educational levels vary significantly by residential zone, with a clear trend toward higher education in urban environments.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="cross-tabulations.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/psirusteam/chapter9Rcodes/4.3_Testing_for_independence.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["CHAPTER 9 - EXAMPLES IN R.pdf", "CHAPTER 9 - EXAMPLES IN R.epub", "CHAPTER 9 - EXAMPLES IN R.mobi"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"tconfig": null
+});
+});
+</script>
+
+</body>
+
+</html>

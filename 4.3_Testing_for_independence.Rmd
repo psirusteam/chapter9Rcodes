@@ -1,0 +1,247 @@
+```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE,
+                      cache = TRUE, 
+                      cache.path = "cache/4.3/")
+```
+
+# 4.3 Testing for Independence {-}
+
+This code section performs a comprehensive analysis of educational attainment patterns using survey data. It begins by setting up the R environment and loading necessary packages, then processes parental education variables and geographic classifications. The analysis implements proper survey weighting methodology and generates both descriptive statistics (through cross-tabulations) and inferential tests (chi-square tests of independence) to examine relationships between education levels and residential zones. The workflow includes data cleaning, variable recoding, survey design specification, and statistical testing components.
+
+### Prepare the work environment {-}
+
+This initial code block in chapter 4.3 prepares the working environment to apply **independence tests** on categorical data from the ESS4 household questionnaire (Section 1). It begins by clearing the R environment to avoid conflicts with previous sessions and loads the required libraries for analyzing complex survey data (`survey`, `srvyr`, among others). The `select` function from `dplyr` is explicitly set to avoid masking issues, and a high RAM limit is configured to enhance performance for large-scale computations. Finally, the corresponding dataset is imported using `read_sav()`, enabling efficient and structured handling of SPSS (.sav) files for subsequent analysis.
+
+```{r}
+#------------------------------------------------------------------------------#
+#                           Cleaning R Environment                             #
+#------------------------------------------------------------------------------#
+
+rm(list = ls())
+gc()
+
+#------------------------------------------------------------------------------#
+#                                Libraries                                     #
+#------------------------------------------------------------------------------#
+
+library(tidyverse)
+library(survey)
+library(srvyr)
+library(data.table)
+library(magrittr)
+library(haven)
+library(stringr)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+library(convey)
+
+# Ensure select function from dplyr is used explicitly
+select <- dplyr::select
+
+#------------------------------------------------------------------------------#
+#                        Setting the RAM Memory Limit                          #
+#------------------------------------------------------------------------------#
+
+memory.limit(250000000)
+
+#------------------------------------------------------------------------------#
+#                           Loading Datasets                                   #
+#------------------------------------------------------------------------------#
+
+HH_data <- read_sav("data/data_ESS4/sect1_hh_w4.sav")
+
+```
+
+###  Processing Education Variables {-}
+
+This block processes and recodes the parental education variables into analytical categories. It creates a new variable for the **mother’s education level (`education_mother`)** and another for the **father’s education level (`education_father`)**, grouping the original codes into four levels: “No education”, “Primary”, “Secondary”, and “Above secondary”. The `case_when()` function is used to classify multiple values into defined ranges or categories of interest, while also handling special codes (e.g., 98 = unknown) and missing values. Additionally, a `zone` variable is created as a factor, representing the **urban/rural classification** (`saq14`), which will be useful for later cross-tabulations by area of residence.
+
+
+```{r}
+
+#------------------------------------------------------------------------------#
+#                    Processing Education Variables                            #
+#------------------------------------------------------------------------------#
+
+HH_data <- HH_data %>%
+  mutate(
+    education_mother = case_when(
+      s1q20 %in% c(98, 99, 93) ~ "01 No education",
+      s1q20 %in% c(96, 94) ~ "02 Primary",
+      s1q20 >= 0 & s1q20 <= 8 ~ "02 Primary",
+      s1q20 %in% c(9:13, 21:26, 95) ~ "03 Secondary",
+      is.na(s1q20) ~ NA_character_,
+      TRUE ~ "04 Above secondary"
+    ),
+    education_father = case_when(
+      s1q16 %in% c(98, 99, 93) ~ "01 No education",
+      s1q16 %in% c(96, 94) ~ "02 Primary",
+      s1q16 >= 0 & s1q16 <= 8 ~ "02 Primary",
+      s1q16 %in% c(9:13, 21:26, 95) ~ "03 Secondary",
+      is.na(s1q16) ~ NA_character_,
+      TRUE ~ "04 Above secondary"
+    ),
+    zone = as_factor(saq14)
+  )
+
+```
+As in previous sections, this block redefines the **complex survey design** using the dataset with processed education variables. The same stratification structure by region and urban/rural area is retained, and adjusted weights (`pw_w4`) are applied. This setup is essential to ensure that subsequent analyses, including independence tests, correctly account for the survey design.
+
+
+```{r}
+#------------------------------------------------------------------------------#
+#                          Defining the Survey Design                          #
+#------------------------------------------------------------------------------#
+
+ESS4_design <- HH_data %>%
+  mutate(strata = paste0(saq01, "_", saq14)) %>%
+  as_survey_design(
+    ids = ea_id,
+    # Primary sampling unit identifier (EA)
+    strata = strata,
+    # Stratification by region (saq01) and urban/rural zone (saq14)
+    weights = pw_w4,
+    # Final adjusted weight
+    nest = TRUE
+  )
+
+options(survey.lonely.psu = "fail")
+summary(ESS4_design)
+
+```
+
+This block estimates the **educational distribution of biological parents** of children and adolescents under 18 years old, based on the complex survey design. It first computes **national-level estimates** for fathers (`education_father`) and mothers (`education_mother`) using proportions (`survey_mean`). Then, it generates **zone-level estimates** (urban or rural, `saq14`) for both parents, grouped by their respective education levels. The results are reshaped into **wide-format tables** using `pivot_wider()` to facilitate comparison across zones. 
+
+```{r}
+#------------------------------------------------------------------------------#
+# TABLE 2.4 - Education and Occupation of Biological Parents                   #
+# Source: Central Statistics Agency of Ethiopia & World Bank (2018/19)         #
+# Ethiopia Socioeconomic Survey (ESS) Survey Report                            #
+#------------------------------------------------------------------------------#
+
+## National estimates for father`s education
+tab_02_tot_father <- ESS4_design %>%
+  filter(s1q03a < 18,!is.na(education_father)) %>%
+  group_by(Education = education_father) %>%
+  summarise(P_father_National = survey_mean(vartype = c("se", "cv")))
+
+## National estimates for mother's education
+tab_02_tot_mother <- ESS4_design %>%
+  filter(s1q03a < 18,!is.na(education_mother)) %>%
+  group_by(Education = education_mother) %>%
+  summarise(P_mother_National = survey_mean(vartype = c("se", "cv")))
+
+## Estimates by zone for father
+tab_02_zone_father <- ESS4_design %>%
+  filter(s1q03a < 18,!is.na(education_father)) %>%
+  group_by(zone, Education = education_father) %>%
+  summarise(P_father = survey_mean(vartype = c("se", "cv")))
+
+tab_02_zone_father_P <- tab_02_zone_father %>%
+  transmute(zone, Education      ,
+            P_father) %>%
+  pivot_wider(
+    names_from = zone ,
+    values_from = P_father,
+    values_fill = list(P_father = 0),
+    names_prefix = "P_father"
+  )
+
+## Estimates by zone for mother
+tab_02_zone_mother <- ESS4_design %>%
+  filter(s1q03a < 18,!is.na(education_mother)) %>%
+  group_by(zone, Education = education_mother) %>%
+  summarise(P_mother = survey_mean(vartype = c("se", "cv")))
+
+tab_02_zone_mother_P <- tab_02_zone_mother %>%
+  transmute(zone, Education ,
+            P_mother)  %>%
+  pivot_wider(
+    names_from = zone ,
+    values_from = P_mother,
+    values_fill = list(P_mother = 0),
+    names_prefix = "P_mother"
+  )
+
+```
+
+
+This block merges the education estimates for biological mothers and fathers into a single consolidated summary table. Using `inner_join()`, it combines the estimated national proportions and zone-level proportions (urban and rural) for each education category. The final table displays the proportion of fathers and mothers attaining each education level, both nationally and by area type. This layout enables direct comparisons between parents and across geographic settings, supporting analyses of intergenerational educational gaps and territorial disparities.
+
+
+```{r, echo=TRUE, eval=FALSE}
+## Merging tables
+tab_02 <- inner_join(tab_02_tot_mother, tab_02_tot_father) %>%
+  inner_join(inner_join(tab_02_zone_father_P, tab_02_zone_mother_P)) %>%
+  select(
+    Education,
+    P_father_National,
+    P_mother_National,
+    matches("RURAL"),
+    matches("URBAN")
+  )
+
+tab_02
+```
+
+The table summarizes the educational attainment of biological mothers and fathers of individuals under 18, disaggregated by urban and rural areas and presented with national-level estimates
+
+```{r, echo=FALSE, eval=TRUE}
+## Merging tables
+tab_02 <- inner_join(tab_02_tot_mother, tab_02_tot_father) %>%
+  inner_join(inner_join(tab_02_zone_father_P, tab_02_zone_mother_P)) %>%
+  select(
+    Education,
+    P_father_National,
+    P_mother_National,
+    matches("RURAL"),
+    matches("URBAN")
+  )
+
+tab_02 %>%  kable(format = "html") %>%
+  kable_styling(font_size = 12, full_width = FALSE)
+```
+
+### Testing for Independence {-}
+
+This block creates a weighted contingency table between the mother's education level and the type of residence area, based on the complex survey design. The `Ntotal = 1` option scales the table to proportions. The `addmargins()` function adds marginal totals for easier interpretation. The output provides insight into the distribution of maternal education across geographic settings.
+
+```{r}
+#------------------------------------------------------------------------------#
+#                   Testing for Independence                                   #
+#------------------------------------------------------------------------------#
+
+
+## Cross-tabulations
+svytable(~ education_mother + zone, ESS4_design, Ntotal = 1) %>%
+  addmargins()
+```
+
+This block replicates the above logic, focusing on the father's education level. It generates a weighted proportion table by urban/rural area, helping identify patterns or differences in paternal education across zones.
+
+```{r}
+svytable(~ education_father + zone, ESS4_design, Ntotal = 1) %>%
+  addmargins()
+```
+
+This block applies a design-adjusted chi-square test to evaluate the statistical independence between mother’s education and area of residence. A p-value less than 0.05 indicates a significant association, meaning education levels vary meaningfully by zone.
+
+```{r}
+## Chi-square tests
+svychisq(~ education_mother + zone, ESS4_design)
+```
+
+The adjusted chi-square test (Rao & Scott) for the association between maternal education and residential zone yields a highly significant result (F = 100.29, p < 0.001). This confirms a statistically significant relationship between both variables, rejecting the null hypothesis of independence. The strength of this association suggests that a mother's educational level is strongly linked to whether she lives in a rural or urban zone.
+
+
+This block repeats the previous test but for father’s education. It checks whether paternal education is statistically dependent on whether the household resides in a rural or urban area.
+
+
+```{r}
+svychisq(~ education_father + zone, ESS4_design)
+
+
+```
+Similarly, the chi-square test for paternal education also shows a significant association (F = 76.82, p < 0.001). Although the F statistic is slightly lower than for mothers, the relationship remains very strong. This reinforces the conclusion that fathers' educational levels vary significantly by residential zone, with a clear trend toward higher education in urban environments.

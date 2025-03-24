@@ -1,0 +1,64 @@
+```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE,
+                      cache = TRUE, 
+                      cache.path = "cache/4.4/")
+```
+
+# 4.4 Tests for Group Comparisons {-}
+
+### Prepare the work environment {-}
+
+```{r}
+#------------------------------------------------------------------------------#
+#                           Cleaning R Environment                             #
+#------------------------------------------------------------------------------#
+
+rm(list = ls())
+gc()
+
+#------------------------------------------------------------------------------#
+#                                Libraries                                     #
+#------------------------------------------------------------------------------#
+
+library(tidyverse)
+library(survey)
+library(srvyr)
+library(data.table)
+library(magrittr)
+library(haven)
+library(stringr)
+library(tidyr)
+library(knitr)
+library(kableExtra)
+
+# Ensure select function from dplyr is used explicitly
+select <- dplyr::select
+
+#------------------------------------------------------------------------------#
+#                        Setting the RAM Memory Limit                          #
+#------------------------------------------------------------------------------#
+
+memory.limit(250000000)
+
+#------------------------------------------------------------------------------#
+#                           Loading Datasets                                   #
+#------------------------------------------------------------------------------#
+
+EXP_data <- read_sav("data/data_ESS4/sect7b_hh_w4_v2.sav") %>%
+  mutate(expenditure = ifelse(s7q03 == 2, 0, s7q04)) %>%
+  group_by(household_id) %>%
+  summarise(total_expenditure = sum(expenditure, na.rm = TRUE))
+
+HH_data <- read_sav("data/data_ESS4/sect_cover_hh_w4.sav")
+
+#------------------------------------------------------------------------------#
+#                      Processing Per Capita Expenditure                       #
+#------------------------------------------------------------------------------#
+
+# Merging household data with expenditure data
+HH_data <- HH_data %>% 
+  inner_join(EXP_data) %>% 
+  mutate(percapita_expenditure = total_expenditure / saq09)
+```
+
