@@ -113,6 +113,10 @@ tab_01_region <- ESS4_design %>%
   summarise(P_hat = survey_mean(vartype = c("se", "cv")),
             T_hat = survey_total(vartype = c("se", "cv")))
 
+tab_01_region_margin <- ESS4_design %>%
+  group_by(Region = as_factor(saq01)) %>%
+  summarise(P_hat = survey_mean(vartype = c("se", "cv")),
+            T_hat = survey_total(vartype = c("se", "cv")))
 
 # National estimates
 tab_01_tot <- ESS4_design %>%
@@ -123,6 +127,11 @@ tab_01_tot <- ESS4_design %>%
 # Estimates by urban/rural zones
 tab_01_zone <- ESS4_design %>%
   group_by(Region = as_factor(saq14), religion) %>%
+  summarise(P_hat = survey_mean(vartype = c("se", "cv")),
+            T_hat = survey_total(vartype = c("se", "cv")))
+
+tab_01_zone_margin <- ESS4_design %>%
+  group_by(Region = as_factor(saq14)) %>%
   summarise(P_hat = survey_mean(vartype = c("se", "cv")),
             T_hat = survey_total(vartype = c("se", "cv")))
 ```
@@ -145,7 +154,10 @@ temp1 <- bind_rows(tab_01_region, tab_01_zone, tab_01_tot) %>%
     names_from = religion,
     values_from = P_hat,
     values_fill = list(P_hat = 0)
-  )
+  ) %>% 
+  left_join(bind_rows(tab_01_region_margin,tab_01_zone_margin) %>% 
+               transmute(Region, P_hat = round(P_hat * 100, 1)),
+             by = "Region")
 
 temp1 %>%
   select(
@@ -154,7 +166,8 @@ temp1 %>%
     Catholic = "2. CATHOLIC",
     Protestant = "3. PROTESTANT",
     Muslim = "4. MUSLEM",
-    Other = OTHER
+    Other = OTHER,
+    P_hat
   ) 
 ```
 
@@ -168,7 +181,10 @@ temp1 <- bind_rows(tab_01_region, tab_01_zone, tab_01_tot) %>%
     names_from = religion,
     values_from = P_hat,
     values_fill = list(P_hat = 0)
-  )
+  ) %>% 
+  left_join(bind_rows(tab_01_region_margin,tab_01_zone_margin) %>% 
+               transmute(Region, P_hat = round(P_hat * 100, 1)),
+             by = "Region")
 
 temp1 %>%
   select(
@@ -177,7 +193,8 @@ temp1 %>%
     Catholic = "2. CATHOLIC",
     Protestant = "3. PROTESTANT",
     Muslim = "4. MUSLEM",
-    Other = OTHER
+    Other = OTHER,
+    P_hat
   ) %>%  kable(format = "html") %>%
   kable_styling(full_width = FALSE)
 ```
@@ -195,7 +212,10 @@ temp2 <- bind_rows(tab_01_region, tab_01_zone, tab_01_tot) %>%
     names_from = religion,
     values_from = T_hat,
     values_fill = list(T_hat = 0)
-  ) 
+  ) %>% 
+  left_join(bind_rows(tab_01_region_margin,tab_01_zone_margin) %>% 
+               transmute(Region, T_hat = round(T_hat)),
+             by = "Region")
 
 temp2 %>%
   select(
@@ -204,7 +224,8 @@ temp2 %>%
     Catholic = "2. CATHOLIC",
     Protestant = "3. PROTESTANT",
     Muslim = "4. MUSLEM",
-    Other = OTHER
+    Other = OTHER,
+    T_hat
   ) 
 
 
@@ -221,7 +242,10 @@ temp2 <- bind_rows(tab_01_region, tab_01_zone, tab_01_tot) %>%
     names_from = religion,
     values_from = T_hat,
     values_fill = list(T_hat = 0)
-  ) 
+  ) %>% 
+  left_join(bind_rows(tab_01_region_margin,tab_01_zone_margin) %>% 
+               transmute(Region, T_hat = round(T_hat)),
+             by = "Region")
 
 temp2 %>%
   select(
@@ -230,7 +254,8 @@ temp2 %>%
     Catholic = "2. CATHOLIC",
     Protestant = "3. PROTESTANT",
     Muslim = "4. MUSLEM",
-    Other = OTHER
+    Other = OTHER,
+    T_hat
   ) %>%  kable(format = "html") %>%
   kable_styling( full_width = FALSE)
 
