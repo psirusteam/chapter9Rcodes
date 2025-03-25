@@ -3,7 +3,7 @@ title: "Appendix of Chapter 9 - Analysis of Household Surveys - Examples in R"
 author: ""
 date: "2025-03-25"
 documentclass: book
-bibliography: chapterbib.bib
+bibliography: appendixbib.bib
 biblio-style: apalike
 link-citations: yes
 colorlinks: yes
