@@ -17,5 +17,7 @@ rmd_files: [
   "5.4_Working_with_Weights.Rmd",
   "5.5_Model_Diagnostics.rmd",
   "5.6_Inference_on_Model_Parameters.Rmd",
-  "7.1_Bar_charts.rmd"
+  "7.1_Bar_charts.rmd",
+  "7.2_Histograms.rmd",
+  "7.3_Scatter_Plots.rmd"
 ]

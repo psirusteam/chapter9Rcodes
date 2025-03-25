@@ -1,7 +1,7 @@
 ---
 title: "CHAPTER 9 - EXAMPLES IN R"
 author: ""
-date: "2025-03-24"
+date: "2025-03-25"
 documentclass: book
 bibliography: chapterbib.bib
 biblio-style: apalike

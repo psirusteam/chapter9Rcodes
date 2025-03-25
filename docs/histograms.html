@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>7.2 Histograms | CHAPTER 9 - EXAMPLES IN R</title>
+  <meta name="description" content="7.2 Histograms | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="7.2 Histograms | CHAPTER 9 - EXAMPLES IN R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="7.2 Histograms | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="github-repo" content="psirusteam/chapter9Rcodes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="7.2 Histograms | CHAPTER 9 - EXAMPLES IN R" />
+  
+  <meta name="twitter:description" content="7.2 Histograms | CHAPTER 9 - EXAMPLES IN R" />
+  
+
+<meta name="author" content="" />
+
+
+<meta name="date" content="2025-03-25" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="bar-charts.html"/>
+<link rel="next" href="scatter-plots---relationship-between-expenditure-and-income.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">CHAPTER 9 - EXAMPLES IN R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Abstract</a></li>
+<li class="chapter" data-level="" data-path="accounting-for-the-sampling-design.html"><a href="accounting-for-the-sampling-design.html"><i class="fa fa-check"></i>Accounting for the Sampling Design</a>
+<ul>
+<li class="chapter" data-level="" data-path="sample-design-of-the-ess4-20182019.html"><a href="sample-design-of-the-ess4-20182019.html"><i class="fa fa-check"></i>Sample design of the ESS4 2018/2019</a></li>
+<li class="chapter" data-level="" data-path="data-source.html"><a href="data-source.html"><i class="fa fa-check"></i>Data Source</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html"><i class="fa fa-check"></i>2.3 Using Software to Generate Valid Inferences</a>
+<ul>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#prepare-the-work-environment"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#loading-datasets"><i class="fa fa-check"></i>Loading Datasets</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#defining-the-survey-design"><i class="fa fa-check"></i>Defining the survey design</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html"><i class="fa fa-check"></i>3.1 Frequencies and Proportions</a>
+<ul>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#prepare-the-work-environment-1"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#estimating-totals-and-proportions"><i class="fa fa-check"></i>Estimating totals and proportions</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#formatting-and-presenting-results"><i class="fa fa-check"></i>Formatting and presenting results</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html"><i class="fa fa-check"></i>3.2 Totals, means and ratios</a>
+<ul>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#prepare-the-work-environment-2"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-totals-and-means"><i class="fa fa-check"></i>Estimation of totals and means</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-ratio"><i class="fa fa-check"></i>Estimation of Ratio</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimating-the-ratio-of-educational-expenditure"><i class="fa fa-check"></i>Estimating the Ratio of Educational Expenditure</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html"><i class="fa fa-check"></i>3.3 Correlations</a>
+<ul>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#prepare-the-work-environment-3"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#estimating-correlations"><i class="fa fa-check"></i>Estimating Correlations</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html"><i class="fa fa-check"></i>3.4 Percentiles and inequality measures</a>
+<ul>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#prepare-the-work-environment-4"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#estimating-the-mean-and-median-of-total-other-income"><i class="fa fa-check"></i>Estimating the Mean and Median of Total Other Income</a></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#the-gini-coefficient."><i class="fa fa-check"></i>The Gini Coefficient.</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html"><i class="fa fa-check"></i>4.2 Cross-tabulations</a>
+<ul>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#prepare-the-work-environment-5"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#processing-variables-for-analysis"><i class="fa fa-check"></i>Processing Variables for Analysis</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#estimating-proportions-and-totals-by-religion"><i class="fa fa-check"></i>Estimating Proportions and Totals by Religion</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#formatting-and-displaying-cross-tabulation-tables"><i class="fa fa-check"></i>Formatting and Displaying Cross-tabulation Tables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html"><i class="fa fa-check"></i>4.3 Testing for Independence</a>
+<ul>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#prepare-the-work-environment-6"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#processing-education-variables"><i class="fa fa-check"></i>Processing Education Variables</a></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#testing-for-independence-1"><i class="fa fa-check"></i>Testing for Independence</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html"><i class="fa fa-check"></i>4.4 Tests for Group Comparisons</a>
+<ul>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#prepare-the-work-environment-7"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#conducting-group-comparisons-on-expenditure"><i class="fa fa-check"></i>Conducting Group Comparisons on expenditure</a></li>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#hypothesis-testing-for-group-comparisons"><i class="fa fa-check"></i>Hypothesis Testing for Group Comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html"><i class="fa fa-check"></i>5.3 Linear Models</a>
+<ul>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html#prepare-the-work-environment-8"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html#processing-demographic-information"><i class="fa fa-check"></i>Processing Demographic Information</a></li>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html#estimating-linear-models"><i class="fa fa-check"></i>Estimating Linear Models</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html"><i class="fa fa-check"></i>5.4 Working with Weights</a>
+<ul>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html#prepare-the-work-environment-9"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html#descriptive-analysis"><i class="fa fa-check"></i>Descriptive Analysis</a></li>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html#defining-survey-designs"><i class="fa fa-check"></i>Defining Survey Designs</a></li>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html#estimating-linear-models-1"><i class="fa fa-check"></i>Estimating Linear Models</a></li>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html#display-regression-results"><i class="fa fa-check"></i>Display regression results</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="model-diagnostics.html"><a href="model-diagnostics.html"><i class="fa fa-check"></i>5.5 Model Diagnostics</a>
+<ul>
+<li class="chapter" data-level="" data-path="model-diagnostics.html"><a href="model-diagnostics.html#prepare-the-work-environment-10"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="model-diagnostics.html"><a href="model-diagnostics.html#model-fit-r2-calculation"><i class="fa fa-check"></i>Model Fit: <span class="math inline">\(R^2\)</span> Calculation</a></li>
+<li class="chapter" data-level="" data-path="model-diagnostics.html"><a href="model-diagnostics.html#standardized-residuals-analysis"><i class="fa fa-check"></i>Standardized Residuals Analysis</a></li>
+<li class="chapter" data-level="" data-path="model-diagnostics.html"><a href="model-diagnostics.html#influential-observations"><i class="fa fa-check"></i>Influential Observations</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="inference-on-model-parameters.html"><a href="inference-on-model-parameters.html"><i class="fa fa-check"></i>5.6 Inference on Model Parameters</a>
+<ul>
+<li class="chapter" data-level="" data-path="inference-on-model-parameters.html"><a href="inference-on-model-parameters.html#prepare-the-work-environment-11"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="inference-on-model-parameters.html"><a href="inference-on-model-parameters.html#estimating-linear-models-2"><i class="fa fa-check"></i>Estimating Linear Models</a></li>
+<li class="chapter" data-level="" data-path="inference-on-model-parameters.html"><a href="inference-on-model-parameters.html#inference-on-model-parameters-1"><i class="fa fa-check"></i>Inference on Model Parameters</a></li>
+<li class="chapter" data-level="" data-path="inference-on-model-parameters.html"><a href="inference-on-model-parameters.html#comparison-predicted-vs-observed-values"><i class="fa fa-check"></i>Comparison: Predicted vs Observed Values</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="bar-charts.html"><a href="bar-charts.html"><i class="fa fa-check"></i>7.1 Bar charts</a>
+<ul>
+<li class="chapter" data-level="" data-path="bar-charts.html"><a href="bar-charts.html#prepare-the-work-environment-12"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="bar-charts.html"><a href="bar-charts.html#bar-chart-for-estimated-number-of-households-spending-on-non-food-items"><i class="fa fa-check"></i>Bar Chart for Estimated Number of Households Spending on Non-Food Items</a></li>
+<li class="chapter" data-level="" data-path="bar-charts.html"><a href="bar-charts.html#bar-chart-for-estimated-total-household-expenditure-on-non-food-items"><i class="fa fa-check"></i>Bar Chart for Estimated Total Household Expenditure on Non-Food Items</a></li>
+<li class="chapter" data-level="" data-path="bar-charts.html"><a href="bar-charts.html#bar-chart-for-estimated-proportion-of-households-spending-on-non-food-items"><i class="fa fa-check"></i>Bar Chart for Estimated Proportion of Households Spending on Non-Food Items</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="histograms.html"><a href="histograms.html"><i class="fa fa-check"></i>7.2 Histograms</a>
+<ul>
+<li class="chapter" data-level="" data-path="histograms.html"><a href="histograms.html#prepare-the-work-environment-13"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="histograms.html"><a href="histograms.html#histogram-using-survey-weighted-data"><i class="fa fa-check"></i>Histogram using Survey-Weighted Data</a></li>
+<li class="chapter" data-level="" data-path="histograms.html"><a href="histograms.html#preparing-data-for-ggplot2-visualization"><i class="fa fa-check"></i>Preparing Data for ggplot2 Visualization</a></li>
+<li class="chapter" data-level="" data-path="histograms.html"><a href="histograms.html#histogram-for-expenditure-distribution"><i class="fa fa-check"></i>Histogram for Expenditure Distribution</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="scatter-plots---relationship-between-expenditure-and-income.html"><a href="scatter-plots---relationship-between-expenditure-and-income.html"><i class="fa fa-check"></i>7.3 Scatter Plots - Relationship Between Expenditure and Income</a>
+<ul>
+<li class="chapter" data-level="" data-path="scatter-plots---relationship-between-expenditure-and-income.html"><a href="scatter-plots---relationship-between-expenditure-and-income.html#prepare-the-work-environment-14"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="scatter-plots---relationship-between-expenditure-and-income.html"><a href="scatter-plots---relationship-between-expenditure-and-income.html#scatter-plots-of-expenditure-vs-income"><i class="fa fa-check"></i>Scatter Plots of Expenditure vs Income</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a CHAPTER 9 - EXAMPLES IN R </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CHAPTER 9 - EXAMPLES IN R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="histograms" class="section level1 unnumbered hasAnchor">
+<h1>7.2 Histograms<a href="histograms.html#histograms" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>This section presents a series of <strong>survey-weighted histograms</strong> to analyze the <strong>distribution of per capita household expenditure on non-food goods and services</strong>, based on the Ethiopia Living Standards Measurement Study (ESS4, 2018/19). Using data from the expenditure and household cover modules, the dataset includes:</p>
+<ul>
+<li>Total household expenditure on non-food items<br />
+</li>
+<li>Per capita expenditure, adjusted for household size<br />
+</li>
+<li>Comparisons by item and by geographic zone (urban/rural)</li>
+</ul>
+<p>All histograms are generated using the complex survey design (clusters, stratification, and expansion weights), ensuring nationally representative estimates. Visualizations include both <code>svyhist()</code> and <code>ggplot2</code>-based histograms, which show the distribution of spending for each item, as well as comparisons between urban and rural households.</p>
+<p>This graphical approach helps identify <strong>consumption patterns and disparities</strong> in access to non-food goods and services. It provides key insights into how expenditures vary across items and regions, offering valuable evidence for policy design and socioeconomic diagnostics.</p>
+<div id="prepare-the-work-environment-13" class="section level3 unnumbered hasAnchor">
+<h3>Prepare the work environment<a href="histograms.html#prepare-the-work-environment-13" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This initial block sets up the environment for performing statistical analysis on <strong>non-food household expenditures</strong> using data from the ESS4 survey (Ethiopia, 2018/19). It begins by clearing memory and loading the necessary libraries for data manipulation, complex survey analysis, and visualization. Then, it loads the <strong>household expenditure section</strong> of the questionnaire, recoding non-reported amounts as zero and converting item codes to factor variables.</p>
+<p>The data is reshaped into <strong>wide format</strong>, with each item becoming a separate column and missing values filled with zeros. The <strong>total household expenditure</strong> is computed by summing all non-food items. This dataset is then merged with the household cover file to calculate <strong>per capita expenditure</strong>, by dividing total expenditure by household size (<code>saq09</code>).</p>
+<p>Finally, a <strong>complex survey design object</strong> is defined to enable valid inference. The design incorporates:<br />
+- Primary sampling units (<code>ea_id</code>)<br />
+- Stratification by region and urban/rural zone<br />
+- Final sampling weights (<code>pw_w4</code>)</p>
+<p>This setup ensures that all estimates reflect national population parameters for expenditure-related indicators.</p>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="histograms.html#cb158-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb158-2"><a href="histograms.html#cb158-2" tabindex="-1"></a><span class="co">#                           Cleaning R Environment                             #</span></span>
+<span id="cb158-3"><a href="histograms.html#cb158-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb158-4"><a href="histograms.html#cb158-4" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())  </span>
+<span id="cb158-5"><a href="histograms.html#cb158-5" tabindex="-1"></a><span class="fu">gc</span>()             </span></code></pre></div>
+<pre><code>##          used (Mb) gc trigger (Mb) max used (Mb)
+## Ncells 542915 29.0    1220942 65.3   660485 35.3
+## Vcells 958255  7.4    8388608 64.0  1770406 13.6</code></pre>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="histograms.html#cb160-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb160-2"><a href="histograms.html#cb160-2" tabindex="-1"></a><span class="co">#                                Libraries                                     #</span></span>
+<span id="cb160-3"><a href="histograms.html#cb160-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb160-4"><a href="histograms.html#cb160-4" tabindex="-1"></a></span>
+<span id="cb160-5"><a href="histograms.html#cb160-5" tabindex="-1"></a></span>
+<span id="cb160-6"><a href="histograms.html#cb160-6" tabindex="-1"></a><span class="fu">library</span>(dplyr)     </span>
+<span id="cb160-7"><a href="histograms.html#cb160-7" tabindex="-1"></a><span class="fu">library</span>(survey)     </span>
+<span id="cb160-8"><a href="histograms.html#cb160-8" tabindex="-1"></a><span class="fu">library</span>(srvyr)      </span>
+<span id="cb160-9"><a href="histograms.html#cb160-9" tabindex="-1"></a><span class="fu">library</span>(data.table) </span>
+<span id="cb160-10"><a href="histograms.html#cb160-10" tabindex="-1"></a><span class="fu">library</span>(magrittr)   </span>
+<span id="cb160-11"><a href="histograms.html#cb160-11" tabindex="-1"></a><span class="fu">library</span>(haven)     </span>
+<span id="cb160-12"><a href="histograms.html#cb160-12" tabindex="-1"></a><span class="fu">library</span>(stringr)   </span>
+<span id="cb160-13"><a href="histograms.html#cb160-13" tabindex="-1"></a><span class="fu">library</span>(tidyr)     </span>
+<span id="cb160-14"><a href="histograms.html#cb160-14" tabindex="-1"></a><span class="fu">library</span>(knitr)     </span>
+<span id="cb160-15"><a href="histograms.html#cb160-15" tabindex="-1"></a><span class="fu">library</span>(kableExtra) </span>
+<span id="cb160-16"><a href="histograms.html#cb160-16" tabindex="-1"></a><span class="fu">library</span>(broom)      </span>
+<span id="cb160-17"><a href="histograms.html#cb160-17" tabindex="-1"></a><span class="fu">library</span>(ggplot2)    </span>
+<span id="cb160-18"><a href="histograms.html#cb160-18" tabindex="-1"></a><span class="fu">library</span>(scales)     </span>
+<span id="cb160-19"><a href="histograms.html#cb160-19" tabindex="-1"></a><span class="fu">library</span>(forcats)   </span>
+<span id="cb160-20"><a href="histograms.html#cb160-20" tabindex="-1"></a></span>
+<span id="cb160-21"><a href="histograms.html#cb160-21" tabindex="-1"></a><span class="co"># Ensure select function from dplyr is used explicitly</span></span>
+<span id="cb160-22"><a href="histograms.html#cb160-22" tabindex="-1"></a>select <span class="ot">&lt;-</span> dplyr<span class="sc">::</span>select</span>
+<span id="cb160-23"><a href="histograms.html#cb160-23" tabindex="-1"></a></span>
+<span id="cb160-24"><a href="histograms.html#cb160-24" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb160-25"><a href="histograms.html#cb160-25" tabindex="-1"></a><span class="co">#                           Loading Datasets                                   #</span></span>
+<span id="cb160-26"><a href="histograms.html#cb160-26" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb160-27"><a href="histograms.html#cb160-27" tabindex="-1"></a></span>
+<span id="cb160-28"><a href="histograms.html#cb160-28" tabindex="-1"></a><span class="co"># Load household expenditure dataset (from World Bank survey)</span></span>
+<span id="cb160-29"><a href="histograms.html#cb160-29" tabindex="-1"></a>HH_data <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/sect7b_hh_w4_v2.sav&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb160-30"><a href="histograms.html#cb160-30" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">expenditure =</span> <span class="fu">ifelse</span>(s7q03 <span class="sc">==</span> <span class="dv">2</span>, <span class="dv">0</span>, s7q04),</span>
+<span id="cb160-31"><a href="histograms.html#cb160-31" tabindex="-1"></a>         <span class="co"># Assign zero to non-expenditures</span></span>
+<span id="cb160-32"><a href="histograms.html#cb160-32" tabindex="-1"></a>         <span class="at">item =</span> <span class="fu">as_factor</span>(item_cd_12months)         </span>
+<span id="cb160-33"><a href="histograms.html#cb160-33" tabindex="-1"></a>         <span class="co"># Convert item codes to factors</span></span>
+<span id="cb160-34"><a href="histograms.html#cb160-34" tabindex="-1"></a>  )</span>
+<span id="cb160-35"><a href="histograms.html#cb160-35" tabindex="-1"></a></span>
+<span id="cb160-36"><a href="histograms.html#cb160-36" tabindex="-1"></a><span class="co"># Convert data to wide format:</span></span>
+<span id="cb160-37"><a href="histograms.html#cb160-37" tabindex="-1"></a><span class="co"># - Items become column names</span></span>
+<span id="cb160-38"><a href="histograms.html#cb160-38" tabindex="-1"></a><span class="co"># - Missing values filled with zero</span></span>
+<span id="cb160-39"><a href="histograms.html#cb160-39" tabindex="-1"></a><span class="co"># - Calculate total expenditure per household</span></span>
+<span id="cb160-40"><a href="histograms.html#cb160-40" tabindex="-1"></a>EXP_data <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb160-41"><a href="histograms.html#cb160-41" tabindex="-1"></a>  <span class="fu">select</span>(household_id, item, expenditure) <span class="sc">%&gt;%</span></span>
+<span id="cb160-42"><a href="histograms.html#cb160-42" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(</span>
+<span id="cb160-43"><a href="histograms.html#cb160-43" tabindex="-1"></a>    <span class="at">names_from =</span> item,</span>
+<span id="cb160-44"><a href="histograms.html#cb160-44" tabindex="-1"></a>    <span class="at">values_from =</span> expenditure,</span>
+<span id="cb160-45"><a href="histograms.html#cb160-45" tabindex="-1"></a>    <span class="at">values_fill =</span> <span class="fu">list</span>(<span class="at">expenditure =</span> <span class="dv">0</span>)</span>
+<span id="cb160-46"><a href="histograms.html#cb160-46" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb160-47"><a href="histograms.html#cb160-47" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_expenditure =</span> <span class="fu">rowSums</span>(<span class="fu">select</span>(., <span class="fu">where</span>(is.numeric)), <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb160-48"><a href="histograms.html#cb160-48" tabindex="-1"></a></span>
+<span id="cb160-49"><a href="histograms.html#cb160-49" tabindex="-1"></a></span>
+<span id="cb160-50"><a href="histograms.html#cb160-50" tabindex="-1"></a><span class="co"># Load additional household data and merge with expenditure dataset</span></span>
+<span id="cb160-51"><a href="histograms.html#cb160-51" tabindex="-1"></a>EXP2_data <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/sect_cover_hh_w4.sav&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb160-52"><a href="histograms.html#cb160-52" tabindex="-1"></a>  <span class="fu">inner_join</span>(EXP_data) <span class="sc">%&gt;%</span></span>
+<span id="cb160-53"><a href="histograms.html#cb160-53" tabindex="-1"></a>  <span class="co"># Compute per capita expenditure</span></span>
+<span id="cb160-54"><a href="histograms.html#cb160-54" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percapita_expenditure =</span> total_expenditure <span class="sc">/</span> saq09)</span>
+<span id="cb160-55"><a href="histograms.html#cb160-55" tabindex="-1"></a></span>
+<span id="cb160-56"><a href="histograms.html#cb160-56" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb160-57"><a href="histograms.html#cb160-57" tabindex="-1"></a><span class="co">#                      Defining Survey Design for Analysis                     #</span></span>
+<span id="cb160-58"><a href="histograms.html#cb160-58" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb160-59"><a href="histograms.html#cb160-59" tabindex="-1"></a></span>
+<span id="cb160-60"><a href="histograms.html#cb160-60" tabindex="-1"></a><span class="co"># Define survey design:</span></span>
+<span id="cb160-61"><a href="histograms.html#cb160-61" tabindex="-1"></a><span class="co"># - Primary Sampling Unit (PSU) identified by `ea_id`</span></span>
+<span id="cb160-62"><a href="histograms.html#cb160-62" tabindex="-1"></a><span class="co"># - Stratification based on region (`saq01`) and urban/rural status (`saq14`)</span></span>
+<span id="cb160-63"><a href="histograms.html#cb160-63" tabindex="-1"></a><span class="co"># - Sampling weights (`pw_w4`) ensure representativity</span></span>
+<span id="cb160-64"><a href="histograms.html#cb160-64" tabindex="-1"></a>ESS4_design <span class="ot">&lt;-</span> EXP2_data <span class="sc">%&gt;%</span> </span>
+<span id="cb160-65"><a href="histograms.html#cb160-65" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strata =</span> <span class="fu">paste0</span>(saq01, <span class="st">&quot;_&quot;</span>, saq14)) <span class="sc">%&gt;%</span> </span>
+<span id="cb160-66"><a href="histograms.html#cb160-66" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(</span>
+<span id="cb160-67"><a href="histograms.html#cb160-67" tabindex="-1"></a>    <span class="at">ids =</span> ea_id,  </span>
+<span id="cb160-68"><a href="histograms.html#cb160-68" tabindex="-1"></a>    <span class="at">strata =</span> strata,  </span>
+<span id="cb160-69"><a href="histograms.html#cb160-69" tabindex="-1"></a>    <span class="at">weights =</span> pw_w4,  </span>
+<span id="cb160-70"><a href="histograms.html#cb160-70" tabindex="-1"></a>    <span class="at">nest =</span> <span class="cn">TRUE</span>  </span>
+<span id="cb160-71"><a href="histograms.html#cb160-71" tabindex="-1"></a>  )</span>
+<span id="cb160-72"><a href="histograms.html#cb160-72" tabindex="-1"></a></span>
+<span id="cb160-73"><a href="histograms.html#cb160-73" tabindex="-1"></a><span class="fu">options</span>(<span class="at">survey.lonely.psu =</span> <span class="st">&quot;fail&quot;</span>) </span>
+<span id="cb160-74"><a href="histograms.html#cb160-74" tabindex="-1"></a><span class="fu">summary</span>(ESS4_design)</span></code></pre></div>
+<pre><code>## Stratified 1 - level Cluster Sampling design (with replacement)
+## With (535) clusters.
+## Called via srvyr
+## Probabilities:
+##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## 3.932e-05 1.997e-04 7.680e-04 2.814e-03 4.164e-03 1.317e-01 
+## Stratum Sizes: 
+##            1_1 1_2 12_1 12_2 13_1 13_2 14_2 15_1 15_2 2_1 2_2 3_1 3_2 4_1 4_2
+## obs        393 283  195  300  190  360  778  160  419 299 225 479 271 453 300
+## design.PSU  35  19   19   20   18   24   52   14   28  28  15  43  18  43  20
+## actual.PSU  35  19   19   20   18   24   52   14   28  28  15  43  18  43  20
+##            5_1 5_2 6_1 6_2 7_1 7_2
+## obs        355 255 169 195 422 269
+## design.PSU  35  17  16  13  40  18
+## actual.PSU  35  17  16  13  40  18
+## Data variables:
+##  [1] &quot;household_id&quot;                                                                      
+##  [2] &quot;ea_id&quot;                                                                             
+##  [3] &quot;saq14&quot;                                                                             
+##  [4] &quot;pw_w4&quot;                                                                             
+##  [5] &quot;saq01&quot;                                                                             
+##  [6] &quot;saq02&quot;                                                                             
+##  [7] &quot;saq03&quot;                                                                             
+##  [8] &quot;saq04&quot;                                                                             
+##  [9] &quot;saq05&quot;                                                                             
+## [10] &quot;saq06&quot;                                                                             
+## [11] &quot;saq07&quot;                                                                             
+## [12] &quot;saq08&quot;                                                                             
+## [13] &quot;saq09&quot;                                                                             
+## [14] &quot;saq11&quot;                                                                             
+## [15] &quot;saq12&quot;                                                                             
+## [16] &quot;saq13&quot;                                                                             
+## [17] &quot;saq17&quot;                                                                             
+## [18] &quot;saq18&quot;                                                                             
+## [19] &quot;InterviewStart&quot;                                                                    
+## [20] &quot;saq21&quot;                                                                             
+## [21] &quot;1. Clothes/shoes/fabric for MEN (18 years and older)&quot;                              
+## [22] &quot;2. Clothes/shoes/fabric for WOMEN (18 years and older)&quot;                            
+## [23] &quot;3. Clothes/shoes/fabric for BOYS (less than 18 years)&quot;                             
+## [24] &quot;4. Clothes/shoes/fabric for GIRLS (less than 18 years)&quot;                            
+## [25] &quot;5. Kitchen equipment (cooking pots, etc.)&quot;                                         
+## [26] &quot;6. Linens (sheets, towels,blankets)&quot;                                               
+## [27] &quot;7. Furniture&quot;                                                                      
+## [28] &quot;8. Lamp/torch/solare power&quot;                                                        
+## [29] &quot;9. Ceremonial expenses&quot;                                                            
+## [30] &quot;10. Contributions to informal social security institutions (inc. IDDIR, mahiber..)&quot;
+## [31] &quot;11. Donations to religious institutions (Incl. churches and mosques..)&quot;            
+## [32] &quot;total_expenditure&quot;                                                                 
+## [33] &quot;percapita_expenditure&quot;                                                             
+## [34] &quot;strata&quot;</code></pre>
+</div>
+<div id="histogram-using-survey-weighted-data" class="section level3 unnumbered hasAnchor">
+<h3>Histogram using Survey-Weighted Data<a href="histograms.html#histogram-using-survey-weighted-data" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block generates a <strong>histogram of per capita expenditure</strong> using survey-weighted data from the ESS4 dataset. The <code>svyhist()</code> function is used, which accounts for the complex survey design (stratification, clustering, and weights). A total of 100 bins are defined to provide a detailed view of the distribution, and the x-axis is limited to values between 0 and 10,000 birr. This visualization allows exploration of the <strong>estimated national distribution of per capita spending</strong>, ensuring results reflect population-level patterns.</p>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="histograms.html#cb162-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb162-2"><a href="histograms.html#cb162-2" tabindex="-1"></a><span class="co">#                      Histogram using Survey-Weighted Data                    #</span></span>
+<span id="cb162-3"><a href="histograms.html#cb162-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb162-4"><a href="histograms.html#cb162-4" tabindex="-1"></a></span>
+<span id="cb162-5"><a href="histograms.html#cb162-5" tabindex="-1"></a><span class="co"># Generate a histogram for per capita expenditure using survey weights</span></span>
+<span id="cb162-6"><a href="histograms.html#cb162-6" tabindex="-1"></a><span class="fu">svyhist</span>(</span>
+<span id="cb162-7"><a href="histograms.html#cb162-7" tabindex="-1"></a>  <span class="sc">~</span> percapita_expenditure,</span>
+<span id="cb162-8"><a href="histograms.html#cb162-8" tabindex="-1"></a>  ESS4_design,</span>
+<span id="cb162-9"><a href="histograms.html#cb162-9" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">&quot;Estimated Distribution of Percapita Expenditure&quot;</span>,</span>
+<span id="cb162-10"><a href="histograms.html#cb162-10" tabindex="-1"></a>  <span class="at">col =</span> <span class="st">&quot;grey80&quot;</span>,</span>
+<span id="cb162-11"><a href="histograms.html#cb162-11" tabindex="-1"></a>  <span class="at">breaks =</span> <span class="dv">100</span>, <span class="co"># Number of bins</span></span>
+<span id="cb162-12"><a href="histograms.html#cb162-12" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">&quot;Expenditure&quot;</span>,</span>
+<span id="cb162-13"><a href="histograms.html#cb162-13" tabindex="-1"></a>  <span class="at">probability =</span> <span class="cn">FALSE</span>, <span class="co"># Normalize to probability density</span></span>
+<span id="cb162-14"><a href="histograms.html#cb162-14" tabindex="-1"></a>  <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10000</span>)  <span class="co"># Limit x-axis range</span></span>
+<span id="cb162-15"><a href="histograms.html#cb162-15" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="7.2_Histograms_files/figure-html/unnamed-chunk-3-1.svg" width="672" /></p>
+</div>
+<div id="preparing-data-for-ggplot2-visualization" class="section level3 unnumbered hasAnchor">
+<h3>Preparing Data for ggplot2 Visualization<a href="histograms.html#preparing-data-for-ggplot2-visualization" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block prepares a combined dataset for visualization with <code>ggplot2</code>. Using <code>bind_rows()</code>, it merges two types of expenditure records:<br />
+1. <strong>Total household expenditure</strong>, from the coverage file (<code>EXP2_data</code>).<br />
+2. <strong>Itemized expenditure data</strong>, from the original dataset (<code>HH_data</code>).</p>
+<p>Both sources are standardized to include household ID, area classification (rural/urban), expenditure amount, survey weight, and item label. The total expenditure entries are tagged under a new <code>"Total"</code> category within the <code>item</code> variable. Additionally, the <code>saq14</code> variable is recoded to label areas clearly as either <strong>RURAL</strong> or <strong>URBAN</strong>, enabling effective comparisons by geographic location in upcoming visual analyses.</p>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="histograms.html#cb163-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb163-2"><a href="histograms.html#cb163-2" tabindex="-1"></a><span class="co">#                      Preparing Data for ggplot2 Visualization                #</span></span>
+<span id="cb163-3"><a href="histograms.html#cb163-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb163-4"><a href="histograms.html#cb163-4" tabindex="-1"></a></span>
+<span id="cb163-5"><a href="histograms.html#cb163-5" tabindex="-1"></a><span class="co"># Create a dataset for visualization:</span></span>
+<span id="cb163-6"><a href="histograms.html#cb163-6" tabindex="-1"></a><span class="co"># - Combine total household expenditures with item-wise expenditures</span></span>
+<span id="cb163-7"><a href="histograms.html#cb163-7" tabindex="-1"></a>HH_data2 <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb163-8"><a href="histograms.html#cb163-8" tabindex="-1"></a>  EXP2_data <span class="sc">%&gt;%</span></span>
+<span id="cb163-9"><a href="histograms.html#cb163-9" tabindex="-1"></a>    <span class="fu">transmute</span>(</span>
+<span id="cb163-10"><a href="histograms.html#cb163-10" tabindex="-1"></a>      household_id,</span>
+<span id="cb163-11"><a href="histograms.html#cb163-11" tabindex="-1"></a>      <span class="at">saq14 =</span> <span class="fu">as_factor</span>(saq14),</span>
+<span id="cb163-12"><a href="histograms.html#cb163-12" tabindex="-1"></a>      <span class="at">expenditure =</span> total_expenditure,</span>
+<span id="cb163-13"><a href="histograms.html#cb163-13" tabindex="-1"></a>      pw_w4,</span>
+<span id="cb163-14"><a href="histograms.html#cb163-14" tabindex="-1"></a>      <span class="at">item =</span> <span class="fu">as_factor</span>(<span class="st">&quot;Total&quot;</span>)</span>
+<span id="cb163-15"><a href="histograms.html#cb163-15" tabindex="-1"></a>    ),</span>
+<span id="cb163-16"><a href="histograms.html#cb163-16" tabindex="-1"></a>  HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb163-17"><a href="histograms.html#cb163-17" tabindex="-1"></a>    <span class="fu">transmute</span>(</span>
+<span id="cb163-18"><a href="histograms.html#cb163-18" tabindex="-1"></a>      household_id,</span>
+<span id="cb163-19"><a href="histograms.html#cb163-19" tabindex="-1"></a>      <span class="at">saq14 =</span> <span class="fu">as_factor</span>(saq14),</span>
+<span id="cb163-20"><a href="histograms.html#cb163-20" tabindex="-1"></a>      expenditure,</span>
+<span id="cb163-21"><a href="histograms.html#cb163-21" tabindex="-1"></a>      pw_w4,</span>
+<span id="cb163-22"><a href="histograms.html#cb163-22" tabindex="-1"></a>      <span class="at">item =</span> item</span>
+<span id="cb163-23"><a href="histograms.html#cb163-23" tabindex="-1"></a>    )</span>
+<span id="cb163-24"><a href="histograms.html#cb163-24" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb163-25"><a href="histograms.html#cb163-25" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">saq14 =</span> <span class="fu">case_when</span>(</span>
+<span id="cb163-26"><a href="histograms.html#cb163-26" tabindex="-1"></a>    saq14 <span class="sc">==</span> <span class="st">&quot;1. RURAL&quot;</span> <span class="sc">~</span> <span class="st">&quot;RURAL&quot;</span>,</span>
+<span id="cb163-27"><a href="histograms.html#cb163-27" tabindex="-1"></a>    saq14 <span class="sc">==</span> <span class="st">&quot;2. URBAN&quot;</span> <span class="sc">~</span> <span class="st">&quot;URBAN&quot;</span>,</span>
+<span id="cb163-28"><a href="histograms.html#cb163-28" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> saq14</span>
+<span id="cb163-29"><a href="histograms.html#cb163-29" tabindex="-1"></a>  ))</span></code></pre></div>
+</div>
+<div id="histogram-for-expenditure-distribution" class="section level3 unnumbered hasAnchor">
+<h3>Histogram for Expenditure Distribution<a href="histograms.html#histogram-for-expenditure-distribution" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block generates a set of survey-weighted histograms to visualize the <strong>distribution of per capita expenditure</strong> across various non-food items, including total expenditure. Using <code>ggplot2</code>, the histograms are grouped by item using <code>facet_wrap()</code> in a 3x4 grid layout. Each plot displays the estimated frequency (weighted by <code>pw_w4</code>) of households according to their expenditure levels, restricted to a range of 0 to 10,000 currency units. The y-axis labels are formatted to clearly show large values. This visual approach helps identify spending patterns and compare expenditure distributions across different goods and services.</p>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="histograms.html#cb164-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb164-2"><a href="histograms.html#cb164-2" tabindex="-1"></a><span class="co">#                      Histogram for Expenditure Distribution                  #</span></span>
+<span id="cb164-3"><a href="histograms.html#cb164-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb164-4"><a href="histograms.html#cb164-4" tabindex="-1"></a></span>
+<span id="cb164-5"><a href="histograms.html#cb164-5" tabindex="-1"></a><span class="fu">ggplot</span>(HH_data2, <span class="fu">aes</span>(<span class="at">x =</span> expenditure, <span class="at">weight =</span> pw_w4)) <span class="sc">+</span></span>
+<span id="cb164-6"><a href="histograms.html#cb164-6" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">fill =</span> <span class="st">&quot;grey80&quot;</span>, </span>
+<span id="cb164-7"><a href="histograms.html#cb164-7" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, </span>
+<span id="cb164-8"><a href="histograms.html#cb164-8" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">20</span>) <span class="sc">+</span></span>
+<span id="cb164-9"><a href="histograms.html#cb164-9" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(. <span class="sc">~</span> item, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">ncol =</span> <span class="dv">4</span>) <span class="sc">+</span>  <span class="co"># Arrange plots in a 3x4 grid</span></span>
+<span id="cb164-10"><a href="histograms.html#cb164-10" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10000</span>)) <span class="sc">+</span>  <span class="co"># Restrict x-axis range</span></span>
+<span id="cb164-11"><a href="histograms.html#cb164-11" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5000000</span>), <span class="at">labels =</span> <span class="fu">label_number</span>(<span class="at">accuracy =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb164-12"><a href="histograms.html#cb164-12" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb164-13"><a href="histograms.html#cb164-13" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Estimated Frequency&quot;</span>,</span>
+<span id="cb164-14"><a href="histograms.html#cb164-14" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Expenditure&quot;</span>,</span>
+<span id="cb164-15"><a href="histograms.html#cb164-15" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Estimated Distribution of Percapita Expenditure by Item&quot;</span></span>
+<span id="cb164-16"><a href="histograms.html#cb164-16" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb164-17"><a href="histograms.html#cb164-17" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb164-18"><a href="histograms.html#cb164-18" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))  <span class="co"># Center title</span></span></code></pre></div>
+<p><img src="images/7.2/01_Histogram.png" /></p>
+<p>This block generates a series of weighted histograms to compare the <strong>distribution of per capita expenditure between urban and rural areas</strong> across various non-food items, including total spending. Using <code>ggplot2</code> and <code>facet_wrap()</code>, it creates a grid of plots for each item. Bars are color-coded: blue for rural and light salmon for urban zones, with transparency (<code>alpha = 0.5</code>) to allow overlap visualization. This approach enables the identification of differences in spending patterns by geographic location, highlighting urban–rural disparities in access or consumption behavior.</p>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="histograms.html#cb165-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb165-2"><a href="histograms.html#cb165-2" tabindex="-1"></a><span class="co">#          Histogram Comparing Urban vs. Rural Expenditure Distribution        #</span></span>
+<span id="cb165-3"><a href="histograms.html#cb165-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb165-4"><a href="histograms.html#cb165-4" tabindex="-1"></a></span>
+<span id="cb165-5"><a href="histograms.html#cb165-5" tabindex="-1"></a><span class="fu">ggplot</span>(HH_data2, <span class="fu">aes</span>(<span class="at">x =</span> expenditure, <span class="at">weight =</span> pw_w4,</span>
+<span id="cb165-6"><a href="histograms.html#cb165-6" tabindex="-1"></a>                     <span class="at">fill =</span> saq14)) <span class="sc">+</span></span>
+<span id="cb165-7"><a href="histograms.html#cb165-7" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>, </span>
+<span id="cb165-8"><a href="histograms.html#cb165-8" tabindex="-1"></a>                 <span class="at">bins =</span> <span class="dv">20</span>, </span>
+<span id="cb165-9"><a href="histograms.html#cb165-9" tabindex="-1"></a>                 <span class="at">position =</span> <span class="st">&quot;identity&quot;</span>,</span>
+<span id="cb165-10"><a href="histograms.html#cb165-10" tabindex="-1"></a>                 <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb165-11"><a href="histograms.html#cb165-11" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(. <span class="sc">~</span> item, <span class="at">nrow =</span> <span class="dv">3</span>, <span class="at">ncol =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb165-12"><a href="histograms.html#cb165-12" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">10000</span>)) <span class="sc">+</span></span>
+<span id="cb165-13"><a href="histograms.html#cb165-13" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">5000000</span>), <span class="at">labels =</span> <span class="fu">label_number</span>(<span class="at">accuracy =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb165-14"><a href="histograms.html#cb165-14" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;URBAN&quot;</span> <span class="ot">=</span> <span class="st">&quot;#E6B9AA&quot;</span>, <span class="st">&quot;RURAL&quot;</span> <span class="ot">=</span> <span class="st">&quot;blue&quot;</span>)) <span class="sc">+</span>  <span class="co"># Light pastel colors</span></span>
+<span id="cb165-15"><a href="histograms.html#cb165-15" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb165-16"><a href="histograms.html#cb165-16" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Estimated Frequency&quot;</span>,</span>
+<span id="cb165-17"><a href="histograms.html#cb165-17" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Expenditure&quot;</span>,</span>
+<span id="cb165-18"><a href="histograms.html#cb165-18" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Estimated Distribution of Percapita Expenditure by Item&quot;</span>,</span>
+<span id="cb165-19"><a href="histograms.html#cb165-19" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Zone&quot;</span></span>
+<span id="cb165-20"><a href="histograms.html#cb165-20" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb165-21"><a href="histograms.html#cb165-21" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb165-22"><a href="histograms.html#cb165-22" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>))  <span class="co"># Center title</span></span></code></pre></div>
+<p><img src="images/7.2/01_Histogram_zone.png" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="bar-charts.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="scatter-plots---relationship-between-expenditure-and-income.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/psirusteam/chapter9Rcodes/7.2_Histograms.rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["CHAPTER 9 - EXAMPLES IN R.pdf", "CHAPTER 9 - EXAMPLES IN R.epub", "CHAPTER 9 - EXAMPLES IN R.mobi"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"tconfig": null
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
