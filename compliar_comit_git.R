@@ -4,7 +4,7 @@ bookdown::render_book("index.Rmd", "bookdown::gitbook")
 system("git add --all")
 
 # Ejecutar git commit
-system('git commit -m "Abstract reviewed"')
+system('git commit -m "Biblo added"')
 
 # Ejecutar git push
 system("git push --verbose")
