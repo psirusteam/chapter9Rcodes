@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>7.1 Bar charts | CHAPTER 9 - EXAMPLES IN R</title>
+  <meta name="description" content="7.1 Bar charts | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="generator" content="bookdown 0.41 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="7.1 Bar charts | CHAPTER 9 - EXAMPLES IN R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="7.1 Bar charts | CHAPTER 9 - EXAMPLES IN R" />
+  <meta name="github-repo" content="psirusteam/chapter9Rcodes" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="7.1 Bar charts | CHAPTER 9 - EXAMPLES IN R" />
+  
+  <meta name="twitter:description" content="7.1 Bar charts | CHAPTER 9 - EXAMPLES IN R" />
+  
+
+<meta name="author" content="" />
+
+
+<meta name="date" content="2025-03-24" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="inference-on-model-parameters.html"/>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">CHAPTER 9 - EXAMPLES IN R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Abstract</a></li>
+<li class="chapter" data-level="" data-path="accounting-for-the-sampling-design.html"><a href="accounting-for-the-sampling-design.html"><i class="fa fa-check"></i>Accounting for the Sampling Design</a>
+<ul>
+<li class="chapter" data-level="" data-path="sample-design-of-the-ess4-20182019.html"><a href="sample-design-of-the-ess4-20182019.html"><i class="fa fa-check"></i>Sample design of the ESS4 2018/2019</a></li>
+<li class="chapter" data-level="" data-path="data-source.html"><a href="data-source.html"><i class="fa fa-check"></i>Data Source</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html"><i class="fa fa-check"></i>2.3 Using Software to Generate Valid Inferences</a>
+<ul>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#prepare-the-work-environment"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#loading-datasets"><i class="fa fa-check"></i>Loading Datasets</a></li>
+<li class="chapter" data-level="" data-path="using-software-to-generate-valid-inferences.html"><a href="using-software-to-generate-valid-inferences.html#defining-the-survey-design"><i class="fa fa-check"></i>Defining the survey design</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html"><i class="fa fa-check"></i>3.1 Frequencies and Proportions</a>
+<ul>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#prepare-the-work-environment-1"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#estimating-totals-and-proportions"><i class="fa fa-check"></i>Estimating totals and proportions</a></li>
+<li class="chapter" data-level="" data-path="frequencies-and-proportions.html"><a href="frequencies-and-proportions.html#formatting-and-presenting-results"><i class="fa fa-check"></i>Formatting and presenting results</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html"><i class="fa fa-check"></i>3.2 Totals, means and ratios</a>
+<ul>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#prepare-the-work-environment-2"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-totals-and-means"><i class="fa fa-check"></i>Estimation of totals and means</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimation-of-ratio"><i class="fa fa-check"></i>Estimation of Ratio</a></li>
+<li class="chapter" data-level="" data-path="totals-means-and-ratios.html"><a href="totals-means-and-ratios.html#estimating-the-ratio-of-educational-expenditure"><i class="fa fa-check"></i>Estimating the Ratio of Educational Expenditure</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html"><i class="fa fa-check"></i>3.3 Correlations</a>
+<ul>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#prepare-the-work-environment-3"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="correlations.html"><a href="correlations.html#estimating-correlations"><i class="fa fa-check"></i>Estimating Correlations</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html"><i class="fa fa-check"></i>3.4 Percentiles and inequality measures</a>
+<ul>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#prepare-the-work-environment-4"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#estimating-the-mean-and-median-of-total-other-income"><i class="fa fa-check"></i>Estimating the Mean and Median of Total Other Income</a></li>
+<li class="chapter" data-level="" data-path="percentiles-and-inequality-measures.html"><a href="percentiles-and-inequality-measures.html#the-gini-coefficient."><i class="fa fa-check"></i>The Gini Coefficient.</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html"><i class="fa fa-check"></i>4.2 Cross-tabulations</a>
+<ul>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#prepare-the-work-environment-5"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#processing-variables-for-analysis"><i class="fa fa-check"></i>Processing Variables for Analysis</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#estimating-proportions-and-totals-by-religion"><i class="fa fa-check"></i>Estimating Proportions and Totals by Religion</a></li>
+<li class="chapter" data-level="" data-path="cross-tabulations.html"><a href="cross-tabulations.html#formatting-and-displaying-cross-tabulation-tables"><i class="fa fa-check"></i>Formatting and Displaying Cross-tabulation Tables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html"><i class="fa fa-check"></i>4.3 Testing for Independence</a>
+<ul>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#prepare-the-work-environment-6"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#processing-education-variables"><i class="fa fa-check"></i>Processing Education Variables</a></li>
+<li class="chapter" data-level="" data-path="testing-for-independence.html"><a href="testing-for-independence.html#testing-for-independence-1"><i class="fa fa-check"></i>Testing for Independence</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html"><i class="fa fa-check"></i>4.4 Tests for Group Comparisons</a>
+<ul>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#prepare-the-work-environment-7"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#conducting-group-comparisons-on-expenditure"><i class="fa fa-check"></i>Conducting Group Comparisons on expenditure</a></li>
+<li class="chapter" data-level="" data-path="tests-for-group-comparisons.html"><a href="tests-for-group-comparisons.html#hypothesis-testing-for-group-comparisons"><i class="fa fa-check"></i>Hypothesis Testing for Group Comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html"><i class="fa fa-check"></i>5.3 Linear Models</a>
+<ul>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html#prepare-the-work-environment-8"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html#processing-demographic-information"><i class="fa fa-check"></i>Processing Demographic Information</a></li>
+<li class="chapter" data-level="" data-path="linear-models.html"><a href="linear-models.html#estimating-linear-models"><i class="fa fa-check"></i>Estimating Linear Models</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html"><i class="fa fa-check"></i>5.4 Working with Weights</a>
+<ul>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html#prepare-the-work-environment-9"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html#descriptive-analysis"><i class="fa fa-check"></i>Descriptive Analysis</a></li>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html#defining-survey-designs"><i class="fa fa-check"></i>Defining Survey Designs</a></li>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html#estimating-linear-models-1"><i class="fa fa-check"></i>Estimating Linear Models</a></li>
+<li class="chapter" data-level="" data-path="working-with-weights.html"><a href="working-with-weights.html#display-regression-results"><i class="fa fa-check"></i>Display regression results</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="model-diagnostics.html"><a href="model-diagnostics.html"><i class="fa fa-check"></i>5.5 Model Diagnostics</a>
+<ul>
+<li class="chapter" data-level="" data-path="model-diagnostics.html"><a href="model-diagnostics.html#prepare-the-work-environment-10"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="model-diagnostics.html"><a href="model-diagnostics.html#model-fit-r2-calculation"><i class="fa fa-check"></i>Model Fit: <span class="math inline">\(R^2\)</span> Calculation</a></li>
+<li class="chapter" data-level="" data-path="model-diagnostics.html"><a href="model-diagnostics.html#standardized-residuals-analysis"><i class="fa fa-check"></i>Standardized Residuals Analysis</a></li>
+<li class="chapter" data-level="" data-path="model-diagnostics.html"><a href="model-diagnostics.html#influential-observations"><i class="fa fa-check"></i>Influential Observations</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="inference-on-model-parameters.html"><a href="inference-on-model-parameters.html"><i class="fa fa-check"></i>5.6 Inference on Model Parameters</a>
+<ul>
+<li class="chapter" data-level="" data-path="inference-on-model-parameters.html"><a href="inference-on-model-parameters.html#prepare-the-work-environment-11"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="inference-on-model-parameters.html"><a href="inference-on-model-parameters.html#estimating-linear-models-2"><i class="fa fa-check"></i>Estimating Linear Models</a></li>
+<li class="chapter" data-level="" data-path="inference-on-model-parameters.html"><a href="inference-on-model-parameters.html#inference-on-model-parameters-1"><i class="fa fa-check"></i>Inference on Model Parameters</a></li>
+<li class="chapter" data-level="" data-path="inference-on-model-parameters.html"><a href="inference-on-model-parameters.html#comparison-predicted-vs-observed-values"><i class="fa fa-check"></i>Comparison: Predicted vs Observed Values</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="bar-charts.html"><a href="bar-charts.html"><i class="fa fa-check"></i>7.1 Bar charts</a>
+<ul>
+<li class="chapter" data-level="" data-path="bar-charts.html"><a href="bar-charts.html#prepare-the-work-environment-12"><i class="fa fa-check"></i>Prepare the work environment</a></li>
+<li class="chapter" data-level="" data-path="bar-charts.html"><a href="bar-charts.html#bar-chart-for-estimated-number-of-households-spending-on-non-food-items"><i class="fa fa-check"></i>Bar Chart for Estimated Number of Households Spending on Non-Food Items</a></li>
+<li class="chapter" data-level="" data-path="bar-charts.html"><a href="bar-charts.html#bar-chart-for-estimated-total-household-expenditure-on-non-food-items"><i class="fa fa-check"></i>Bar Chart for Estimated Total Household Expenditure on Non-Food Items</a></li>
+<li class="chapter" data-level="" data-path="bar-charts.html"><a href="bar-charts.html#bar-chart-for-estimated-proportion-of-households-spending-on-non-food-items"><i class="fa fa-check"></i>Bar Chart for Estimated Proportion of Households Spending on Non-Food Items</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a CHAPTER 9 - EXAMPLES IN R </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">CHAPTER 9 - EXAMPLES IN R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="bar-charts" class="section level1 unnumbered hasAnchor">
+<h1>7.1 Bar charts<a href="bar-charts.html#bar-charts" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="prepare-the-work-environment-12" class="section level3 unnumbered hasAnchor">
+<h3>Prepare the work environment<a href="bar-charts.html#prepare-the-work-environment-12" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This initial block sets up the environment to produce bar charts on non-food expenditure using data from Section 7 of the ESS4 questionnaire. It clears the memory, loads required libraries, and imports the dataset. Then, it recodes non-reported expenses as zero and creates a binary indicator of whether the household spent on each item. Lastly, it defines the complex survey design, incorporating stratification, primary sampling units, and expansion weights—ensuring accurate and representative estimates.</p>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="bar-charts.html#cb150-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb150-2"><a href="bar-charts.html#cb150-2" tabindex="-1"></a><span class="co">#                           Cleaning R Environment                             #</span></span>
+<span id="cb150-3"><a href="bar-charts.html#cb150-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb150-4"><a href="bar-charts.html#cb150-4" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list =</span> <span class="fu">ls</span>())</span>
+<span id="cb150-5"><a href="bar-charts.html#cb150-5" tabindex="-1"></a><span class="fu">gc</span>()</span></code></pre></div>
+<pre><code>##          used (Mb) gc trigger (Mb) max used (Mb)
+## Ncells 542750 29.0    1220471 65.2   660485 35.3
+## Vcells 957550  7.4    8388608 64.0  1770406 13.6</code></pre>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="bar-charts.html#cb152-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb152-2"><a href="bar-charts.html#cb152-2" tabindex="-1"></a><span class="co">#                                Libraries                                     #</span></span>
+<span id="cb152-3"><a href="bar-charts.html#cb152-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb152-4"><a href="bar-charts.html#cb152-4" tabindex="-1"></a></span>
+<span id="cb152-5"><a href="bar-charts.html#cb152-5" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb152-6"><a href="bar-charts.html#cb152-6" tabindex="-1"></a><span class="fu">library</span>(survey)</span>
+<span id="cb152-7"><a href="bar-charts.html#cb152-7" tabindex="-1"></a><span class="fu">library</span>(srvyr)</span>
+<span id="cb152-8"><a href="bar-charts.html#cb152-8" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb152-9"><a href="bar-charts.html#cb152-9" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb152-10"><a href="bar-charts.html#cb152-10" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb152-11"><a href="bar-charts.html#cb152-11" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb152-12"><a href="bar-charts.html#cb152-12" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb152-13"><a href="bar-charts.html#cb152-13" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb152-14"><a href="bar-charts.html#cb152-14" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb152-15"><a href="bar-charts.html#cb152-15" tabindex="-1"></a><span class="fu">library</span>(forcats)</span>
+<span id="cb152-16"><a href="bar-charts.html#cb152-16" tabindex="-1"></a></span>
+<span id="cb152-17"><a href="bar-charts.html#cb152-17" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb152-18"><a href="bar-charts.html#cb152-18" tabindex="-1"></a><span class="co">#                           Loading Datasets                                   #</span></span>
+<span id="cb152-19"><a href="bar-charts.html#cb152-19" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb152-20"><a href="bar-charts.html#cb152-20" tabindex="-1"></a></span>
+<span id="cb152-21"><a href="bar-charts.html#cb152-21" tabindex="-1"></a><span class="fu">options</span>(<span class="at">survey.lonely.psu =</span> <span class="st">&quot;fail&quot;</span>)</span>
+<span id="cb152-22"><a href="bar-charts.html#cb152-22" tabindex="-1"></a>HH_data <span class="ot">&lt;-</span> <span class="fu">read_sav</span>(<span class="st">&quot;data/data_ESS4/sect7b_hh_w4_v2.sav&quot;</span>)</span>
+<span id="cb152-23"><a href="bar-charts.html#cb152-23" tabindex="-1"></a></span>
+<span id="cb152-24"><a href="bar-charts.html#cb152-24" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb152-25"><a href="bar-charts.html#cb152-25" tabindex="-1"></a><span class="co">#                             7.1 Bar Charts                                   #</span></span>
+<span id="cb152-26"><a href="bar-charts.html#cb152-26" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb152-27"><a href="bar-charts.html#cb152-27" tabindex="-1"></a></span>
+<span id="cb152-28"><a href="bar-charts.html#cb152-28" tabindex="-1"></a><span class="co"># Prepare dataset:</span></span>
+<span id="cb152-29"><a href="bar-charts.html#cb152-29" tabindex="-1"></a><span class="co"># - Group by item category</span></span>
+<span id="cb152-30"><a href="bar-charts.html#cb152-30" tabindex="-1"></a><span class="co"># - Convert missing or non-reported expenditures to zero</span></span>
+<span id="cb152-31"><a href="bar-charts.html#cb152-31" tabindex="-1"></a><span class="co"># - Create an indicator variable (yes/no) for whether a household spent on an item</span></span>
+<span id="cb152-32"><a href="bar-charts.html#cb152-32" tabindex="-1"></a></span>
+<span id="cb152-33"><a href="bar-charts.html#cb152-33" tabindex="-1"></a>HH_data <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb152-34"><a href="bar-charts.html#cb152-34" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="at">item =</span> item_cd_12months) <span class="sc">%&gt;%</span></span>
+<span id="cb152-35"><a href="bar-charts.html#cb152-35" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">expenditure =</span> <span class="fu">ifelse</span>(s7q03 <span class="sc">==</span> <span class="dv">2</span>, <span class="dv">0</span>, s7q04),  <span class="co"># If no expense, set to 0</span></span>
+<span id="cb152-36"><a href="bar-charts.html#cb152-36" tabindex="-1"></a>         <span class="at">yes_no =</span> <span class="fu">ifelse</span>(s7q03 <span class="sc">==</span> <span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">1</span>))           <span class="co"># Indicator for spending (1) or not (0)</span></span>
+<span id="cb152-37"><a href="bar-charts.html#cb152-37" tabindex="-1"></a></span>
+<span id="cb152-38"><a href="bar-charts.html#cb152-38" tabindex="-1"></a><span class="co"># Defining survey design</span></span>
+<span id="cb152-39"><a href="bar-charts.html#cb152-39" tabindex="-1"></a></span>
+<span id="cb152-40"><a href="bar-charts.html#cb152-40" tabindex="-1"></a>ESS4_design <span class="ot">&lt;-</span> HH_data <span class="sc">%&gt;%</span></span>
+<span id="cb152-41"><a href="bar-charts.html#cb152-41" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">strata =</span> <span class="fu">paste0</span>(saq01, <span class="st">&quot;_&quot;</span>, saq14)) <span class="sc">%&gt;%</span></span>
+<span id="cb152-42"><a href="bar-charts.html#cb152-42" tabindex="-1"></a>  <span class="fu">as_survey_design</span>(</span>
+<span id="cb152-43"><a href="bar-charts.html#cb152-43" tabindex="-1"></a>    <span class="at">ids =</span> ea_id,</span>
+<span id="cb152-44"><a href="bar-charts.html#cb152-44" tabindex="-1"></a>    <span class="at">strata =</span> strata,</span>
+<span id="cb152-45"><a href="bar-charts.html#cb152-45" tabindex="-1"></a>    <span class="at">weights =</span> pw_w4,</span>
+<span id="cb152-46"><a href="bar-charts.html#cb152-46" tabindex="-1"></a>    <span class="at">nest =</span> <span class="cn">TRUE</span></span>
+<span id="cb152-47"><a href="bar-charts.html#cb152-47" tabindex="-1"></a>  )</span>
+<span id="cb152-48"><a href="bar-charts.html#cb152-48" tabindex="-1"></a></span>
+<span id="cb152-49"><a href="bar-charts.html#cb152-49" tabindex="-1"></a><span class="fu">options</span>(<span class="at">survey.lonely.psu =</span> <span class="st">&quot;fail&quot;</span>) </span>
+<span id="cb152-50"><a href="bar-charts.html#cb152-50" tabindex="-1"></a><span class="fu">summary</span>(ESS4_design)</span></code></pre></div>
+<pre><code>## Stratified 1 - level Cluster Sampling design (with replacement)
+## With (535) clusters.
+## Called via srvyr
+## Probabilities:
+##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## 3.932e-05 1.997e-04 7.680e-04 2.814e-03 4.164e-03 1.317e-01 
+## Stratum Sizes: 
+##             1_1  1_2 12_1 12_2 13_1 13_2 14_2 15_1 15_2  2_1  2_2  3_1  3_2
+## obs        4323 3113 2145 3300 2090 3960 8558 1760 4609 3289 2475 5269 2981
+## design.PSU   35   19   19   20   18   24   52   14   28   28   15   43   18
+## actual.PSU   35   19   19   20   18   24   52   14   28   28   15   43   18
+##             4_1  4_2  5_1  5_2  6_1  6_2  7_1  7_2
+## obs        4983 3300 3905 2805 1859 2145 4642 2959
+## design.PSU   43   20   35   17   16   13   40   18
+## actual.PSU   43   20   35   17   16   13   40   18
+## Data variables:
+##  [1] &quot;household_id&quot;     &quot;item_cd_12months&quot; &quot;ea_id&quot;            &quot;saq14&quot;           
+##  [5] &quot;pw_w4&quot;            &quot;saq01&quot;            &quot;saq02&quot;            &quot;saq03&quot;           
+##  [9] &quot;saq04&quot;            &quot;saq05&quot;            &quot;saq06&quot;            &quot;saq07&quot;           
+## [13] &quot;saq08&quot;            &quot;s7q03&quot;            &quot;s7q04&quot;            &quot;item&quot;            
+## [17] &quot;expenditure&quot;      &quot;yes_no&quot;           &quot;strata&quot;</code></pre>
+<p>This block computes the weighted estimates for <strong>Table 7.3</strong>, which summarizes household spending on nonfood items and services. For each item reported over the past 12 months, three key indicators are estimated using the complex survey design:</p>
+<ul>
+<li><strong><code>N_hat</code></strong>: Estimated total number of households spending on the item.<br />
+</li>
+<li><strong><code>P_hat</code></strong>: Proportion of households that spent on the item.<br />
+</li>
+<li><strong><code>T_hat</code></strong>: Total estimated amount spent on the item across all households.</li>
+</ul>
+<p>These indicators help identify the most common nonfood spending categories and their relative importance in household budgets.</p>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="bar-charts.html#cb154-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb154-2"><a href="bar-charts.html#cb154-2" tabindex="-1"></a><span class="co"># TABLE 7.3 - Spending on Nonfood Items and Services</span></span>
+<span id="cb154-3"><a href="bar-charts.html#cb154-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb154-4"><a href="bar-charts.html#cb154-4" tabindex="-1"></a><span class="co"># Compute weighted estimates:</span></span>
+<span id="cb154-5"><a href="bar-charts.html#cb154-5" tabindex="-1"></a><span class="co"># - `N_hat`: Total number of households spending on an item</span></span>
+<span id="cb154-6"><a href="bar-charts.html#cb154-6" tabindex="-1"></a><span class="co"># - `P_hat`: Proportion of households spending on an item</span></span>
+<span id="cb154-7"><a href="bar-charts.html#cb154-7" tabindex="-1"></a><span class="co"># - `T_hat`: Total amount spent on each item</span></span>
+<span id="cb154-8"><a href="bar-charts.html#cb154-8" tabindex="-1"></a></span>
+<span id="cb154-9"><a href="bar-charts.html#cb154-9" tabindex="-1"></a>tab_03 <span class="ot">&lt;-</span> ESS4_design <span class="sc">%&gt;%</span></span>
+<span id="cb154-10"><a href="bar-charts.html#cb154-10" tabindex="-1"></a>  <span class="fu">group_by</span>(item) <span class="sc">%&gt;%</span></span>
+<span id="cb154-11"><a href="bar-charts.html#cb154-11" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb154-12"><a href="bar-charts.html#cb154-12" tabindex="-1"></a>    <span class="at">N_hat =</span> <span class="fu">survey_total</span>(yes_no, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>)),</span>
+<span id="cb154-13"><a href="bar-charts.html#cb154-13" tabindex="-1"></a>    <span class="at">P_hat =</span> <span class="fu">survey_mean</span>(yes_no, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>)),</span>
+<span id="cb154-14"><a href="bar-charts.html#cb154-14" tabindex="-1"></a>    <span class="at">T_hat =</span> <span class="fu">survey_total</span>(expenditure, <span class="at">na.rm =</span> <span class="cn">TRUE</span>, <span class="at">vartype =</span> <span class="fu">c</span>(<span class="st">&quot;se&quot;</span>, <span class="st">&quot;ci&quot;</span>))</span>
+<span id="cb154-15"><a href="bar-charts.html#cb154-15" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb154-16"><a href="bar-charts.html#cb154-16" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">item =</span> <span class="fu">as_factor</span>(item))</span></code></pre></div>
+</div>
+<div id="bar-chart-for-estimated-number-of-households-spending-on-non-food-items" class="section level3 unnumbered hasAnchor">
+<h3>Bar Chart for Estimated Number of Households Spending on Non-Food Items<a href="bar-charts.html#bar-chart-for-estimated-number-of-households-spending-on-non-food-items" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block produces a <strong>horizontal bar chart</strong> displaying the <strong>estimated number of households (<span class="math inline">\(\hat{N}\)</span>)</strong> that spent on various non-food goods and services during the 12 months preceding the survey. The results are based on the ESS4 complex survey design (Ethiopia, 2018/19) and include <strong>95% confidence intervals</strong> shown as error bars. Items are sorted from the lowest to highest number of households, allowing for easy comparison across categories.</p>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="bar-charts.html#cb155-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb155-2"><a href="bar-charts.html#cb155-2" tabindex="-1"></a><span class="co"># Bar Chart for Estimated Number of Households Spending on Non-Food Items</span></span>
+<span id="cb155-3"><a href="bar-charts.html#cb155-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb155-4"><a href="bar-charts.html#cb155-4" tabindex="-1"></a></span>
+<span id="cb155-5"><a href="bar-charts.html#cb155-5" tabindex="-1"></a>tab_03 <span class="ot">&lt;-</span> tab_03 <span class="sc">%&gt;%</span></span>
+<span id="cb155-6"><a href="bar-charts.html#cb155-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">item =</span> <span class="fu">fct_reorder</span>(item, N_hat, <span class="at">.desc =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb155-7"><a href="bar-charts.html#cb155-7" tabindex="-1"></a></span>
+<span id="cb155-8"><a href="bar-charts.html#cb155-8" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tab_03, <span class="fu">aes</span>(</span>
+<span id="cb155-9"><a href="bar-charts.html#cb155-9" tabindex="-1"></a>  <span class="at">x =</span> item,</span>
+<span id="cb155-10"><a href="bar-charts.html#cb155-10" tabindex="-1"></a>  <span class="at">y =</span> N_hat,</span>
+<span id="cb155-11"><a href="bar-charts.html#cb155-11" tabindex="-1"></a>  <span class="at">ymax =</span> N_hat_upp,</span>
+<span id="cb155-12"><a href="bar-charts.html#cb155-12" tabindex="-1"></a>  <span class="at">ymin =</span> N_hat_low</span>
+<span id="cb155-13"><a href="bar-charts.html#cb155-13" tabindex="-1"></a>)) <span class="sc">+</span></span>
+<span id="cb155-14"><a href="bar-charts.html#cb155-14" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>,</span>
+<span id="cb155-15"><a href="bar-charts.html#cb155-15" tabindex="-1"></a>           <span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>,</span>
+<span id="cb155-16"><a href="bar-charts.html#cb155-16" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">&quot;#CCE5FF&quot;</span>) <span class="sc">+</span></span>
+<span id="cb155-17"><a href="bar-charts.html#cb155-17" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.9</span>), <span class="at">width =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb155-18"><a href="bar-charts.html#cb155-18" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="fu">label_number</span>(<span class="at">accuracy =</span> <span class="dv">1</span>),</span>
+<span id="cb155-19"><a href="bar-charts.html#cb155-19" tabindex="-1"></a>                     <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(tab_03<span class="sc">$</span>N_hat)<span class="sc">*</span><span class="fl">1.3</span>) ) <span class="sc">+</span></span>
+<span id="cb155-20"><a href="bar-charts.html#cb155-20" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb155-21"><a href="bar-charts.html#cb155-21" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">expression</span>(<span class="fu">hat</span>(N)),</span>
+<span id="cb155-22"><a href="bar-charts.html#cb155-22" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb155-23"><a href="bar-charts.html#cb155-23" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Estimated number of households spending on non-food items and</span></span>
+<span id="cb155-24"><a href="bar-charts.html#cb155-24" tabindex="-1"></a><span class="st">       services in the previous year, Ethiopia 2018/19&quot;</span></span>
+<span id="cb155-25"><a href="bar-charts.html#cb155-25" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb155-26"><a href="bar-charts.html#cb155-26" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb155-27"><a href="bar-charts.html#cb155-27" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span>  <span class="co"># Centers the title</span></span>
+<span id="cb155-28"><a href="bar-charts.html#cb155-28" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code></pre></div>
+<p><img src="images/7.1/01_Bar_Chart_for_Estimated_Number.png" /></p>
+</div>
+<div id="bar-chart-for-estimated-total-household-expenditure-on-non-food-items" class="section level3 unnumbered hasAnchor">
+<h3>Bar Chart for Estimated Total Household Expenditure on Non-Food Items<a href="bar-charts.html#bar-chart-for-estimated-total-household-expenditure-on-non-food-items" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block creates a horizontal bar chart showing the estimated total household expenditure (<span class="math inline">\(\hat{T}\)</span>) on various non-food goods and services over the past 12 months, based on ESS4 survey data (Ethiopia, 2018/19). The estimates include 95% confidence intervals, visualized as error bars. Items are sorted in ascending order of total expenditure, enabling identification of the categories with the highest monetary burden at the national level.</p>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="bar-charts.html#cb156-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb156-2"><a href="bar-charts.html#cb156-2" tabindex="-1"></a><span class="co"># Bar Chart for Estimated Total Household Expenditure on Non-Food Items</span></span>
+<span id="cb156-3"><a href="bar-charts.html#cb156-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb156-4"><a href="bar-charts.html#cb156-4" tabindex="-1"></a></span>
+<span id="cb156-5"><a href="bar-charts.html#cb156-5" tabindex="-1"></a>tab_03 <span class="ot">&lt;-</span> tab_03 <span class="sc">%&gt;%</span> </span>
+<span id="cb156-6"><a href="bar-charts.html#cb156-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">item =</span> <span class="fu">fct_reorder</span>(item, T_hat, <span class="at">.desc =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb156-7"><a href="bar-charts.html#cb156-7" tabindex="-1"></a></span>
+<span id="cb156-8"><a href="bar-charts.html#cb156-8" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tab_03, <span class="fu">aes</span>(</span>
+<span id="cb156-9"><a href="bar-charts.html#cb156-9" tabindex="-1"></a>  <span class="at">x =</span> item,</span>
+<span id="cb156-10"><a href="bar-charts.html#cb156-10" tabindex="-1"></a>  <span class="at">y =</span> T_hat,</span>
+<span id="cb156-11"><a href="bar-charts.html#cb156-11" tabindex="-1"></a>  <span class="at">ymax =</span> T_hat_upp,</span>
+<span id="cb156-12"><a href="bar-charts.html#cb156-12" tabindex="-1"></a>  <span class="at">ymin =</span> T_hat_low</span>
+<span id="cb156-13"><a href="bar-charts.html#cb156-13" tabindex="-1"></a>)) <span class="sc">+</span></span>
+<span id="cb156-14"><a href="bar-charts.html#cb156-14" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>,</span>
+<span id="cb156-15"><a href="bar-charts.html#cb156-15" tabindex="-1"></a>           <span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>,</span>
+<span id="cb156-16"><a href="bar-charts.html#cb156-16" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">&quot;#CCE5FF&quot;</span>) <span class="sc">+</span></span>
+<span id="cb156-17"><a href="bar-charts.html#cb156-17" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.9</span>), <span class="at">width =</span> <span class="fl">0.3</span>) <span class="sc">+</span>  <span class="co"># Error bars for confidence intervals</span></span>
+<span id="cb156-18"><a href="bar-charts.html#cb156-18" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="fu">label_number</span>(<span class="at">accuracy =</span> <span class="dv">1</span>),</span>
+<span id="cb156-19"><a href="bar-charts.html#cb156-19" tabindex="-1"></a>                     <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(tab_03<span class="sc">$</span>T_hat)<span class="sc">*</span><span class="fl">1.3</span>)) <span class="sc">+</span>  <span class="co"># Format y-axis labels</span></span>
+<span id="cb156-20"><a href="bar-charts.html#cb156-20" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb156-21"><a href="bar-charts.html#cb156-21" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">expression</span>(<span class="fu">hat</span>(T)),  <span class="co"># LaTeX-style notation for total expenditure</span></span>
+<span id="cb156-22"><a href="bar-charts.html#cb156-22" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb156-23"><a href="bar-charts.html#cb156-23" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Estimated total household expenditure on non-food items and</span></span>
+<span id="cb156-24"><a href="bar-charts.html#cb156-24" tabindex="-1"></a><span class="st">       services in the previous year, Ethiopia 2018/19&quot;</span></span>
+<span id="cb156-25"><a href="bar-charts.html#cb156-25" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb156-26"><a href="bar-charts.html#cb156-26" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb156-27"><a href="bar-charts.html#cb156-27" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span>  <span class="co"># Centers the title</span></span>
+<span id="cb156-28"><a href="bar-charts.html#cb156-28" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code></pre></div>
+<p><img src="images/7.1/02_Bar_Chart_for_Estimated_total.png" /></p>
+</div>
+<div id="bar-chart-for-estimated-proportion-of-households-spending-on-non-food-items" class="section level3 unnumbered hasAnchor">
+<h3>Bar Chart for Estimated Proportion of Households Spending on Non-Food Items<a href="bar-charts.html#bar-chart-for-estimated-proportion-of-households-spending-on-non-food-items" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>This block creates a horizontal bar chart displaying the estimated proportion of households (<span class="math inline">\(\hat{P}\)</span>) that spent on various non-food goods and services during the past 12 months (ESS4, Ethiopia 2018/19). Each bar shows the fraction of households reporting expenditures, along with a 95% confidence interval. Items are ordered from the lowest to highest spending prevalence, allowing visualization of patterns in household access or needs by item category.</p>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="bar-charts.html#cb157-1" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb157-2"><a href="bar-charts.html#cb157-2" tabindex="-1"></a><span class="co"># Bar Chart for Estimated Proportion of Households Spending on Non-Food Items</span></span>
+<span id="cb157-3"><a href="bar-charts.html#cb157-3" tabindex="-1"></a><span class="co">#------------------------------------------------------------------------------#</span></span>
+<span id="cb157-4"><a href="bar-charts.html#cb157-4" tabindex="-1"></a></span>
+<span id="cb157-5"><a href="bar-charts.html#cb157-5" tabindex="-1"></a>tab_03 <span class="ot">&lt;-</span> tab_03 <span class="sc">%&gt;%</span></span>
+<span id="cb157-6"><a href="bar-charts.html#cb157-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">item =</span> <span class="fu">fct_reorder</span>(item, P_hat, <span class="at">.desc =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb157-7"><a href="bar-charts.html#cb157-7" tabindex="-1"></a></span>
+<span id="cb157-8"><a href="bar-charts.html#cb157-8" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tab_03, <span class="fu">aes</span>(</span>
+<span id="cb157-9"><a href="bar-charts.html#cb157-9" tabindex="-1"></a>  <span class="at">x =</span> item,</span>
+<span id="cb157-10"><a href="bar-charts.html#cb157-10" tabindex="-1"></a>  <span class="at">y =</span> P_hat,</span>
+<span id="cb157-11"><a href="bar-charts.html#cb157-11" tabindex="-1"></a>  <span class="at">ymax =</span> P_hat_upp,</span>
+<span id="cb157-12"><a href="bar-charts.html#cb157-12" tabindex="-1"></a>  <span class="at">ymin =</span> P_hat_low</span>
+<span id="cb157-13"><a href="bar-charts.html#cb157-13" tabindex="-1"></a>)) <span class="sc">+</span></span>
+<span id="cb157-14"><a href="bar-charts.html#cb157-14" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>,</span>
+<span id="cb157-15"><a href="bar-charts.html#cb157-15" tabindex="-1"></a>           <span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>,</span>
+<span id="cb157-16"><a href="bar-charts.html#cb157-16" tabindex="-1"></a>           <span class="at">fill =</span> <span class="st">&quot;#CCE5FF&quot;</span>) <span class="sc">+</span></span>
+<span id="cb157-17"><a href="bar-charts.html#cb157-17" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.9</span>), <span class="at">width =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb157-18"><a href="bar-charts.html#cb157-18" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> <span class="fu">label_number</span>(<span class="at">accuracy =</span> <span class="fl">0.05</span>),</span>
+<span id="cb157-19"><a href="bar-charts.html#cb157-19" tabindex="-1"></a>                     <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(tab_03<span class="sc">$</span>P_hat)<span class="sc">*</span><span class="fl">1.3</span>)) <span class="sc">+</span></span>
+<span id="cb157-20"><a href="bar-charts.html#cb157-20" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb157-21"><a href="bar-charts.html#cb157-21" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">expression</span>(<span class="fu">hat</span>(P)),</span>
+<span id="cb157-22"><a href="bar-charts.html#cb157-22" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;&quot;</span>,</span>
+<span id="cb157-23"><a href="bar-charts.html#cb157-23" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Estimated proportion of households that spent on non-food items</span></span>
+<span id="cb157-24"><a href="bar-charts.html#cb157-24" tabindex="-1"></a><span class="st">       and services in the previous year, Ethiopia 2018/19&quot;</span></span>
+<span id="cb157-25"><a href="bar-charts.html#cb157-25" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb157-26"><a href="bar-charts.html#cb157-26" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb157-27"><a href="bar-charts.html#cb157-27" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)) <span class="sc">+</span>  <span class="co"># Centers the title</span></span>
+<span id="cb157-28"><a href="bar-charts.html#cb157-28" tabindex="-1"></a>  <span class="fu">coord_flip</span>()</span></code></pre></div>
+<p><img src="images/7.1/03_Bar_Chart_for_Estimated_proportion.png" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="inference-on-model-parameters.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/psirusteam/chapter9Rcodes/7.1_Bar_charts.rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["CHAPTER 9 - EXAMPLES IN R.pdf", "CHAPTER 9 - EXAMPLES IN R.epub", "CHAPTER 9 - EXAMPLES IN R.mobi"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "section"
+},
+"tconfig": null
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
