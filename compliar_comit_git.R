@@ -4,9 +4,12 @@ bookdown::render_book("index.Rmd", "bookdown::gitbook")
 system("git add --all")
 
 # Ejecutar git commit
-system('git commit -m "Actualizar repositorio html"')
+system('git commit -m "Abstract reviewed"')
 
 # Ejecutar git push
 system("git push --verbose")
 
-bookdown::render_book("index.Rmd", "bookdown::pdf_book")
+# Ejecutar git pull
+system("git pull")
+
+#bookdown::render_book("index.Rmd", "bookdown::pdf_book")

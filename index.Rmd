@@ -1,5 +1,5 @@
 ---
-title: "CHAPTER 9 - EXAMPLES IN R"
+title: "Appendix of Chapter 9 - Analysis of Household Surveys - Examples in R"
 author: ""
 date: "`r Sys.Date()`"
 documentclass: book
@@ -54,8 +54,28 @@ thematic_on(
 ## bookdown::render_book("index.Rmd", "bookdown::word_document2")
 ```
 
+```{r, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE, 
+                      message = FALSE,
+                      cache = TRUE, 
+                      cache.path = "cache/index/")
+```
+
 # Abstract {-}
 
-The Ethiopia Socioeconomic Survey (ESS) is a nationally representative study conducted by the Central Statistical Agency of Ethiopia (CSA) in collaboration with the World Bank. Its objective is to collect detailed information on various aspects of Ethiopian households, such as expenditure on goods and services, income, employment, agricultural production, and living conditions. The data collected in the ESS are essential for policy formulation and evaluating the impact of development programs in the country. This survey enables the analysis of consumption patterns and economic inequalities across different regions, distinguishing between urban and rural areas to identify trends and specific population needs.
+This repository hosts the appendix for Chapter 9 (*Analysis of Household Surveys*) of the *United Nations Handbook on Surveys of Individuals and Households*. This appendix enables readers to reproduce the examples and results presented in the main document by following the computational steps outlined here.   
 
-In this study, multiple analyses have been conducted using ESS data, applying data processing and visualization techniques to examine household income and expenditure patterns. Bar charts have been created to illustrate the distribution of spending on non-food items, histograms to assess the density of expenditure across different categories, and scatter plots to explore the relationship between per capita income and expenditure. Additionally, weighted statistical models have been implemented, considering the survey's sampling structure to ensure representative and robust estimates. These analyses help identify key differences in the economic behavior of Ethiopian households, providing valuable insights for designing interventions and policies aimed at improving the population’s well-being.
+Chapter 9 focuses on the analysis of survey data. To provide practical examples, we utilize real household survey data from the World Bank's *Living Standards Measurement Study (LSMS)* project. Each section of Chapter 9 is accompanied by corresponding examples, which illustrate and expand upon the key concepts discussed in the chapter.  
+
+This appendix was developed by the Statistics Division of the United Nations Economic Commission for Latin America and the Caribbean (UN-ECLAC). The implementation was commissioned to Andrés Gutiérrez (<andres.gutierrez@eclac.org>), Technical Adviser at UN-ECLAC Statistics Division, and Stalyn Guerrero (<guerrerostalyn@gmail.com>), Consultant of the same Division.  
+
+
+
+
+
+
+
+
+
+
+
